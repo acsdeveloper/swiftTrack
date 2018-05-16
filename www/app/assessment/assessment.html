@@ -1,0 +1,410 @@
+<ion-view cache-view="false" class="assessment-page">
+   <header class="fixed-hdr">
+      <div class="">
+         <div class="">
+            <img class="logo" src="https://app.swifttrack.co.uk/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/settings/nf-logo.jpg" alt="logo">
+         </div>
+      </div>
+      <div class="">
+         <div class="top-r tr-single-btn">
+            <a id="saveSession" class="btn-circ btn-top-r" ng-click="vm.assess_save($event)">
+            <i class="icon-checkmark"></i>
+            </a>
+            <a id="cancelSession" class="btn-circ btn-top-r" ng-click="vm.assess_cancel($event)">
+            <i class="icon-cross"></i>
+            </a>
+
+            <div ng-show="vm.assesscancelsavepopup" class="popover fade bottom in" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:94px;margin-left: 45px;">
+               <div class="arrow" style="left: 50%;">
+                  <i class="icon ion-arrow-up-b"></i>
+               </div>
+               <h3 class="popover-title">End without saving?</h3>
+               <div class="popover-content">
+                  <a ng-click="vm.confirm_without_save($event)" class="btn btn-warning m-rgt-10 btn-logout-confirm">Confirm</a>
+                  <a ng-click="vm.cancel_without_save()" id="cancelLogout" class="btn btn-cancel">Cancel</a>
+               </div>
+            </div>
+            <div ng-show="vm.assessoksavepopup" class="popover fade bottom in" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:94px;margin-left: 0px;">
+               <div class="arrow" style="left: 50%;">
+                  <i class="icon ion-arrow-up-b"></i>
+               </div>
+               <h3 class="popover-title">End and save session?</h3>
+               <div class="popover-content">
+                  <a style="background-color:  #47b475;" ng-click="vm.confirm_savesession($event)" class="btn btn-warning m-rgt-10 btn-logout-confirm">Confirm</a>
+                  <a ng-click="vm.cancel_savesession()" id="cancelLogout" class="btn btn-cancel">Cancel</a>
+               </div>
+            </div>
+            <div class="avatar"><img ng-src="{{vm.userImageUrl}}" alt="User-Avatar"></div>
+         </div>
+      </div>
+   </header>
+   <div class="header-bar">
+      <div class="row bar-row">
+         <div col-11 class="col-xs-11 no-pad">
+            Assessing: <strong ng-bind-html="vm.assessmentdetail_response.jobRole"></strong> | <strong ng-bind-html=" vm.assessmentdetail_response.ModuleName">
+               </strong>
+         </div>
+      </div>
+      <i ng-click="vm.assesstray = !vm.assesstray;" class="resource-icon icon-stack"></i>
+      <div id="resourcesTray" ng-show="vm.assesstray">
+         <h1><i class="icn icon-stack"></i> Resources for this assessment</h1>
+         <div ng-click="vm.resourcefunct(resour)" ng-repeat=" resour in vm.assessmentdetail_response.resources" class="res-row">
+            <i class="glyphicon glyphicon-menu-right"></i>
+            <h2>{{resour.resource_name}}</h2>
+         </div>
+      </div>
+   </div>
+   <div class="header-bar-pad"></div>
+   <ion-content class="assess-top" scroll="true">
+      <div class="panel-container">
+      <div class="fullvh">
+         <section id="panelIDVDK19N4X3Y" ng-repeat="(assesskey,assessvalue) in vm.assessmentdetail_response.people" class="panel person-panel pnl-brdr pnl-no-pad ">
+            <div class="panel-hdr">
+               <div class="panel-title">
+                  <div class="circ-person">
+                     <img class="avatar" ng-src="{{assessvalue.image}}" alt="">
+                  </div>
+                  <h3 class="p-nam">{{assessvalue.name}}</h3>
+               </div>
+               <div class="ind-labels">
+                  <div class="level-label">Aware</div>
+                  <div class="level-label">Understands</div>
+                  <div class="level-label">Competent</div>
+               </div>
+            </div>
+            <div class="panel-rows">
+               <div  ng-repeat="indicatorsvalue in assessvalue.indicators" id="rowIDRWWH89SG7N" class="panel-row" data-id="65" data-q="0" data-level-set="0">
+                  <div class="ind" ng-click="indicatorsvalue.levels[3].signedoff? '' : vm.assess_popupfun(indicatorsvalue,assessvalue.image,assessvalue.name)">
+                     <span class="ind-content" ng-bind-html="indicatorsvalue.final_content"></span>
+                     <br>
+                     <span>
+                        <i ng-repeat="(key,val) in indicatorsvalue.type_ref" class="icn {{key == 'media' ? 'icon-camera media' : key == 'notes' ? 'icon-file-text2 notes' : key == 'pdf' ? 'icon-file-pdf pdf' : key == 'question' ? 'icon-bubble question' : 'hidden' }}"></i>
+                        <i class="icn icon-plus"></i>
+                  <em>Tap to add evidence or notes </em>
+                  </span>
+                     <span ng-if="indicatorsvalue.ind_is_q == true" class="q-icon "><i class="icon-bubble"></i> </span>
+                  </div>
+                  <div class="checks">
+                     <span class="chk-holder {{levels.signedoff == true ? 'disabled' : ''}}" ng-repeat="levels in indicatorsvalue.levels">
+                  <i class="check btn-check icon-checkmark " ng-class="levels.level_achieved !== true ?'unchecked':'' " style="color:rgb({{ levels.color }});"></i>
+                  </span>
+                  </div>
+               </div>
+            </div>
+         </section>
+      </div>
+
+         <!--<div ng-show="vm.assessmentpopup" class="custom-modal" id="evidenceModal">-->
+         <!--   <div class="mdl mdl-ev">-->
+         <!--      <div class="mdl-ev-hdr">-->
+         <!--         <input class="fileuploader hidden" type="file" name="files[]" accept="image/*,video/*" capture="camera">-->
+         <!--         <div class="circ-person">-->
+         <!--            <img class="avatar" ng-src="{{vm.userImageUrl}}" alt="">-->
+         <!--         </div>-->
+         <!--         <div class="ev-hdr-info">-->
+         <!--            <h4>{{assessvalue.name}}</h4>-->
+         <!--            <h5>{{vm.assessquestion}}</h5>-->
+         <!--         </div>-->
+         <!--         <i ng-click="vm.assesspopclose()" class="icon-cancel-circle close-modal"></i>-->
+         <!--      </div>-->
+         <!--      <div class="mdl-ev-icons-tray">-->
+         <!--         <div class="ev-icon icn-cam" data-type="cam"><i class="icon-camera"></i></div>-->
+         <!--         <div class="ev-icon icn-pdf" data-type="pdf"><i class="icon-file-pdf"></i></div>-->
+         <!--         <div class="ev-icon icn-notes" data-type="notes"><i class="icon-file-text2"></i></div>-->
+         <!--         <div class="ev-icon icn-question" data-type="question"><i class="icon-bubble"></i></div>-->
+         <!--      </div>-->
+         <!--      <div class="mdl-bdy ev-bdy bdy-cam" ng-click="vm.assesscam(indicatorsvalue)">-->
+         <!--         <h1 class="ev-title">Visual Evidence</h1>-->
+         <!--         <div id="gallery"></div>-->
+         <!--      </div>-->
+         <!--      <div class="mdl-bdy ev-bdy bdy-pdf hidden " ng-click="vm.assesspdf(indicatorsvalue)">-->
+         <!--         <h1 class="ev-title">File-Based Evidence</h1>-->
+         <!--         <div id="galleryPDF"></div>-->
+         <!--      </div>-->
+         <!--      <div class="mdl-bdy ev-bdy bdy-notes hidden" ng-click="vm.assessnotes(indicatorsvalue)">-->
+         <!--         <h1 class="ev-title">Notes</h1>-->
+         <!--         <div class="update-btn hidden" data-type="notes"></div>-->
+         <!--         <input type="text" class="form-control mdl-input new-note catch-enter" data-type="notes" placeholder="Add a new note...">-->
+         <!--         <div id="galleryNotes" class="gal-wrapper" data-type="notes"></div>-->
+         <!--      </div>-->
+         <!--      <div class="mdl-bdy ev-bdy bdy-question hidden" ng-click="vm.assessquest(indicatorsvalue)">-->
+         <!--         <h1 class="ev-title">Answer the Question&hellip;</h1>-->
+         <!--         <h2 class="q-question-hdr"></h2>-->
+         <!--         <div class="update-btn hidden" data-type="question"></div>-->
+         <!--         <textarea type="text" class="form-control mdl-input q-answer" data-type="question" placeholder="Your answer..." rows="3"></textarea>-->
+         <!--         <div id="galleryQuestions" class="gal-wrapper" data-type="questions"></div>-->
+         <!--      </div>-->
+         <!--      <div class="mdl-ftr">-->
+         <!--         <div class="upload-bar">-->
+         <!--            <div class="ul-prog"></div>-->
+         <!--         </div>-->
+         <!--         <div id="addEv" data-type='cam'>-->
+         <!--            <span class="btn-pre">Add</span>-->
+         <!--            <span class="ftr-icn">-->
+         <!--               <i class="icn-cam icon-camera"></i>-->
+         <!--               <i class="icn-pdf icon-file-pdf hidden"></i>-->
+         <!--               <i class="icn-notes icon-file-text2 hidden"></i>-->
+         <!--               <i class="icn-question icon-bubble hidden"></i>-->
+         <!--           </span>-->
+         <!--            <span class="btn-suf">New</span>-->
+         <!--         </div>-->
+         <!--      </div>-->
+         <!--   </div>-->
+         <!--   <div class="modal-backdrop"></div>-->
+         <!--</div>-->
+
+
+         <!--<div ng-show="vm.assessreport" class="custom-modal" id="resourceModal">-->
+         <!--   <div class="mdl mdl-full-page">-->
+         <!--      <div class="mdl-hdr">{{ vm.resouobj.resource_name}}<i ng-click="vm.assessreport = !vm.assessreport;" class="resource-icon icon-cancel-circle"></i></div>-->
+         <!--      <div class="mdl-bdy" style="height: 367px;">-->
+         <!--         <div class="pad-30"></div>-->
+
+         <!--         <div ng-repeat="resouval in vm.resouobj.resource_sections " class="row sep-box">-->
+         <!--            <div col-6 class="col-xs-6">-->
+         <!--               <p>{{resouval.item_content}}</p>-->
+         <!--               <div class="pad-15"></div>-->
+         <!--            </div>-->
+         <!--            <div col-6 class="col-xs-6"><img class="img-resource" ng-src="{{resouval.item_media}}" alt=""></div>-->
+         <!--         </div>-->
+         <!--      </div>-->
+         <!--   </div>-->
+         <!--   <div class="overlay"></div>-->
+         <!--</div>-->
+
+
+
+
+         <footer>&copy; 2018 SwiftTrack V1.1&nbsp;&nbsp;&vellip;&nbsp;&nbsp;Licensed to Food International</footer>
+      </div>
+      </div>
+
+
+
+
+
+
+   </ion-content>
+
+
+   <div ng-show="vm.assessreport" class="custom-modal resource-model-overlay" id="resourceModal">
+      <div class="mdl mdl-full-page">
+         <div class="mdl-hdr">{{ vm.resouobj.resource_name}}<i ng-click="vm.resourcevideosectionclose($event)" class="resource-icon icon-cancel-circle"></i></div>
+         <div class="mdl-bdy" style="height: 100vh;">
+            <div class="pad-30"></div>
+
+            <div ng-repeat="resouval in vm.resouobj.resource_sections " class="row sep-box">
+
+               <div class="col-xs-12" ng-if="resouval.type_id == 5">
+                  <!-- <video width="100%" height="300px" controls preload="auto">
+                        <source ng-src="{{resouval.item_media}}" type="video/mp4"></source>
+                        </video> -->
+                        <video width="280" height="240" controls>
+                              <source src="" dynamic-url dynamic-url-src="{{resouval.item_media}}">
+                          </video>
+                  <!-- <p>
+                       
+                     {{resouval.item_media}}
+                  </p> -->
+                  <!--<video width="100%" height="300" controls>-->
+                  <!--   <source ng-src="" type="video/mp4">-->
+                  <!--   </source>-->
+                  <!--</video>-->
+                  <!--<video class="img-resource" ng-src="{{resouval.item_media}}" controls="" preload="auto" poster="/img/poster-movie.jpg"></video>-->
+                  <!--<video width="100%" height="300" controls>-->
+                  <!--  <source src="{{resouval.item_media}}" type="video/mp4">-->
+                  <!-- </video>-->
+                  <!--<iframe width="560" height="300" ng-src="{{resouval.item_media}}" frameborder="0" allowfullscreen controls></iframe>-->
+               </div>
+               <div class="col-xs-12" ng-if="resouval.type_id == 2">
+                  <h1>{{resouval.item_content}}</h1>
+               </div>
+               <div col-6 class="col-xs-6" ng-if="resouval.type_id == 3">
+                  <p>{{resouval.item_content}}</p>
+                  <div class="pad-15"></div>
+               </div>
+               <div col-6 class="col-xs-6" ng-if="resouval.type_id == 3"><img class="img-resource" ng-src="{{resouval.item_media}}" alt=""></div>
+               <div col-6 class="col-xs-6" ng-if="resouval.type_id == 4"><img class="img-resource" ng-src="{{resouval.item_media}}" alt=""></div>
+               <div col-6 class="col-xs-6" ng-if="resouval.type_id == 4">
+                  <p>{{resouval.item_content}}</p>
+                  <div class="pad-15"></div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!--<div class="modal-backdrop"></div>-->
+   </div>
+
+   <d3iv ng-show="vm.assessmentpopup" class="custom-modal assess-file-overlay" id="evidenceModal">
+      <div class="mdl mdl-ev">
+         <div class="mdl-ev-hdr">
+            <input class="fileuploader hidden" type="file" name="files[]" accept="image/*,video/*" capture="camera">
+            <div class="circ-person">
+               <img class="avatar" ng-src="{{vm.userimage}}" alt="">
+            </div>
+            <div class="ev-hdr-info">
+               <h4>{{vm.username}}</h4>
+               <h5>{{vm.indicatorname}}</h5>
+            </div>
+            <i ng-click="vm.assesspopclose()" class="icon-cancel-circle close-modal"></i>
+         </div>
+         <div class="mdl-ev-icons-tray">
+            <div class="ev-icon icn-cam" ng-click="vm.assesscam()"><i class="icon-camera"></i></div>
+            <div class="ev-icon icn-pdf" ng-click="vm.assesspdf()"><i class="icon-file-pdf"></i></div>
+            <div class="ev-icon icn-notes" ng-click="vm.assessnotes()"><i class="icon-file-text2"></i></div>
+            <div class="ev-icon icn-question" ng-click="vm.assessquest()"><i class="icon-bubble"></i></div>
+         </div>
+         <div class="mdl-bdy ev-bdy bdy-cam" ng-show="vm.bdycampanel">
+            <h1 class="ev-title">Visual Evidence</h1>
+
+            <div id="gallery">
+                  <div class="media-wrapper ev-wrap" ng-show="vm.playvideo" ng-click="vm.assessvideoplay()">
+                        <div ng-click="vm.playvideo = !vm.playvideo" class="icon-cancel-circle remove-media"></div>
+                        <img class="img-resource" ng-src="./img/icon-movie.jpg" alt="" >
+                        <img class="img-resource" ng-src="./img/no-img.jpg" alt="" >
+                        
+                     </div>
+            </div>
+            <div class="mdl-ftr">
+                  <div class="upload-bar">
+                     <div class="ul-prog"></div>
+                  </div>
+                  <div id="addEv" ng-click="vm.evidenceupload()" data-type='cam'>
+                     <span class="btn-pre">Add</span>
+                     <span class="ftr-icn">
+                              <i class="icn-cam icon-camera"></i>
+                          </span>
+                     <span class="btn-suf">New</span>
+                     <div>{{vm.filename}}</div>
+                  </div>
+               </div>
+
+         </div>
+
+
+
+         <div class="mdl-bdy ev-bdy bdy-pdf" ng-show="vm.bdypdfpanel">
+            <h1 class="ev-title">File-Based Evidence</h1>
+
+            <!-- <div id="galleryPDF" ng-if="vm.popupdata.type_ref.pdf != undefined"> -->
+            <div id="galleryPDF" ng-show="vm.pdficon">
+               <div class="media-wrapper ev-wrap" >
+                  <div class="icon-cancel-circle remove-media"></div>
+                  <img alt="" ng-src="./img/icon-pdf.jpg" ng-click="vm.pdfopen()">
+               </div>
+            </div>
+            <div class="mdl-ftr">
+                  <div class="upload-bar">
+                     <div class="ul-prog"></div>
+                  </div>
+                  <div id="addEv" ng-click="vm.pdfevidence()" data-type='cam'>
+                     <span class="btn-pre">Add</span>
+                     <span class="ftr-icn">
+                              
+                              <i class="icn-pdf icon-file-pdf"></i>
+                            
+                          </span>
+                     <span class="btn-suf">New</span>
+                     <div>{{vm.filename}}</div>
+                  </div>
+               </div>
+         </div>
+
+
+         <div class="mdl-bdy ev-bdy bdy-notes" ng-show="vm.bdynotespanel">
+            <h1 class="ev-title">Notes</h1>
+
+            <div class="update-btn hidden" data-type="notes"></div>
+            <input type="text" class="form-control mdl-input new-note catch-enter" data-type="notes" placeholder="Add a new note...">
+            <div id="galleryNotes" class="gal-wrapper" data-type="notes"></div>
+
+            <!-- <div class="mdl-ftr">
+                  <div class="upload-bar">
+                     <div class="ul-prog"></div>
+                  </div>
+                  <div id="addEv" ng-click="vm.evidenceupload()" data-type='cam'>
+                     <span class="btn-pre">Add</span>
+                     <span class="ftr-icn">
+                  
+                              <i class="icn-notes icon-file-text2 "></i>
+                          </span>
+                     <span class="btn-suf">New</span>
+                     <div>{{vm.filename}}</div>
+                  </div>
+               </div> -->
+         </div>
+
+
+         <div class="mdl-bdy ev-bdy bdy-question" ng-show="vm.bdyquestpanel" ng-click="vm.assessquest(indicatorsvalue)">
+            <h1 class="ev-title">Answer the Question&hellip;</h1>
+
+
+            <h2 class="q-question-hdr"></h2>
+            <div class="update-btn hidden" data-type="question"></div>
+            <textarea type="text" class="form-control mdl-input q-answer" data-type="question" placeholder="Your answer..." rows="3"></textarea>
+            <div id="galleryQuestions" class="gal-wrapper" data-type="questions"></div>
+
+            <div class="mdl-ftr">
+                  <div class="upload-bar">
+                     <div class="ul-prog"></div>
+                  </div>
+                  <div id="addEv" data-type='cam'>
+                     <span class="btn-pre">Add</span>
+                     <span class="ftr-icn">
+                             
+                              <i class="icn-question icon-bubble"></i>
+                          </span>
+                     <span class="btn-suf">New</span>
+                     <div>{{vm.filename}}</div>
+                  </div>
+               </div>
+         </div>
+         <!-- <div class="mdl-ftr">
+            <div class="upload-bar">
+               <div class="ul-prog"></div>
+            </div>
+            <div id="addEv" ng-click="vm.evidenceupload()" data-type='cam'>
+               <span class="btn-pre">Add</span>
+               <span class="ftr-icn">
+                        <i class="icn-cam icon-camera"></i>
+                        <i class="icn-pdf icon-file-pdf hidden"></i>
+                        <i class="icn-notes icon-file-text2 hidden"></i>
+                        <i class="icn-question icon-bubble hidden"></i>
+                    </span>
+               <span class="btn-suf">New</span>
+               <div>{{vm.filename}}</div>
+            </div>
+         </div> -->
+
+
+
+      </div>
+      <!--<div class="modal-backdrop"></div>-->
+   </div>
+
+
+   <div ng-show="vm.assessvideopopup" id="mediaView" class="" style="height: auto;">
+      <i class="icon-cancel-circle close-modal" ng-click="vm.assessvideopopupclose(vm.videolocallocation,$event)"></i>
+      <div class="mv-content">
+                  <video controls ng-src="{{vm.videolocallocation}}"></video>     
+      </div>
+   </div>
+   <div ng-show="vm.assesspdfpopup" id="mediaView" class="" style="height: auto;">
+            <i class="icon-cancel-circle close-modal" ng-click="vm.assesspdfpopupclose($event)"></i>
+            <div class="mv-content">
+             <!-- <embed style="min-height: 400px; height: 133px;" ng-src="{{vm.pdflocallocation}}" alt="pdf">   -->
+                  <!-- <object src="http://www.africau.edu/images/default/sample.pdf" width="500" height="700" type='application/pdf'>  </object> -->
+                  <button ng-click="vm.prevPage()">&lt;</button>
+                  <button ng-click="vm.nextPage()">&gt;</button>
+                  <br>
+                  <span>{{vm.currentPage}}/{{vm.totalPages}}</span>
+                  <br>
+                  <pdfviewer ng-src="{{vm.pdflocallocation}}" on-page-load='vm.pageLoaded(page,total)' id="viewer"></pdfviewer>
+                  
+                        <!-- <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url=http://www.africau.edu/images/default/sample.pdf" width="500" height="375">      <iframe src="http://www.africau.edu/images/default/sample.pdf" style="min-height: 400px; height: 133px;"></iframe> -->
+                  <!-- <pdfviewer src="http://www.africau.edu/images/default/sample.pdf" style="min-height: 400px; height: 133px;" ></pdfviewer> -->
+            </div>
+         </div>
+
+
+</ion-view>

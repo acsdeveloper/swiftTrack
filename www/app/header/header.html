@@ -1,0 +1,56 @@
+<ion-nav-bar class="nav-title-slide-ios7 bar-positive" ng-click="vm.logoutpopup=false">
+    <ion-nav-back-button class="button-icon ion-arrow-left-c">
+        <a class="btn btn-md btn-default btn-back2dash">
+				<i class="icon-arrow-left"></i> Back <span class="hide-on-phone">to Dashboard</span></a>
+    </ion-nav-back-button>
+
+<!--<ion-content class="sidemenu-content" >-->
+
+        <header class="fixed-hdr">
+            <div class="">
+                <div class="">
+                    <img class="logo" src="https://app.swifttrack.co.uk/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/settings/nf-logo.jpg" alt="logo">
+                </div>
+            </div>
+            <div class="">
+                <div class="top-r tr-single-btn">
+                    <a ng-click="vm.logoutpopup=!vm.logoutpopup; $event.preventDefault(); $event.stopPropagation();" class="btn-circ btn-top-r btn-logout">
+                 <i class="icon-switch"></i>
+                 </a>
+                    <div ng-show="vm.logoutpopup" class="popover fade bottom in" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:94px;margin-left: 0px;">
+                        <div class="arrow" style="left: 50%;">
+                            <i class="icon ion-arrow-up-b"></i>
+                        </div>
+                        <h3 class="popover-title">Log out of SwiftTrack?</h3>
+                        <div class="popover-content">
+                            <a ng-click="vm.confirmlogout($event)" class="btn btn-warning m-rgt-10 btn-logout-confirm">Confirm</a>
+                            <a ng-click="vm.cancellogout()" id="cancelLogout" class="btn btn-cancel">Cancel</a>
+                        </div>
+                    </div>
+                    <div class="avatar"><img ng-src="{{vm.userImageUrl}}" alt="User-Avatar"></div>
+                </div>
+            </div>
+        </header>
+
+    <ion-nav-view name="menuContent"></ion-nav-view>
+
+</ion-nav-bar>
+<style type="text/css">
+    nav-bar-block ion-header-bar {
+        max-width: 1024px;
+        margin: 0 auto;
+        position: absolute;
+        left: -266px;
+    }
+
+    .has-header {
+        top: 70px;
+    }
+
+    .arrow {
+        top: -18px;
+        position: absolute;
+        color: #333;
+        font-size: 25px;
+    }
+</style>

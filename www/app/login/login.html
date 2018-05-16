@@ -1,0 +1,34 @@
+<ion-view cache-view="false">
+    <ion-content scroll="false" id="scroll-view">
+        <section class="status-container">
+            <div id="loginPanel">
+                <div class="panel-logo">
+                    <img src="./img/logo-swifttrack.png" alt="SwiftTrack logo">
+                </div>
+                <div class="panel-body">
+                    <div class="login-row">
+                        <input id="orgName" ng-keypress="vm.myFunct($event)" focus-me="vm.shouldBeOpen" type="text" class="form-control fademe" placeholder="Organisation" ng-model="vm.organisation">
+                    </div>
+
+                    <div class="login-row">
+                        <input id="username" ng-keypress="vm.myFunct($event)" type="text" class="form-control fademe" placeholder="Username" ng-model="vm.username">
+                    </div>
+                    <div class="login-row">
+                        <input id="password" ng-keypress="vm.myFunct($event)" type="password" class="form-control fademe" placeholder="Password" ng-model="vm.password">
+                    </div>
+                    <div class="login-row">
+                        <div class="form-msg alert alert-warning"></div>
+                    </div>
+                    <div class="login-row">
+                        <a id="loginBtn" href="" class="btn btn-primary" ng-click="vm.login()"><i class=""></i> Login</a>
+                    </div>
+                    <div class="login-row">
+                        <div style="color:red;" ng-bind="vm.errormessage"></div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </ion-content>
+
+</ion-view>
