@@ -1,5 +1,5 @@
 (function() {
-    // 'use strictl';
+    // 'use strict ck';
     function assessmentCtrl(pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService) {
         console.log("after ctrl");
         var vm = this;
