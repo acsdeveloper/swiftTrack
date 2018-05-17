@@ -1,5 +1,6 @@
 (function() {
     // 'use strict karthik';
+    // 'use strict ck';
     function assessmentCtrl(pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService) {
         console.log("after ctrl");
         var vm = this;
@@ -258,8 +259,10 @@
                 function(entry) {
 
                     $scope.$apply(function () {
-                        console.log("file type ..----------------.",ftype);
+                        console.log("file type ..----------------.",typeof ftype);
+                        console.log("file type ..-----###--------.",ftype);
                         vm.playvideo = true;
+                        vm.filetype = ftype;
                     });
                     
                     console.log(entry);
@@ -319,11 +322,14 @@
        
         }
 
-        vm.assessvideoplay = function()
+        vm.assessvideoplay = function(filetype)
         {
             // vm.videolocallocation= "https://app.swifttrack.co.uk/orgs/wor-pf834j3894mqf348l3489d384fsfoj67/media/resources/manual-handling-8-basic-steps-to-correct-lifting-technique_1.mp4";
             console.log("assess video function");
-            vm.assessvideopopup=true;
+            if(filetype == "video"){vm.assessvideopopup=true;}
+            else if(filetype == "image"){
+                vm.assessimagepopup=true;
+               }
             vm.bdycampanel = false;
         }
         vm.assessvideopopupclose = function(videourl,$event)
