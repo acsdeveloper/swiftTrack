@@ -86,7 +86,7 @@
                   </div>
                   <div class="checks">
                      <span class="chk-holder {{levels.signedoff == true ? 'disabled' : ''}}" ng-repeat="levels in indicatorsvalue.levels">
-                  <i class="check btn-check icon-checkmark " ng-class="levels.level_achieved !== true ?'unchecked':'' " style="color:rgb({{ levels.color }});"></i>
+                  <i class="check btn-check icon-checkmark " ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-style="color:rgb({{ levels.color }});"></i>
                   </span>
                   </div>
                </div>
@@ -258,10 +258,10 @@
             <h1 class="ev-title">Visual Evidence</h1>
 
             <div id="gallery">
-                  <div class="media-wrapper ev-wrap" ng-show="vm.playvideo" ng-click="vm.assessvideoplay()">
+                  <div class="media-wrapper ev-wrap" ng-show="vm.playvideo" >
                         <div ng-click="vm.playvideo = !vm.playvideo" class="icon-cancel-circle remove-media"></div>
-                        <img class="img-resource" ng-src="./img/icon-movie.jpg" alt="" >
-                        <img class="img-resource" ng-src="./img/no-img.jpg" alt="" >
+                        <img class="img-resource" ng-if="vm.filetype == 'video/mp4'" ng-src="./img/icon-movie.jpg" alt="" ng-click="vm.assessvideoplay('video')" >
+                        <img class="img-resource" ng-if="vm.filetype == 'image/jpeg'" ng-src="./img/no-img.jpg" alt="" ng-click="vm.assessvideoplay('image')" >
                         
                      </div>
             </div>
@@ -389,6 +389,14 @@
                   <video controls ng-src="{{vm.videolocallocation}}"></video>     
       </div>
    </div>
+
+   <div ng-show="vm.assessimagepopup" id="mediaView" class="" style="height: auto;">
+      <i class="icon-cancel-circle close-modal" ng-click="vm.assessimagepopup = !vm.assessimagepopup; vm.bdycampanel = true;"></i>
+      <div class="mv-content">
+            <img ng-src="{{vm.videolocallocation}}" alt="logo">    
+      </div>
+   </div>
+
    <div ng-show="vm.assesspdfpopup" id="mediaView" class="" style="height: auto;">
             <i class="icon-cancel-circle close-modal" ng-click="vm.assesspdfpopupclose($event)"></i>
             <div class="mv-content">
