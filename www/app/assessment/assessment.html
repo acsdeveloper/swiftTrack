@@ -254,16 +254,24 @@
             <div class="ev-icon icn-notes" ng-click="vm.assessnotes()"><i class="icon-file-text2"></i></div>
             <div class="ev-icon icn-question" ng-click="vm.assessquest()"><i class="icon-bubble"></i></div>
          </div>
+
+
+       <!-- ##### video section ######## -->
          <div class="mdl-bdy ev-bdy bdy-cam" ng-show="vm.bdycampanel">
             <h1 class="ev-title">Visual Evidence</h1>
 
             <div id="gallery">
                   <div class="media-wrapper ev-wrap" ng-show="vm.playvideo" >
-                        <div ng-click="vm.playvideo = !vm.playvideo" class="icon-cancel-circle remove-media"></div>
+                        <div ng-click="vm.delconform = !vm.delconform ;vm.playvideo = false;" class="icon-cancel-circle remove-media"></div>
                         <img class="img-resource" ng-if="vm.filetype == 'video/mp4'" ng-src="./img/icon-movie.jpg" alt="" ng-click="vm.assessvideoplay('video')" >
                         <img class="img-resource" ng-if="vm.filetype == 'image/jpeg'" ng-src="./img/no-img.jpg" alt="" ng-click="vm.assessvideoplay('image')" >
-                        
+                  
                      </div>
+                     <div class="del-media" ng-show="vm.delconform">
+                              <span class="del-title">Really Delete?</span>
+                              <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.playvideo = false;vm.delconform = false;">Confirm</a>
+                              <a class="btn btn-cancel del-false" ng-click="vm.delconform = false;vm.playvideo = true;" >Cancel</a>
+                        </div>
             </div>
             <div class="mdl-ftr">
                   <div class="upload-bar">
@@ -281,43 +289,55 @@
 
          </div>
 
+      <!-- #########   video section end ###### -->
 
 
-         <div class="mdl-bdy ev-bdy bdy-pdf" ng-show="vm.bdypdfpanel">
-            <h1 class="ev-title">File-Based Evidence</h1>
+<!-- ####### pdf section ########## -->
 
-            <!-- <div id="galleryPDF" ng-if="vm.popupdata.type_ref.pdf != undefined"> -->
-            <div id="galleryPDF" ng-show="vm.pdficon">
-               <div class="media-wrapper ev-wrap" >
-                  <div class="icon-cancel-circle remove-media"></div>
-                  <img alt="" ng-src="./img/icon-pdf.jpg" ng-click="vm.pdfopen()">
-               </div>
-            </div>
-            <div class="mdl-ftr">
-                  <div class="upload-bar">
-                     <div class="ul-prog"></div>
-                  </div>
-                  <div id="addEv" ng-click="vm.pdfevidence()" data-type='cam'>
-                     <span class="btn-pre">Add</span>
-                     <span class="ftr-icn">
-                              
-                              <i class="icn-pdf icon-file-pdf"></i>
-                            
-                          </span>
-                     <span class="btn-suf">New</span>
-                     <div>{{vm.filename}}</div>
-                  </div>
-               </div>
+<div class="mdl-bdy ev-bdy bdy-pdf" ng-show="vm.bdypdfpanel">
+      <h1 class="ev-title">File-Based Evidence</h1>
+
+      <!-- <div id="galleryPDF" ng-if="vm.popupdata.type_ref.pdf != undefined"> -->
+      <div id="galleryPDF" >
+         <div class="media-wrapper ev-wrap" ng-show="vm.pdficon" >
+            <div class="icon-cancel-circle remove-media" ng-click="vm.delconform = !vm.delconform;vm.pdficon = false" ></div>
+            <img alt="" ng-src="./img/icon-pdf.jpg" ng-click="vm.pdfopen()">
          </div>
+         <div class="del-media" ng-show="vm.delconform">
+                  <span class="del-title">Really Delete?</span>
+                  <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.pdficon = false;vm.delconform = false;">Confirm</a>
+                  <a class="btn btn-cancel del-false" ng-click="vm.delconform = false;vm.pdficon = true;" >Cancel</a>
+            </div>
+
+      </div>
+      <div class="mdl-ftr">
+            <div class="upload-bar">
+               <div class="ul-prog"></div>
+            </div>
+            <div id="addEv" ng-click="vm.pdfevidence()" data-type='cam'>
+               <span class="btn-pre">Add</span>
+               <span class="ftr-icn">
+                        
+                        <i class="icn-pdf icon-file-pdf"></i>
+                      
+                    </span>
+               <span class="btn-suf">New</span>
+               <div>{{vm.filename}}</div>
+            </div>
+         </div>
+   </div>
+<!-- ########### pdf section end #### -->
+
+
+         <!-- ################ notes section########## -->
 
 
          <div class="mdl-bdy ev-bdy bdy-notes" ng-show="vm.bdynotespanel">
             <h1 class="ev-title">Notes</h1>
 
-            <div class="update-btn hidden" data-type="notes"></div>
-            <input type="text" class="form-control mdl-input new-note catch-enter" data-type="notes" placeholder="Add a new note...">
+            <div class="update-btn" ng-click="vm.updateok();vm.updatebtn = !vm.updatebtn" ng-show="vm.updatebtn" data-type="notes"></div>
+            <input ng-change="vm.myFunc12()" ng-model="vm.myValue"  type="text" class="form-control mdl-input new-note catch-enter" data-type="notes" placeholder="Add a new note...">
             <div id="galleryNotes" class="gal-wrapper" data-type="notes"></div>
-
 
             <div class="note-row ev-wrap" ng-show="vm.noterow" data-type="notes" data-ev-id="new">
                         
@@ -332,23 +352,11 @@
                         <i class="icon-user"></i>
                         <span class="auth">rogersmith</span>
                   </span></div>
-
-
-            <!-- <div class="mdl-ftr">
-                  <div class="upload-bar">
-                     <div class="ul-prog"></div>
-                  </div>
-                  <div id="addEv" ng-click="vm.evidenceupload()" data-type='cam'>
-                     <span class="btn-pre">Add</span>
-                     <span class="ftr-icn">
-                  
-                              <i class="icn-notes icon-file-text2 "></i>
-                          </span>
-                     <span class="btn-suf">New</span>
-                     <div>{{vm.filename}}</div>
-                  </div>
-               </div> -->
          </div>
+
+
+
+<!-- ############# note section end ################# -->
 
 
          <div class="mdl-bdy ev-bdy bdy-question" ng-show="vm.bdyquestpanel" ng-click="vm.assessquest(indicatorsvalue)">

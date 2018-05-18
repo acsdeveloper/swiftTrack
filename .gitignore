@@ -23,6 +23,8 @@ node_modules/
 tmp/
 temp/
 platforms/
+www/lib/
+www/js/
 backup/
 plugins/
 plugins/android.json
