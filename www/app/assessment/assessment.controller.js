@@ -1,6 +1,5 @@
 (function() {
-    // 'use strict karthik';
-    // 'use strict ck';
+    // 'use strict';
     function assessmentCtrl(pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService) {
         console.log("after ctrl");
         var vm = this;
@@ -41,6 +40,53 @@
                 vm.headerimagefunction();
             });
 
+            vm.setlevel = function (value){
+                var returnvalue= 0;
+                Object.keys(value.levels).map(function(key, index) {
+                    if(value.levels[key].level_achieved==true){
+                        returnvalue= key;
+                    }
+                 });
+                 return returnvalue;
+            }
+            vm.setdatalevel = function(level,personid,assesskey,$event){
+	            var thisLevel = parseInt(level);
+                if(angular.element($event.target).hasClass('unchecked')){
+                    angular.forEach(angular.element('[data-attribute-value="person_'+assesskey+'_'+personid+'"] .btn-check'), function(value, key){
+                        var chkLevel = parseInt(value.attributes['data-level'].value);
+                        if(chkLevel <= thisLevel)
+                        {
+                            angular.element(value).removeClass('unchecked');
+                        } else  {
+                            angular.element(value).addClass('unchecked');
+                        }
+                   });
+                    document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]').setAttribute("data-level-set", level)
+                }
+                else{
+                    angular.forEach(angular.element('[data-attribute-value="person_'+assesskey+'_'+personid+'"] .btn-check'), function(value, key){
+                        var chkLevel = parseInt(value.attributes['data-level'].value);
+                        if(chkLevel >= thisLevel)
+                        {
+                            angular.element(value).addClass('unchecked');
+                        } else  {
+                            angular.element(value).removeClass('unchecked');
+                        }
+                    })
+                    document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]').setAttribute("data-level-set", parseInt(level)-1)
+
+                }
+                
+            }
+            // vm.getRandomstr = function(){
+            //     // return Math.random().toString(36).substring(1);
+            //     var text = "";
+            //     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            //     for (var i = 0; i < 10; i++)
+            //     text += possible.charAt(Math.floor(Math.random() * possible.length));
+            //     console.log(text)
+            //     return text;
+            // }
         // vm.logoutclick = function() {
         //     vm.logoutpopup = $scope.logoutpopup ? false : true;
         // }
