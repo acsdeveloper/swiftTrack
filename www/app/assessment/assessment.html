@@ -72,13 +72,8 @@
                   <div class="level-label">Competent</div>
                </div>
             </div>
-<<<<<<< HEAD
             <div class="panel-rows">
                <div  ng-repeat="(personid,indicatorsvalue) in assessvalue.indicators track by $index"  class="panel-row" data-id="{{personid}}" data-attribute-value="person_{{assesskey}}_{{personid}}" data-q="0" data-level-set="{{vm.setlevel(indicatorsvalue)}}">
-=======
-            <div class="panel-rows"></div>
-               <div  ng-repeat="indicatorsvalue in assessvalue.indicators" id="rowIDRWWH89SG7N" class="panel-row" data-id="65" data-q="0" data-level-set="0">
->>>>>>> f9eaaf22236a360a3b6a19864655b064d2404d99
                   <div class="ind" ng-click="indicatorsvalue.levels[3].signedoff? '' : vm.assess_popupfun(indicatorsvalue,assessvalue.image,assessvalue.name)">
                      <span class="ind-content" ng-bind-html="indicatorsvalue.final_content"></span>
                      <br>
