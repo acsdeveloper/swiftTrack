@@ -510,7 +510,26 @@
 
         // var url = "file:///storage/emulated/0/360/sample.pdf";
 
+        vm.myFunc12 = function()
+        {
+            console.log("testing-------");
+            console.log("myValue",vm.myValue);
+            if(vm.myValue == ""){
+                console.log("nullll");
+                vm.updatebtn=false;
 
+                
+            }else{vm.updatebtn=true;}
+        }
+
+        vm.updateok = function(){
+            console.log("update ok....");
+            var a = vm.myValue;
+            vm.upVal = a;
+            vm.myValue = "";
+            vm.noterow =true;
+            vm.delnotemedia=false;
+        }
 
 
 
