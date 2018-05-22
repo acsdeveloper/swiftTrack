@@ -3,7 +3,6 @@
     angular.module('swiftTrack', [
 
             'swiftTrack.controllers',
-            // 'swiftTrack.header',
             'swiftTrack.login',
             'swiftTrack.dashboard',
             'swiftTrack.assessment',
@@ -14,6 +13,7 @@
             'swiftTrack.userService',
             'swiftTrack.loader',
             'swiftTrack.networkInformation',
+            'swiftTrack.pouchservice',
             'ionic',
             'ngPDFViewer',
             'ngCookies',

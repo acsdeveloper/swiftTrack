@@ -53,9 +53,9 @@
 
         vm.dashboardAPIcall = function() {
             vm.object = {};
-            vm.object["jobroleids"] = localStorage.getItem('job_role_ids');
-            vm.login_type = localStorage.getItem('login_type');
-            dashboardService.UserdetailsAjax(vm.object).then(function(resp) {
+            // vm.object["jobroleids"] = localStorage.getItem('job_role_ids');
+            // vm.login_type = localStorage.getItem('login_type');
+            dashboardService.DashboarddetailsPouch().then(function(resp) {
                 storageFactory.setuserdetailsresponse(resp);
                 vm.fullresponseData = resp;
             });
