@@ -358,4 +358,6 @@
         text-decoration: none;
         background-color: #eee;
     }
-    
+    ul.nav.nav-tabs.tabs {
+        height: auto;
+    }

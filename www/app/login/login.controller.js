@@ -52,6 +52,7 @@
                         localStorage.setItem("fullname", resp.result[Object.keys(resp.result)].username);
                         localStorage.setItem("signoff_level", resp.result[Object.keys(resp.result)].signoff_level);
                         //call user details api and put storage factory service 
+                        
                         $state.go('dashboard')
                     }
                     else {

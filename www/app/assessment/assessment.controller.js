@@ -245,92 +245,92 @@
         vm.evidenceupload = function() {
 
             
-        fileChooser.open(
-            function fcSuccess(file){
-                vm.filename=file.name;
-                downloadImage(file.uri,file.name,file.mime_type);
-                },
-              function fcError(e){console.log(e);}
-       );
-
-
-        function downloadImage(uri,name,ftype){
-           
-            var ft = new FileTransfer();
-            var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/" + name;
-            vm.videolocallocation = targetPath;
-            ft.download(
-                uri,
-                targetPath,
-                function(entry) {
-
-                    $scope.$apply(function () {
-                        console.log("file type ..----------------.",typeof ftype);
-                        console.log("file type ..-----###--------.",ftype);
-                        vm.playvideo = true;
-                        vm.filetype = ftype;
-                    });
-                    
-                    console.log(entry);
-                    console.log("download complete: " + entry.fullPath);
+            fileChooser.open(
+                function fcSuccess(file){
+                    vm.filename=file.name;
+                    downloadImage(file.uri,file.name,file.mime_type);
+                    },
+                  function fcError(e){console.log(e);}
+           );
     
-                },
-                function(error) {
-                    console.log("error");
-                    console.log(error);
-                    console.log("download error" + error.code);
-                }
-            );
-            
-
-
-            // ##########################################
-                // file upload to server 
-
-
-            var win = function (r) {
-                console.log("Code = " + r.responseCode);
-                console.log("Response = " + r.response);
-                console.log("Sent = " + r.bytesSent);
-            }
-            
-            var fail = function (error) {
-                alert("An error has occurred: Code = " + error.code);
-                console.log("upload error source " + error.source);
-                console.log("upload error target " + error.target);
-            }
-
-            var options = new FileUploadOptions();
-            options.fileKey = "file";
-            options.fileName =name; 
-            options.mimeType = ftype;
-            console.log("option obj",options);
-            console.log("targetPath",targetPath);
-            var params = {};
-            params.value1 = "test";
-            params.value2 = "param";
-
-            options.params = params;
-
-                var encodeuri="https://swifttrack-agilexcyber.c9users.io/ionic/fileupload.php";
-                console.log("encodeuri",encodeuri);
+    
+            function downloadImage(uri,name,ftype){
+               
                 var ft = new FileTransfer();
-                ft.upload(targetPath, encodeURI(encodeuri),win,fail,options);
-      
-        // #######################################
-        // ----------end-------
+                var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/" + name;
+                vm.videolocallocation = targetPath;
+                ft.download(
+                    uri,
+                    targetPath,
+                    function(entry) {
+    
+                        $scope.$apply(function () {
+                            console.log("file type ..----------------.",typeof ftype);
+                            console.log("file type ..-----###--------.",ftype);
+                            vm.playvideo = true;
+                            vm.filetype = ftype;
+                        });
+                        
+                        console.log(entry);
+                        console.log("download complete: " + entry.fullPath);
         
-        
-        
-        }
-
+                    },
+                    function(error) {
+                        console.log("error");
+                        console.log(error);
+                        console.log("download error" + error.code);
+                    }
+                );
+                
+    
+    
+                // ##########################################
+                    // file upload to server 
+    
+    
+                var win = function (r) {
+                    console.log("Code = " + r.responseCode);
+                    console.log("Response = " + r.response);
+                    console.log("Sent = " + r.bytesSent);
+                }
+                
+                var fail = function (error) {
+                    alert("An error has occurred: Code = " + error.code);
+                    console.log("upload error source " + error.source);
+                    console.log("upload error target " + error.target);
+                }
+    
+                var options = new FileUploadOptions();
+                options.fileKey = "file";
+                options.fileName =name; 
+                options.mimeType = ftype;
+                console.log("option obj",options);
+                console.log("targetPath",targetPath);
+                var params = {};
+                params.value1 = "test";
+                params.value2 = "param";
+    
+                options.params = params;
+    
+                    var encodeuri="https://swifttrack-agilexcyber.c9users.io/ionic/fileupload.php";
+                    console.log("encodeuri",encodeuri);
+                    var ft = new FileTransfer();
+                    ft.upload(targetPath, encodeURI(encodeuri),win,fail,options);
+          
+            // #######################################
+            // ----------end-------
+            
+            
+            
+            }
+    
+               
            
-       
-        }
+            }
 
         vm.assessvideoplay = function(filetype)
         {
-            // vm.videolocallocation= "https://app.swifttrack.co.uk/orgs/wor-pf834j3894mqf348l3489d384fsfoj67/media/resources/manual-handling-8-basic-steps-to-correct-lifting-technique_1.mp4";
+    
             console.log("assess video function");
             if(filetype == "video"){vm.assessvideopopup=true;}
             else if(filetype == "image"){
@@ -343,21 +343,9 @@
             
            
             var srcelement=$event.target.nextElementSibling.children[0];
-                console.log("tttttrp", $event.target.nextElementSibling);
-                console.log("child111", $event.target.nextElementSibling.children[0]);
-                console.log("child222", $event.target.nextElementSibling.children[0].outerHTML);
-                console.log( document.querySelectorAll('.mv-content video')[0]);
-            
+
             video = angular.element(srcelement);
-            // console.log("myvideo ",video);
-
             video[0].pause();
-            // console.log("video url",videourl);
-            // console.log("$eventrrrr",$event);
-            // vm.url = videourl;  
-           
-            // console.log("assess video close  function");
-
             vm.assessvideopopup=false;
             vm.bdycampanel = true;
             
@@ -367,9 +355,6 @@
             var srcele = $event.target.parentElement.nextElementSibling.children[1].children[0].children[0];
             video = angular.element(srcele);
             video[0].pause();
-            // console.log("resourcevideosectionclose function");
-            // console.log($event);
-            // console.log("parent---",$event.target);
             vm.assessreport = !vm.assessreport;
 
         }
@@ -430,60 +415,8 @@
             vm.assesspdfpopup = true;
 
         
-       
-    //     var url = "file:///storage/emulated/0/360/sample.pdf";
-    //    var mimeType ="application/pdf";
-    //    var options = {
-    //     title: "pdf viewer",
-    //     documentView : {
-    //         closeLabel : "close"
-    //     },
-    //     navigationView : {
-    //         closeLabel : "nav"
-    //     },
-    //     email : {
-    //         enabled : true
-    //     },
-    //     print : {
-    //         enabled : false
-    //     },
-    //     openWith : {
-    //         enabled : true
-    //     },
-    //     bookmarks : {
-    //         enabled : false
-    //     },
-    //     search : {
-    //         enabled : true
-    //     },
-    //     autoClose: {
-    //         onPause : false
-    //     }
-    // }
-        
-    //       function onShow(){
-    //         window.console.log('document shown');
-    //         //e.g. track document usage
-    //       }
-    //       function onClose(){
-    //         window.console.log('document closed');
-    //         //e.g. remove temp files
-    //       }
-    //       function onMissingApp(appId, installer){
-    //         if(confirm("Do you want to install the free PDF Viewer App "
-    //                 + appId + " for Android?"))
-    //         {
-    //             installer();
-    //         }
-    //     } 
-    //     function onError(error){
-    //         window.console.log(error);
-    //         alert("Sorry! Cannot view document.");
-    //     }
-    
-    //     cordova.plugins.SitewaertsDocumentViewer.viewDocument(url, mimeType, options, onShow, onClose, onMissingApp, onError);
-    
-    }
+     
+        }
 
 
 

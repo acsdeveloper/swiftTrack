@@ -810,12 +810,12 @@ section .panel-row .chk-holder.disabled:before {
 
 
 .btn-dash-module i {
-	font-size: 16px;
+	font-size: 20px;
 	color: #fff;
-	position: relative;
+	/* position: relative; */
 	position: absolute;
-	top: 17px;
-	left: 10px;
+	/* top: 17px; */
+	/* left: 10px; */
 }
 
 .dash-tabs li a span {
