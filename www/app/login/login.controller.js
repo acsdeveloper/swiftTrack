@@ -39,18 +39,18 @@
                     if (resp.status == "success") {
                         // storageFactory.putService(resp);
                         storageFactory.login(true)
-                        storageFactory.setuserdetails(resp.result[Object.keys(resp.result)[0]][0]);
+                        storageFactory.setuserdetails(resp.result[Object.keys(resp.result)]);
                         console.log(storageFactory.getuserdetails())
                         $cookieStore.put('loginAuth', true);
                         localStorage.setItem("loginAuth", true);
-                        localStorage.setItem("first_name", resp.result[Object.keys(resp.result)[0]][0].first_name);
-                        localStorage.setItem("images", resp.result[Object.keys(resp.result)[0]][0].images);
-                        localStorage.setItem("job_role_ids", resp.result[Object.keys(resp.result)[0]][0].job_role_ids);
-                        localStorage.setItem("limited_to_people", resp.result[Object.keys(resp.result)[0]][0].limited_to_people);
-                        localStorage.setItem("limited_to_mods", resp.result[Object.keys(resp.result)[0]][0].limited_to_mods);
+                        localStorage.setItem("first_name", resp.result[Object.keys(resp.result)].first_name);
+                        localStorage.setItem("images", resp.result[Object.keys(resp.result)].images);
+                        localStorage.setItem("job_role_ids", resp.result[Object.keys(resp.result)].job_role_ids);
+                        localStorage.setItem("limited_to_people", resp.result[Object.keys(resp.result)].limited_to_people);
+                        localStorage.setItem("limited_to_mods", resp.result[Object.keys(resp.result)].limited_to_mods);
                         localStorage.setItem("login_type", Object.keys(resp.result));
-                        localStorage.setItem("fullname", resp.result[Object.keys(resp.result)[0]][0].username);
-                        localStorage.setItem("signoff_level", resp.result[Object.keys(resp.result)[0]][0].signoff_level);
+                        localStorage.setItem("fullname", resp.result[Object.keys(resp.result)].username);
+                        localStorage.setItem("signoff_level", resp.result[Object.keys(resp.result)].signoff_level);
                         //call user details api and put storage factory service 
                         $state.go('dashboard')
                     }

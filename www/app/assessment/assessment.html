@@ -74,14 +74,24 @@
             </div>
             <div class="panel-rows">
                <div  ng-repeat="(personid,indicatorsvalue) in assessvalue.indicators track by $index"  class="panel-row" data-id="{{personid}}" data-attribute-value="person_{{assesskey}}_{{personid}}" data-q="0" data-level-set="{{vm.setlevel(indicatorsvalue)}}">
-                  <div class="ind" ng-click="indicatorsvalue.levels[3].signedoff? '' : vm.assess_popupfun(indicatorsvalue,assessvalue.image,assessvalue.name)">
+                  <div class="ind" ng-click="indicatorsvalue.levels[3].signedoff? '' : vm.assess_popupfun(indicatorsvalue,assessvalue,$event)">
                      <span class="ind-content" ng-bind-html="indicatorsvalue.final_content"></span>
                      <br>
+                     {{indicatorsvalue.type_ref.media.length}}helo
+                     {{indicatorsvalue.type_ref.pdf.length}}
                      <span>
-                        <i ng-repeat="(key,val) in indicatorsvalue.type_ref" class="icn {{key == 'media' ? 'icon-camera media' : key == 'notes' ? 'icon-file-text2 notes' : key == 'pdf' ? 'icon-file-pdf pdf' : key == 'question' ? 'icon-bubble question' : 'hidden' }}"></i>
+                        <i data-ev="{{indicatorsvalue.type_ref.media.data_ev}}" data-ev-ids="{{indicatorsvalue.type_ref.media.data_ev_ids}}" data-auth="{{indicatorsvalue.type_ref.media.data_auth}}" class="ev-cam icn icon-camera" ng-class=" indicatorsvalue.type_ref.media !== undefined ?'':'hidden'"></i>
+                        <i data-ev="{{indicatorsvalue.type_ref.pdf.data_ev}}" data-ev-ids="{{indicatorsvalue.type_ref.pdf.data_ev_ids}}" data-auth="{{indicatorsvalue.type_ref.pdf.data_auth}}" class="ev-pdf icn icon-file-pdf " ng-class="indicatorsvalue.type_ref.pdf !== undefined ?'':'hidden'"></i>
+                        <i data-ev="{{indicatorsvalue.type_ref.notes.data_ev}}" data-ev-ids="{{indicatorsvalue.type_ref.notes.data_ev_ids}}" data-auth="{{indicatorsvalue.type_ref.notes.data_auth}}" class="ev-notes icn icon-file-text2" ng-class=" indicatorsvalue.type_ref.notes !== undefined ?'':'hidden'"></i>
+                        <i data-ev="{{indicatorsvalue.type_ref.question.data_ev}}" data-ev-ids="{{indicatorsvalue.type_ref.question.data_ev_ids}}" data-auth="{{indicatorsvalue.type_ref.question.data_auth}}" class="ev-question icn icon-bubble" ng-class=" indicatorsvalue.type_ref.question !== undefined?'':'hidden'"></i>
+                        <i class="icn icon-plus"></i>
+                        <em>Tap to add evidence or notes </em>
+                      </span>
+                     <!-- <span>
+                        <i ng-data-ev="val.data_ev" ng-data-ev-ids="val.data_ev_ids" ng-data-auth="val.data_auth" ng-repeat="(key,val) in indicatorsvalue.type_ref" class="icn ev-cam {{key == 'media' ? 'icon-camera media' : key == 'notes' ? 'icon-file-text2 notes' : key == 'pdf' ? 'icon-file-pdf pdf' : key == 'question' ? 'icon-bubble question' : 'hidden' }}"></i>
                         <i class="icn icon-plus"></i>
                   <em>Tap to add evidence or notes </em>
-                  </span>
+                  </span> -->
                      <span ng-if="indicatorsvalue.ind_is_q == true" class="q-icon "><i class="icon-bubble"></i> </span>
                   </div>
                   <div class="checks">
@@ -196,25 +206,9 @@
             <div ng-repeat="resouval in vm.resouobj.resource_sections " class="row sep-box">
 
                <div class="col-xs-12" ng-if="resouval.type_id == 5">
-                  <!-- <video width="100%" height="300px" controls preload="auto">
-                        <source ng-src="{{resouval.item_media}}" type="video/mp4"></source>
-                        </video> -->
                         <video width="280" height="240" controls>
                               <source src="" dynamic-url dynamic-url-src="{{resouval.item_media}}">
                           </video>
-                  <!-- <p>
-                       
-                     {{resouval.item_media}}
-                  </p> -->
-                  <!--<video width="100%" height="300" controls>-->
-                  <!--   <source ng-src="" type="video/mp4">-->
-                  <!--   </source>-->
-                  <!--</video>-->
-                  <!--<video class="img-resource" ng-src="{{resouval.item_media}}" controls="" preload="auto" poster="/img/poster-movie.jpg"></video>-->
-                  <!--<video width="100%" height="300" controls>-->
-                  <!--  <source src="{{resouval.item_media}}" type="video/mp4">-->
-                  <!-- </video>-->
-                  <!--<iframe width="560" height="300" ng-src="{{resouval.item_media}}" frameborder="0" allowfullscreen controls></iframe>-->
                </div>
                <div class="col-xs-12" ng-if="resouval.type_id == 2">
                   <h1>{{resouval.item_content}}</h1>
@@ -235,7 +229,7 @@
       <!--<div class="modal-backdrop"></div>-->
    </div>
 
-   <d3iv ng-show="vm.assessmentpopup" class="custom-modal assess-file-overlay" id="evidenceModal">
+   <div ng-show="vm.assessmentpopup" class="custom-modal assess-file-overlay" id="evidenceModal">
       <div class="mdl mdl-ev">
          <div class="mdl-ev-hdr">
             <input class="fileuploader hidden" type="file" name="files[]" accept="image/*,video/*" capture="camera">
@@ -259,11 +253,11 @@
 
             <div id="gallery">
                   <div class="media-wrapper ev-wrap" ng-show="vm.playvideo" >
-                        <div ng-click="vm.playvideo = !vm.playvideo" class="icon-cancel-circle remove-media"></div>
-                        <img class="img-resource" ng-if="vm.filetype == 'video/mp4'" ng-src="./img/icon-movie.jpg" alt="" ng-click="vm.assessvideoplay('video')" >
-                        <img class="img-resource" ng-if="vm.filetype == 'image/jpeg'" ng-src="./img/no-img.jpg" alt="" ng-click="vm.assessvideoplay('image')" >
+                        <div ng-click="vm.removeMedia()" class="icon-cancel-circle remove-media"></div>
+                        <!-- <img class="img-resource" ng-if="vm.filetype == 'video/mp4'" ng-src="./img/icon-movie.jpg" alt="" ng-click="vm.assessvideoplay('video')" > -->
+                        <img class="img-resource" ng-src="vm.imagesource" alt="" ng-click="vm.assessvideoplay(vm.imagesource)" >
                         
-                     </div>
+                  </div>
             </div>
             <div class="mdl-ftr">
                   <div class="upload-bar">

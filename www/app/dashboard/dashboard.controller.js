@@ -49,7 +49,6 @@
             storageFactory.setJobAndMod(vm.object);
             $state.go('assessment');
 
-
         }
 
         vm.dashboardAPIcall = function() {

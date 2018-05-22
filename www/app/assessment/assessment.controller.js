@@ -3,10 +3,10 @@
     function assessmentCtrl(pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService) {
         console.log("after ctrl");
         var vm = this;
-        
+         
 
         vm.popupdata = null;
-        if (!storageFactory.getJobAndMod()) {
+        if (!storageFactory.getJobAndMod()) { 
             $state.go('dashboard')
         }
         vm.assessmentdetails = function() {
@@ -168,48 +168,10 @@
         }
 
 
-        vm.assess_popupfun = function(key,image,name) {
-
-                // ############ auto storage permission
-                // var permissions = cordova.plugins.permissions;
-                // // console.log("permission",permission);
-                // permissions.hasPermission(permissions.CAMERA, function( status ){
-                //     console.log("status---",status);
-                //     if ( status.hasPermission ) {
-                //       console.log("Yes------------- :D ");
-                //     }
-                //     else {
-                //       console.warn("No------------ :( ");
-                //     }
-                //   });
-
-        //         var permissions = cordova.plugins.permissions;
-        //         vm.androidPermissions.hasPermission(vm.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE)
-        // .then(status => {
-        //     console.log("storage permission------------",vm.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE);
-        //   if (status.hasPermission) {
-        //     vm.captureVideo();
-        //   } else {
-        //     vm.androidPermissions.requestPermission(vm.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE)
-        //     .then(status =>{
-        //       if(status.hasPermission) vm.captureVideo();
-        //     });
-        //   }
-        // })
-
-
-
-
-                // End ############################
-
-              
-        
-                console.log("assresp------",key);
-                console.log("assimage------",image);
-                console.log("assname------",name);
+        vm.assess_popupfun = function(key,assessdetails) {
             vm.indicatorname=key.final_content;
-            vm.userimage=image;
-            vm.username=name;
+            vm.userimage=assessdetails.image;
+            vm.username=assessdetails.name;
 
                 
             vm.popupdata = key;
@@ -226,8 +188,6 @@
                 vm.bdyquestpanel = false;
             }
             vm.assessmentpopup = true;
-
-            console.log("keydata", key);
 
         }
 
