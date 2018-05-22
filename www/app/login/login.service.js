@@ -20,6 +20,23 @@
                 return vm.defered.promise;
             });
         };
+        vm.fetchfulldata = function(obj) {
+            if (Constants.productionServer) {
+                vm.url = Constants.baseUrl + '/swiftMobile/api/swiftTrackAll.php';
+            }
+            else {
+                console.log('api call json');
+                vm.url = 'json/job.json';
+            }
+
+            vm.object=obj;
+
+            return Request.post(vm.url,vm.object).then(function(resp) {
+                vm.defered = $q.defer();
+                vm.defered.resolve(resp);
+                return vm.defered.promise;
+            });
+        };
 
     }
 

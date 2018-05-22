@@ -39,12 +39,8 @@
       "cordova-plugin-cache-clear": {},
       "cordova-plugin-file-transfer": {},
       "cordova-plugin-file": {},
-<<<<<<< HEAD
-      "maurodx-cordova-plugin-file-selector": {}
-=======
       "maurodx-cordova-plugin-file-selector": {},
       "cordova-plugin-document-viewer": {}
->>>>>>> a533de9f67de3935c22e8b64f9ac87ce73c08f2e
     },
     "platforms": [
       "android"
