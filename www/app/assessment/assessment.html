@@ -38,18 +38,18 @@
          </div>
       </div>
    </header>
-   <div class="header-bar">
+   <div class="header-bar" ng-click="vm.assesstray = !vm.assesstray;">
       <div class="row bar-row">
          <div col-11 class="col-xs-11 no-pad">
             Assessing: <strong ng-bind-html="vm.assessmentdetail_response.jobRole"></strong> | <strong ng-bind-html=" vm.assessmentdetail_response.ModuleName">
                </strong>
          </div>
       </div>
-      <i ng-click="vm.assesstray = !vm.assesstray;" class="resource-icon icon-stack"></i>
+      <i  class="resource-icon" ng-class="vm.assesstray == true ? 'icon-cancel-circle' : 'icon-stack'"></i>
       <div id="resourcesTray" ng-show="vm.assesstray">
          <h1><i class="icn icon-stack"></i> Resources for this assessment</h1>
          <div ng-click="vm.resourcefunct(resour)" ng-repeat=" resour in vm.assessmentdetail_response.resources" class="res-row">
-            <i class="glyphicon glyphicon-menu-right"></i>
+            <i class="ion-chevron-right"></i>
             <h2>{{resour.resource_name}}</h2>
          </div>
       </div>
