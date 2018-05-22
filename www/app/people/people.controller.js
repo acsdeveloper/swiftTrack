@@ -20,9 +20,63 @@
             reportService.reportpageAjax(vm.reportobj).then(function(resp) {
                 console.log("assessrepes", resp);
                 vm.report_response = resp;
+                vm.peoplemediadownload(resp);
 
             });
         }
+
+        vm.peoplemediadownload = function(peopleresponse)
+        {
+            console.log("people media download ",peopleresponse);
+            console.log("people media download ",peopleresponse.detailedReport);
+            var reportres = peopleresponse.detailedReport;
+            Object.keys(reportres).map(function(key, index) {
+                Object.keys(reportres[key].modules).map(function(key1, index1) {
+                Object.keys(reportres[key].modules[key1].indicators).map(function(key2, index2) {
+                Object.keys(reportres[key].modules[key1].indicators[key2]).map(function(key3, index3) {
+                if(key3 == 'media' || key3 == 'pdf'){
+                Object.keys(reportres[key].modules[key1].indicators[key2][key3]).map(function(key4, index4) {
+                // console.log('tttt'+key4+index4);
+                console.log('tttt'+reportres[key].modules[key1].indicators[key2][key3][key4].media_url);
+                });}
+                });
+                });
+                });
+                });
+                var uri ="https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/quote (6).jpg";
+                var name = "quote (6).jpg";
+                downloadImage(uri,name);
+            // "https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media"
+            // angular.forEach(peopleresponse.detailedReport, function(key, value) {
+            //     console.log(key + ': ' + value);
+            //   });
+        }
+
+
+        function downloadImage(uri,name){
+            console.log("people download");
+               
+            var ft = new FileTransfer();
+            var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/" + name;
+            vm.videolocallocation = targetPath;
+            ft.download(
+                uri,
+                targetPath,
+                function(entry) {
+                    
+                    console.log(entry);
+                    console.log("download complete: " + entry.fullPath);
+    
+                },
+                function(error) {
+                    console.log("error");
+                    console.log(error);
+                    console.log("download error" + error.code);
+                }
+            );
+        }
+
+
         vm.assessmentdetails();
 
         vm.openimageModal = function(image) {
