@@ -7,7 +7,7 @@
             usrdtl = null,
             JobAndMod = null,
             userId = null,
-            userdetailsresponse = null;
+            dashboarddetailsresponse = null;
 
 
         return {
@@ -49,11 +49,11 @@
             clearuserresportid: function() {
                 userId = null;
             },
-            setuserdetailsresponse: function(object) {
-                userdetailsresponse = object;
+            setdashboarddetailsresponse: function(object) {
+                dashboarddetailsresponse = object;
             },
-            getuserdetailsresponse: function() {
-                return userdetailsresponse;
+            getdashboarddetailsresponse: function() {
+                return dashboarddetailsresponse;
             },
             clearAllStorage: function() {
                 loginValue = null;
@@ -61,7 +61,7 @@
                 usrdtl = null;
                 JobAndMod = null;
                 userId = null;
-                userdetailsresponse = null;
+                dashboarddetailsresponse = null;
                 
             }
 

@@ -17,59 +17,37 @@
         vm.assessmentdetails = function() {
             vm.reportobj = storageFactory.getuserreportid();
             console.log(vm.reportobj)
-            reportService.reportpageAjax(vm.reportobj).then(function(resp) {
+            reportService.ReportdetailsPouch(vm.reportobj).then(function(resp) {
                 console.log("assessrepes", resp);
                 vm.report_response = resp;
-                vm.peoplemediadownload(resp);
 
             });
         }
 
-        vm.peoplemediadownload = function(peopleresponse)
-        {
-                var reportres = peopleresponse.detailedReport;
-                Object.keys(reportres).map(function(key, index) {
-                Object.keys(reportres[key].modules).map(function(key1, index1) {
-                Object.keys(reportres[key].modules[key1].indicators).map(function(key2, index2) {
-                Object.keys(reportres[key].modules[key1].indicators[key2]).map(function(key3, index3) {
-                if(key3 == 'media' || key3 == 'pdf'){
-                Object.keys(reportres[key].modules[key1].indicators[key2][key3]).map(function(key4, index4) {
-                var fileurl = reportres[key].modules[key1].indicators[key2][key3][key4].media_url;
-                var filename = fileurl.replace("/media/", "");
-                var comfileurl = "https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r"+reportres[key].modules[key1].indicators[key2][key3][key4].media_url;
-                var encodedfileurl = encodeURI(comfileurl);
-                downloadImage(encodedfileurl,filename);
-                });}
-                });
-                });
-                });
-                });
-                
-        }
         
 
-        function downloadImage(uri,name){
-            console.log("people download");
+        // function downloadImage(uri,name){
+        //     console.log("people download");
                
-            var ft = new FileTransfer();
-            var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/" + name;
-            vm.videolocallocation = targetPath;
-            ft.download(
-                uri,
-                targetPath,
-                function(entry) {
+        //     var ft = new FileTransfer();
+        //     var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/" + name;
+        //     vm.videolocallocation = targetPath;
+        //     ft.download(
+        //         uri,
+        //         targetPath,
+        //         function(entry) {
                     
-                    console.log(entry);
-                    console.log("download complete: " + entry.fullPath);
+        //             console.log(entry);
+        //             console.log("download complete: " + entry.fullPath);
     
-                },
-                function(error) {
-                    console.log("error");
-                    console.log(error);
-                    console.log("download error" + error.code);
-                }
-            );
-        }
+        //         },
+        //         function(error) {
+        //             console.log("error");
+        //             console.log(error);
+        //             console.log("download error" + error.code);
+        //         }
+        //     );
+        // }
 
 
         vm.assessmentdetails();

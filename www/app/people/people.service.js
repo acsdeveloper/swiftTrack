@@ -1,5 +1,5 @@
 (function() {
-    function reportService(Request, Constants, $q) {
+    function reportService(Pouchfactory,Request, Constants, $q) {
         var vm = this;
         vm.data = {};
 
@@ -20,10 +20,29 @@
                 return vm.defered.promise;
             });
         };
+        vm.ReportdetailsPouch = function(obj) {
+            if (Constants.productionServer) {
+                vm.docname ='detailed_document';
+            }
+            else {
+                console.log('api call json');
+                vm.url = 'json/job.json';
+            }
+            vm.docname ='detailed_document';
+            vm.data='report'
+            // vm.object=obj;
+            vm.persondata=obj.person_id
+            return Pouchfactory.get(vm.docname,vm.data).then(function(resp) {
+                vm.defered = $q.defer();
+                console.log(vm.persondata,resp,"data")
+                vm.defered.resolve(resp[vm.persondata]);
+                return vm.defered.promise;
+            });
+        };
 
     }
 
     angular.module('swiftTrack.progressreport')
         .service('reportService', reportService)
-    reportService.$inject = ['Request', 'Constants', '$q'];
+    reportService.$inject = ['Pouchfactory','Request', 'Constants', '$q'];
 }())

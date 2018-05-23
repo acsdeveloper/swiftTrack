@@ -1,21 +1,40 @@
 (function() {
-    function dashboardService(Request, Constants, $q) {
+    function dashboardService(Pouchfactory,Request, Constants, $q) {
         var vm = this;
         vm.data = {};
 
 
-        vm.UserdetailsAjax = function(obj) {
+        vm.DashboarddetailsPouch = function(obj) {
             if (Constants.productionServer) {
-                vm.url = Constants.baseUrl + '/api/dashboardapi.php';
+                vm.docname ='detailed_document';
             }
             else {
                 console.log('api call json');
                 vm.url = 'json/job.json';
             }
+            vm.docname ='detailed_document';
+            vm.data='dashboard'
+            // vm.object=obj;
 
-            vm.object=obj;
+            return Pouchfactory.get(vm.docname,vm.data).then(function(resp) {
+                vm.defered = $q.defer();
+                vm.defered.resolve(resp);
+                return vm.defered.promise;
+            });
+        };
+        vm.LocaldatadetailsPouch = function(obj) {
+            if (Constants.productionServer) {
+                vm.docname ='detailed_document';
+            }
+            else {
+                console.log('api call json');
+                vm.url = 'json/job.json';
+            }
+            vm.docname ='localdata';
+            vm.data=''
+            // vm.object=obj;
 
-            return Request.post(vm.url,vm.object).then(function(resp) {
+            return Pouchfactory.get(vm.docname,vm.data).then(function(resp) {
                 vm.defered = $q.defer();
                 vm.defered.resolve(resp);
                 return vm.defered.promise;
@@ -43,5 +62,5 @@
 
     angular.module('swiftTrack.dashboard')
         .service('dashboardService', dashboardService)
-    dashboardService.$inject = ['Request', 'Constants', '$q'];
+    dashboardService.$inject = ['Pouchfactory','Request', 'Constants', '$q'];
 }())
