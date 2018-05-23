@@ -7,6 +7,9 @@
         vm.showloader = false;
         vm.localDB = new PouchDB("Swifttrack");
         if (storageFactory.islogin()) {
+            // vm.localDB.get('detailed_document').then(function (doc) {
+            //     console.log("pouchdb document",doc);
+            // });
             $state.go('dashboard')
             return;
         }
@@ -78,9 +81,110 @@
 
             LoginService.fetchfulldata(vm.obj).then(function(resp) {
                 storageFactory.setuserdetailsresponse(resp);
+                console.log("full response",resp);
+                vm.assessmentmediadownload(resp);
+
+
+
+
+
+
                 vm.putDataPouch(resp,'detailed_document')
             });
         }
+        vm.assessmentmediadownload = function(response)
+        {
+            var resourcesection = response.assessment[Object.keys(response.assessment)[0]][Object.keys(response.assessment[Object.keys(response.assessment)[0]])[0]].resources;
+            console.log("myresources section for loop",resourcesection);
+            Object.keys(response.assessment).map(function(key, index) {
+                Object.keys(response.assessment[key]).map(function(key1, index1) {
+                Object.keys(response.assessment[key][key1]).map(function(key2, index2) {
+                
+                if(key2 == 'people' || key2 == 'resources'){
+                
+                if(key2 == 'people'){
+                Object.keys(response.assessment[key][key1][key2]).map(function(key3, index3) {
+                Object.keys(response.assessment[key][key1][key2][key3].indicators).map(function(key3a, index3a){ 
+                Object.keys(response.assessment[key][key1][key2][key3].indicators[key3a]).map(function(key3b, index3b){ 
+                if(key3b == 'type_ref'){
+                Object.keys(response.assessment[key][key1][key2][key3].indicators[key3a][key3b]).map(function(key3c, index3c){
+                
+                if(key3c == 'media' || key3c == 'pdf'){
+                Object.keys(response.assessment[key][key1][key2][key3].indicators[key3a][key3b][key3c]).map(function(key3d, index3d){
+               
+                response.assessment[key][key1][key2][key3].indicators[key3a][key3b][key3c].data_ev.split(',').map((a)=>vm.mediares(a))
+               
+                })
+            
+                }
+                 })
+                }
+                
+                
+                })
+                })
+                })
+                }
+                
+                else{
+                Object.keys(response.assessment[key][key1][key2]).map(function(key3, index3) {
+                Object.keys(response.assessment[key][key1][key2][key3]).map(function(key4, index4) {
+                
+                if(key4 == 'resource_sections'){
+                Object.keys(response.assessment[key][key1][key2][key3][key4]).map(function(key5, index5) {
+                Object.keys(response.assessment[key][key1][key2][key3][key4][key5]).map(function(key6, index6) {
+    
+                var mediaurl = response.assessment[key][key1][key2][key3][key4][key5].item_media;
+                console.log("mediaurlresourse--------",mediaurl);
+                var encodedmediaurl = encodeURI(mediaurl);
+                var filename =mediaurl.substring(mediaurl.lastIndexOf('/')+1);
+                // vm.downloadImage(encodedmediaurl,filename);
+            })
+                })
+                
+                }
+                })
+                })
+                }
+                }
+                })
+                })
+                })
+        }
+     vm.mediares = function(a)
+        {
+            console.log("mediapeople------------",a);
+            var comfileurl = "https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r"+a;
+            var encodedmediaurl = encodeURI(comfileurl); 
+            var filename = comfileurl.substring(comfileurl.lastIndexOf('/')+1);
+            // vm.downloadImage(encodedmediaurl,filename);
+            
+
+        }
+
+    vm.downloadImage = function(uri,name){
+            console.log("people download");
+               
+            var ft = new FileTransfer();
+            var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/" + name;
+            vm.videolocallocation = targetPath;
+            ft.download(
+                uri,
+                targetPath,
+                function(entry) {
+                    
+                    console.log(entry);
+                    console.log("download complete: " + entry.fullPath);
+    
+                },
+                function(error) {
+                    console.log("error");
+                    console.log(error);
+                    console.log("download error" + error.code);
+                }
+            );
+        }
+
         vm.putDataPouch = function(data,doc_name){
             
             function detailedDocfunc(doc) {

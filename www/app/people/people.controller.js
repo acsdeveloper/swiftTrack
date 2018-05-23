@@ -27,31 +27,26 @@
 
         vm.peoplemediadownload = function(peopleresponse)
         {
-            console.log("people media download ",peopleresponse);
-            console.log("people media download ",peopleresponse.detailedReport);
-            var reportres = peopleresponse.detailedReport;
-            Object.keys(reportres).map(function(key, index) {
+                var reportres = peopleresponse.detailedReport;
+                Object.keys(reportres).map(function(key, index) {
                 Object.keys(reportres[key].modules).map(function(key1, index1) {
                 Object.keys(reportres[key].modules[key1].indicators).map(function(key2, index2) {
                 Object.keys(reportres[key].modules[key1].indicators[key2]).map(function(key3, index3) {
                 if(key3 == 'media' || key3 == 'pdf'){
                 Object.keys(reportres[key].modules[key1].indicators[key2][key3]).map(function(key4, index4) {
-                // console.log('tttt'+key4+index4);
-                console.log('tttt'+reportres[key].modules[key1].indicators[key2][key3][key4].media_url);
+                var fileurl = reportres[key].modules[key1].indicators[key2][key3][key4].media_url;
+                var filename = fileurl.replace("/media/", "");
+                var comfileurl = "https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r"+reportres[key].modules[key1].indicators[key2][key3][key4].media_url;
+                var encodedfileurl = encodeURI(comfileurl);
+                downloadImage(encodedfileurl,filename);
                 });}
                 });
                 });
                 });
                 });
-                var uri ="https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/quote (6).jpg";
-                var name = "quote (6).jpg";
-                downloadImage(uri,name);
-            // "https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media"
-            // angular.forEach(peopleresponse.detailedReport, function(key, value) {
-            //     console.log(key + ': ' + value);
-            //   });
+                
         }
-
+        
 
         function downloadImage(uri,name){
             console.log("people download");
