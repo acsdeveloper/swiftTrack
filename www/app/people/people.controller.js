@@ -17,7 +17,7 @@
         vm.assessmentdetails = function() {
             vm.reportobj = storageFactory.getuserreportid();
             console.log(vm.reportobj)
-            reportService.reportpageAjax(vm.reportobj).then(function(resp) {
+            reportService.ReportdetailsPouch(vm.reportobj).then(function(resp) {
                 console.log("assessrepes", resp);
                 vm.report_response = resp;
 

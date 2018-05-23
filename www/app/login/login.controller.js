@@ -5,7 +5,7 @@
 
         var vm = this;
         vm.showloader = false;
-        vm.localDB = new PouchDB("Swifttrack");
+        vm.localDB = new PouchDB("Swifttrack",{revs_limit: 2});
         if (storageFactory.islogin()) {
             $state.go('dashboard')
             return;
@@ -53,11 +53,9 @@
                         localStorage.setItem("fullname", resp.result[Object.keys(resp.result)].username);
                         localStorage.setItem("signoff_level", resp.result[Object.keys(resp.result)].signoff_level);
                         //call user details api and put storage factory service 
-                        vm.putDataPouch(resp.result[Object.keys(resp.result)],'localdata')
-                        
-                        vm.fetchfulldataAPI(resp);
-
-                        $state.go('dashboard')
+                        vm.putDataPouch(resp.result[Object.keys(resp.result)],'localdata').then(function(){
+                            vm.fetchfulldataAPI(resp);
+                        })
                     }
                     else {
                         vm.errormessage = resp.result;
@@ -74,25 +72,29 @@
             vm.obj.org_usr = vm.object["org"];
             vm.obj.login_user = resp.result[Object.keys(resp.result)].username;
             vm.obj.login_type = Object.keys(resp.result)[0];
-            vm.putDataPouch(vm.obj,'post_jsonobject');
-
-            LoginService.fetchfulldata(vm.obj).then(function(resp) {
-                storageFactory.setuserdetailsresponse(resp);
-                vm.putDataPouch(resp,'detailed_document')
-            });
+            vm.putDataPouch(vm.obj,'post_jsonobject').then(function(){
+                LoginService.fetchfulldata(vm.obj).then(function(resp) {
+                    vm.putDataPouch(resp,'detailed_document').then(function(){
+                        $state.go('dashboard')
+                    })
+                });
+            })
         }
         vm.putDataPouch = function(data,doc_name){
+            return new Promise(function(resolve, reject) {
+                // Do async job
+               function detailedDocfunc(doc) {
+                    doc=data;
+                    return doc;
+                  }
+                  
+                  vm.localDB.upsert(doc_name, detailedDocfunc).then(function () {
+                    resolve('success')
+                  }).catch(function (err) {
+                    reject(err)
+                  });
+            })
             
-            function detailedDocfunc(doc) {
-                doc=data;
-                return doc;
-              }
-              
-              vm.localDB.upsert(doc_name, detailedDocfunc).then(function () {
-                // success!
-              }).catch(function (err) {
-                // error (not a 404 or 409)
-              });
         }
         vm.myFunct = function(event) {
             var keycode = (event.keyCode ? event.keyCode : event.which);

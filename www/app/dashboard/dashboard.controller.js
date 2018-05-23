@@ -56,11 +56,13 @@
             // vm.object["jobroleids"] = localStorage.getItem('job_role_ids');
             // vm.login_type = localStorage.getItem('login_type');
             dashboardService.DashboarddetailsPouch().then(function(resp) {
-                storageFactory.setuserdetailsresponse(resp);
+                storageFactory.setdashboarddetailsresponse(resp);
+                console.log(resp)
                 vm.fullresponseData = resp;
             });
         }
         vm.getlength = function(mt) {
+            console.log(mt)
             return Object.keys(mt).length;
         }
 
@@ -96,14 +98,14 @@
 
         angular.element(document).ready(function() {
             vm.login_type = localStorage.getItem('login_type');
-            console.log(storageFactory.getuserdetailsresponse(), "null")
-            if (storageFactory.getuserdetailsresponse() == null) {
+            console.log(storageFactory.getdashboarddetailsresponse(), "null")
+            if (storageFactory.getdashboarddetailsresponse() == null) {
                 $timeout(function() {
                     vm.dashboardAPIcall();
-                }, 400);
+                }, 300);
             }
             else {
-                vm.fullresponseData = storageFactory.getuserdetailsresponse();
+                vm.fullresponseData = storageFactory.getdashboarddetailsresponse();
                 Loader.stopLoading();
             }
 

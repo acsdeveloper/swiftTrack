@@ -4,9 +4,10 @@
     'use strict';
     angular.module('swiftTrack.pouchservice', [])
         .factory("Pouchfactory", function($http, $q, Loader, $ionicPopup) {
-            var localDB = new PouchDB("Swifttrack");
+            
             return {
                 get: function(docname,data,callback) {
+                    var localDB = new PouchDB("Swifttrack",{revs_limit: 2});
                     var cb = callback || angular.noop;
                     var deferred = $q.defer();
                     localDB.get(docname).then(function(value){
