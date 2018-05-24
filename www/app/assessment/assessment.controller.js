@@ -1,10 +1,10 @@
 (function() {
     // 'use strict';
-    function assessmentCtrl(pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService) {
+    function assessmentCtrl(Constants,pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService) {
         console.log("after ctrl");
         var vm = this;
          
-
+        vm.localUrl=cordova.file.externalRootDirectory +'upload';
         vm.popupdata = null;
         if (!storageFactory.getJobAndMod()) { 
             $state.go('dashboard')
@@ -16,8 +16,8 @@
             vm.jobroleandmod['signoff_level'] = localStorage.getItem('signoff_level');
 
             console.log(vm.jobroleandmod)
-            ModuleService.ModuledetailsAjax(vm.jobroleandmod).then(function(resp) {
-                console.log(resp);
+            ModuleService.ModuledetailsPouch(vm.jobroleandmod).then(function(resp) {
+                console.log(resp,"assessment controller response");
                 vm.assessmentdetail_response = resp;
             });
         }
@@ -168,32 +168,57 @@
         }
 
 
-        vm.assess_popupfun = function(key,assessdetails) {
+        vm.assess_popupfun = function(key,assessdetails,$event) {
+            vm.popupdata = key;
+            if (key.ind_is_q) {
+                    vm.bdycampanel = false;
+                    vm.bdypdfpanel = false;
+                    vm.bdynotespanel = false;
+                    vm.bdyquestpanel = true;
+                    vm.assessmentpopup = true;
+            }
+            else {
+                    vm.bdycampanel = true;
+                    vm.bdypdfpanel = false;
+                    vm.bdynotespanel = false;
+                    vm.bdyquestpanel = false;
+                    vm.assessmentpopup = true;
+            }
+            
             vm.indicatorname=key.final_content;
             vm.userimage=assessdetails.image;
             vm.username=assessdetails.name;
+            console.log(angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value)
+            var datapath=angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value;
+            
+            var datacam=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-ev'].value
+            var datapdf=angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-ev'].value
+            var datanotes=angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev'].value
+            var dataques=angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-ev'].value
+            
+           var finalarrcam =datacam.split(',')[0]==''?[]:datacam.split(',');
+           var finalarrpdf =datapdf.split(',')[0]==''?[]:datapdf.split(',');
+           var finalarrnotes =datanotes.split(',')[0]==''?[]:datanotes.split(',');
+           var finalarrquestion =dataques.split(',')[0]==''?[]:dataques.split(',');
 
-                
-            vm.popupdata = key;
-            if (key.ind_is_q) {
-                vm.bdycampanel = false;
-                vm.bdypdfpanel = false;
-                vm.bdynotespanel = false;
-                vm.bdyquestpanel = true;
-            }
-            else {
-                vm.bdycampanel = true;
-                vm.bdypdfpanel = false;
-                vm.bdynotespanel = false;
-                vm.bdyquestpanel = false;
-            }
-            vm.assessmentpopup = true;
+           vm.gallerycamArr=finalarrcam;
+           vm.gallerypdfArr=finalarrpdf;
+           vm.gallerynotesArr=finalarrnotes;
+           vm.galleryquestionArr=finalarrquestion;
+           
+            
+            console.log(vm.gallerypdfArr,finalarrcam)
+            
 
         }
 
 
         vm.assesspopclose = function() {
             vm.assessmentpopup = false;
+            vm.bdycampanel = false;
+                    vm.bdypdfpanel = false;
+                    vm.bdynotespanel = false;
+                    vm.bdyquestpanel = false;
         }
 
         vm.resourcefunct = function(value) {
@@ -482,5 +507,5 @@
 
     angular.module('swiftTrack.assessment')
         .controller('assessmentCtrl', assessmentCtrl);
-    assessmentCtrl.$inject = ['PDFViewerService','$sce','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'ModuleService'];
+    assessmentCtrl.$inject = ['Constants','PDFViewerService','$sce','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'ModuleService'];
 }());
