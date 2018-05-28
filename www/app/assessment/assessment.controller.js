@@ -83,6 +83,7 @@
                             angular.element(value).addClass('unchecked');
                         }
                    });
+                   console.log(assesskey,personid,document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]'))
                     document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]').setAttribute("data-level-set", level)
                 }
                 else{
@@ -95,6 +96,7 @@
                             angular.element(value).removeClass('unchecked');
                         }
                     })
+                    console.log(assesskey,personid,document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]'))
                     document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]').setAttribute("data-level-set", parseInt(level)-1)
 
                 }
@@ -248,6 +250,16 @@
            vm.gallerypdfArr=finalarrpdf;
            vm.gallerynotesArr=finalarrnotes;
            vm.galleryquestionArr=finalarrquestion;
+
+           vm.finalarrcamEv_id=finalarrcamEv_id;
+           vm.finalarrpdfEv_id=finalarrpdfEv_id;
+           vm.finalarrnotesEv_id=finalarrnotesEv_id;
+           vm.finalarrquestionEv_id=finalarrquestionEv_id;
+
+           vm.finalarrcamAuth=finalarrcamAuth;
+           vm.finalarrpdfAuth=finalarrpdfAuth;
+           vm.finalarrnotesAuth=finalarrnotesAuth;
+           vm.finalarrquestionAuth=finalarrquestionAuth;
            
             
             console.log(vm.gallerycamArr,finalarrcam)

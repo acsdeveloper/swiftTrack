@@ -74,7 +74,7 @@
             </div>
             <div class="panel-rows">
                <div  ng-repeat="(personid,indicatorsvalue) in assessvalue.indicators track by $index"  class="panel-row" data-id="{{personid}}" data-attribute-value="person_{{assesskey}}_{{personid}}_{{$index}}" data-q="0" data-level-set="{{vm.setlevel(indicatorsvalue)}}">
-                  <div class="ind" ng-click="indicatorsvalue.levels[3].signedoff? '' : vm.assess_popupfun(indicatorsvalue,assessvalue,$event)">
+                  <div class="ind" ng-click="assessvalue.signedoff? '' : vm.assess_popupfun(indicatorsvalue,assessvalue,$event)">
                      <span class="ind-content" ng-bind-html="indicatorsvalue.final_content"></span>
                      <br>
                      {{indicatorsvalue.type_ref.media.length}}helo
@@ -255,8 +255,8 @@
             <h1 class="ev-title">Visual Evidence</h1>
 
             <div id="gallery">
-                  <div ng-repeat="value in vm.gallerycamArr" >
-                        <div class="media-wrapper ev-wrap"  >
+                  <div ng-repeat="(i,value) in vm.gallerycamArr track by $index" >
+                        <div class="media-wrapper ev-wrap" data-ev-id="{{vm.finalarrcamEv_id[i]}}" data-auth="{{vm.finalarrcamAuth[i]}}">
                               <div ng-click="vm.removeMedia()" class="icon-cancel-circle remove-media"></div>
                               <!-- <img class="img-resource" ng-if="vm.filetype == 'video/mp4'" ng-src="./img/icon-movie.jpg" alt="" ng-click="vm.assessvideoplay('video')" > -->
                               <img class="img-resource" ng-if="vm.findfiletype(value)=='image'" ng-src="{{vm.changelocalurl(value,'image')}}" alt="" ng-click="vm.assessvideoplay(value)" >
@@ -296,8 +296,8 @@
 
       <!-- <div id="galleryPDF" ng-if="vm.popupdata.type_ref.pdf != undefined"> -->
       <div id="galleryPDF" >
-            <div ng-repeat="value in vm.gallerypdfArr" >
-                  <div class="media-wrapper ev-wrap"  >
+            <div ng-repeat="(i,value) in vm.gallerypdfArr" >
+                  <div class="media-wrapper ev-wrap" data-ev-id="{{vm.finalarrpdfEv_id[i]}}" data-auth="{{vm.finalarrpdfAuth[i]}}" >
                         <div class="icon-cancel-circle remove-media" ng-click="vm.delconform = !vm.delconform;vm.pdficon = false" ></div>
                         <img alt="" ng-src="./img/icon-pdf.jpg" ng-click="vm.pdfopen(value)">
                   </div>
@@ -336,8 +336,8 @@
             <div class="update-btn" ng-click="vm.updateok();vm.updatebtn = !vm.updatebtn" ng-show="vm.updatebtn" data-type="notes"></div>
             <input ng-change="vm.myFunc12()" ng-model="vm.myValue"  type="text" class="form-control mdl-input new-note catch-enter" data-type="notes" placeholder="Add a new note...">
             <div id="galleryNotes" class="gal-wrapper" data-type="notes">
-                  <div ng-repeat="value in vm.gallerynotesArr" >
-                        <div class="note-row ev-wrap" data-type="notes" data-ev-id="new">
+                  <div ng-repeat="(i,value) in vm.gallerynotesArr track by $index" >
+                        <div class="note-row ev-wrap" data-type="notes" data-ev-id="{{vm.finalarrnotesEv_id[i]}}">
                               <div class="del-media" ng-show="vm.delnotemedia">
                                     <span class="del-title">Really Delete?</span>
                                     <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.noterow = false" >Confirm</a>
@@ -345,10 +345,10 @@
                               </div> 
                               
                               <i class="icon-cancel-circle remove-note" ng-click="vm.delnotemedia = !vm.delnotemedia"></i>
-                              <span class="note">{{vm.upVal}}</span>
+                              <span class="note" ng-bind-html="value"></span>
                               <span class="note-auth">
                                     <i class="icon-user"></i>
-                                    <span class="auth">rogersmith</span>
+                                    <span class="auth">{{vm.finalarrnotesAuth[i]}}</span>
                               </span>
                         </div>
                   </div>
@@ -425,11 +425,8 @@
    <div ng-show="vm.assesspdfpopup" id="mediaView" class="" style="height: auto;">
             <i class="icon-cancel-circle close-modal" ng-click="vm.assesspdfpopupclose($event)"></i>
             <div class="mv-content">
-
-
              <!-- <embed style="min-height: 400px; height: 133px;" ng-src="{{vm.pdflocallocation}}" alt="pdf">   -->
                   <!-- <object src="http://www.africau.edu/images/default/sample.pdf" width="500" height="700" type='application/pdf'>  </object> -->
-                 
                   <button ng-click="vm.prevPage()">&lt;</button>
                   <button ng-click="vm.nextPage()">&gt;</button>
                   <br>
@@ -437,10 +434,6 @@
                   <br>
                   <pdfviewer ng-src="{{vm.pdflocallocation}}" on-page-load='vm.pageLoaded(page,total)' id="viewer"></pdfviewer>
                   
-                  <!-- <ng-pdf url="{{vm.pdflocallocation}}"></ng-pdf> -->
-
-
-
                         <!-- <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url=http://www.africau.edu/images/default/sample.pdf" width="500" height="375">      <iframe src="http://www.africau.edu/images/default/sample.pdf" style="min-height: 400px; height: 133px;"></iframe> -->
                   <!-- <pdfviewer src="http://www.africau.edu/images/default/sample.pdf" style="min-height: 400px; height: 133px;" ></pdfviewer> -->
             </div>
