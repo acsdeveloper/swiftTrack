@@ -256,10 +256,11 @@
 
             <div id="gallery">
                   <div ng-repeat="value in vm.gallerycamArr" >
-                        <div class="media-wrapper ev-wrap" ng-show="vm.playvideo" >
+                        <div class="media-wrapper ev-wrap"  >
                               <div ng-click="vm.removeMedia()" class="icon-cancel-circle remove-media"></div>
                               <!-- <img class="img-resource" ng-if="vm.filetype == 'video/mp4'" ng-src="./img/icon-movie.jpg" alt="" ng-click="vm.assessvideoplay('video')" > -->
-                              <img class="img-resource" ng-src="{{vm.localUrl}}{{value}}" alt="" ng-click="vm.assessvideoplay(value)" >
+                              <img class="img-resource" ng-if="vm.findfiletype(value)=='image'" ng-src="{{vm.changelocalurl(value,'image')}}" alt="" ng-click="vm.assessvideoplay(value)" >
+                              <img class="img-resource" ng-if="vm.findfiletype(value)=='movie'" ng-src="{{vm.changelocalurl(value,'movie')}}" alt="" ng-click="vm.assessvideoplay(value)" >
                               
                         </div>
                         <div class="del-media" ng-show="vm.delconform">
@@ -329,18 +330,19 @@
          <!-- ################ notes section########## -->
 
 
-         <div class="mdl-bdy ev-bdy bdy-notes" ng-show="vm.bdynotespanel">
+      <div class="mdl-bdy ev-bdy bdy-notes" ng-show="vm.bdynotespanel">
             <h1 class="ev-title">Notes</h1>
 
             <div class="update-btn" ng-click="vm.updateok();vm.updatebtn = !vm.updatebtn" ng-show="vm.updatebtn" data-type="notes"></div>
             <input ng-change="vm.myFunc12()" ng-model="vm.myValue"  type="text" class="form-control mdl-input new-note catch-enter" data-type="notes" placeholder="Add a new note...">
-            <div id="galleryNotes" class="gal-wrapper" data-type="notes"></div>
+            <div id="galleryNotes" class="gal-wrapper" data-type="notes">
                   <div ng-repeat="value in vm.gallerynotesArr" >
-                        <div class="note-row ev-wrap" ng-show="vm.noterow" data-type="notes" data-ev-id="new">
+                        <div class="note-row ev-wrap" data-type="notes" data-ev-id="new">
                               <div class="del-media" ng-show="vm.delnotemedia">
-                                          <span class="del-title">Really Delete?</span>
-                                          <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.noterow = false" >Confirm</a>
-                                          <a class="btn btn-cancel del-false" ng-click="vm.delnotemedia = false">Cancel</a></div> 
+                                    <span class="del-title">Really Delete?</span>
+                                    <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.noterow = false" >Confirm</a>
+                                    <a class="btn btn-cancel del-false" ng-click="vm.delnotemedia = false">Cancel</a>
+                              </div> 
                               
                               <i class="icon-cancel-circle remove-note" ng-click="vm.delnotemedia = !vm.delnotemedia"></i>
                               <span class="note">{{vm.upVal}}</span>
@@ -350,8 +352,8 @@
                               </span>
                         </div>
                   </div>
-         </div>
-
+            </div>
+      </div>
 
 
 <!-- ############# note section end ################# -->

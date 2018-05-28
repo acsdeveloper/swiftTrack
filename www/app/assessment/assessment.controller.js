@@ -4,7 +4,7 @@
         console.log("after ctrl");
         var vm = this;
          
-        vm.localUrl=cordova.file.externalRootDirectory +'upload';
+        vm.localUrl=cordova.file.externalRootDirectory +'Uploadfolder/';
         vm.popupdata = null;
         if (!storageFactory.getJobAndMod()) { 
             $state.go('dashboard')
@@ -33,6 +33,28 @@
             else {
                 vm.userImageUrl = localStorage.getItem("images");
             }
+        }
+        vm.changelocalurl = function(url,type){
+             if(type=='image'){return vm.localUrl+url.split('/')[url.split('/').length-1];}
+             if(type=='movie'){return './img/icon-movie.jpg'}
+        }
+        vm.findfiletype = function(url){
+            var fileName=(vm.localUrl+url.split('/')[url.split('/').length-1]);
+                var ft = "";
+                if(fileName.indexOf(".MOV") > 0 || fileName.indexOf(".mov") > 0 || fileName.indexOf(".m4v") > 0 || fileName.indexOf(".M4V") > 0 || fileName.indexOf(".mp4") > 0 || fileName.indexOf(".MP4") > 0 )
+                {
+                    ft = "movie";
+                }
+                else if(fileName.indexOf(".pdf") > 0 || fileName.indexOf(".pdf") > 0 )
+                {
+                    ft = "pdf";
+                }
+                else {
+                    ft = "image";
+                }
+                return ft;
+            
+            
         }
         $scope.$watch(
             function($scope) {
@@ -196,10 +218,31 @@
             var datanotes=angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev'].value
             var dataques=angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-ev'].value
             
+            var datacamAuth=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-auth'].value
+            var datapdfAuth=angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-auth'].value
+            var datanotesAuth=angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-auth'].value
+            var dataquesAuth=angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-auth'].value
+            
+            var datacamEv_id=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-ev-ids'].value
+            var datapdfEv_id=angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-ev-ids'].value
+            var datanotesEv_id=angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev-ids'].value
+            var dataquesEv_id=angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-ev-ids'].value
+            
+
+           var finalarrcamAuth =datacamAuth.split(',')[0]==''?[]:datacamAuth.split(',');
+           var finalarrpdfAuth =datapdfAuth.split(',')[0]==''?[]:datapdfAuth.split(',');
+           var finalarrnotesAuth =datanotesAuth.split('_*_')[0]==''?[]:datanotesAuth.split('_*_');
+           var finalarrquestionAuth =dataquesAuth.split('_*_')[0]==''?[]:dataquesAuth.split('_*_');
+
+           var finalarrcamEv_id =datacamEv_id.split(',')[0]==''?[]:datacamEv_id.split(',');
+           var finalarrpdfEv_id =datapdfEv_id.split(',')[0]==''?[]:datapdfEv_id.split(',');
+           var finalarrnotesEv_id =datanotesEv_id.split('_*_')[0]==''?[]:datanotesEv_id.split('_*_');
+           var finalarrquestionEv_id =dataquesEv_id.split('_*_')[0]==''?[]:dataquesEv_id.split('_*_');
+
            var finalarrcam =datacam.split(',')[0]==''?[]:datacam.split(',');
            var finalarrpdf =datapdf.split(',')[0]==''?[]:datapdf.split(',');
-           var finalarrnotes =datanotes.split(',')[0]==''?[]:datanotes.split(',');
-           var finalarrquestion =dataques.split(',')[0]==''?[]:dataques.split(',');
+           var finalarrnotes =datanotes.split('_*_')[0]==''?[]:datanotes.split('_*_');
+           var finalarrquestion =dataques.split('_*_')[0]==''?[]:dataques.split('_*_');
 
            vm.gallerycamArr=finalarrcam;
            vm.gallerypdfArr=finalarrpdf;
@@ -207,7 +250,7 @@
            vm.galleryquestionArr=finalarrquestion;
            
             
-            console.log(vm.gallerypdfArr,finalarrcam)
+            console.log(vm.gallerycamArr,finalarrcam)
             
 
         }
