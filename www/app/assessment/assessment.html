@@ -73,7 +73,7 @@
                </div>
             </div>
             <div class="panel-rows">
-               <div  ng-repeat="(personid,indicatorsvalue) in assessvalue.indicators track by $index"  class="panel-row" data-id="{{personid}}" data-attribute-value="person_{{assesskey}}_{{personid}}" data-q="0" data-level-set="{{vm.setlevel(indicatorsvalue)}}">
+               <div  ng-repeat="(personid,indicatorsvalue) in assessvalue.indicators track by $index"  class="panel-row" data-id="{{personid}}" data-attribute-value="person_{{assesskey}}_{{personid}}_{{$index}}" data-q="0" data-level-set="{{vm.setlevel(indicatorsvalue)}}">
                   <div class="ind" ng-click="indicatorsvalue.levels[3].signedoff? '' : vm.assess_popupfun(indicatorsvalue,assessvalue,$event)">
                      <span class="ind-content" ng-bind-html="indicatorsvalue.final_content"></span>
                      <br>
@@ -255,16 +255,19 @@
             <h1 class="ev-title">Visual Evidence</h1>
 
             <div id="gallery">
-                  <div class="media-wrapper ev-wrap" ng-show="vm.playvideo" >
-                        <div ng-click="vm.removeMedia()" class="icon-cancel-circle remove-media"></div>
-                        <!-- <img class="img-resource" ng-if="vm.filetype == 'video/mp4'" ng-src="./img/icon-movie.jpg" alt="" ng-click="vm.assessvideoplay('video')" > -->
-                        <img class="img-resource" ng-src="vm.imagesource" alt="" ng-click="vm.assessvideoplay(vm.imagesource)" >
-                        
-                  </div>
-                  <div class="del-media" ng-show="vm.delconform">
-                        <span class="del-title">Really Delete?</span>
-                        <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.playvideo = false;vm.delconform = false;">Confirm</a>
-                        <a class="btn btn-cancel del-false" ng-click="vm.delconform = false;vm.playvideo = true;" >Cancel</a>
+                  <div ng-repeat="value in vm.gallerycamArr" >
+                        <div class="media-wrapper ev-wrap"  >
+                              <div ng-click="vm.removeMedia()" class="icon-cancel-circle remove-media"></div>
+                              <!-- <img class="img-resource" ng-if="vm.filetype == 'video/mp4'" ng-src="./img/icon-movie.jpg" alt="" ng-click="vm.assessvideoplay('video')" > -->
+                              <img class="img-resource" ng-if="vm.findfiletype(value)=='image'" ng-src="{{vm.changelocalurl(value,'image')}}" alt="" ng-click="vm.assessvideoplay(value)" >
+                              <img class="img-resource" ng-if="vm.findfiletype(value)=='movie'" ng-src="{{vm.changelocalurl(value,'movie')}}" alt="" ng-click="vm.assessvideoplay(value)" >
+                              
+                        </div>
+                        <div class="del-media" ng-show="vm.delconform">
+                              <span class="del-title">Really Delete?</span>
+                              <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.playvideo = false;vm.delconform = false;">Confirm</a>
+                              <a class="btn btn-cancel del-false" ng-click="vm.delconform = false;vm.playvideo = true;" >Cancel</a>
+                        </div>
                   </div>
             </div>
             <div class="mdl-ftr">
@@ -279,7 +282,7 @@
                      <span class="btn-suf">New</span>
                      <div>{{vm.filename}}</div>
                   </div>
-               </div>
+            </div>
 
          </div>
 
@@ -293,16 +296,17 @@
 
       <!-- <div id="galleryPDF" ng-if="vm.popupdata.type_ref.pdf != undefined"> -->
       <div id="galleryPDF" >
-         <div class="media-wrapper ev-wrap" ng-show="vm.pdficon" >
-            <div class="icon-cancel-circle remove-media" ng-click="vm.delconform = !vm.delconform;vm.pdficon = false" ></div>
-            <img alt="" ng-src="./img/icon-pdf.jpg" ng-click="vm.pdfopen()">
-         </div>
-         <div class="del-media" ng-show="vm.delconform">
-                  <span class="del-title">Really Delete?</span>
-                  <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.pdficon = false;vm.delconform = false;">Confirm</a>
-                  <a class="btn btn-cancel del-false" ng-click="vm.delconform = false;vm.pdficon = true;" >Cancel</a>
+            <div ng-repeat="value in vm.gallerypdfArr" >
+                  <div class="media-wrapper ev-wrap"  >
+                        <div class="icon-cancel-circle remove-media" ng-click="vm.delconform = !vm.delconform;vm.pdficon = false" ></div>
+                        <img alt="" ng-src="./img/icon-pdf.jpg" ng-click="vm.pdfopen(value)">
+                  </div>
+                  <div class="del-media" ng-show="vm.delconform">
+                        <span class="del-title">Really Delete?</span>
+                        <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.pdficon = false;vm.delconform = false;">Confirm</a>
+                        <a class="btn btn-cancel del-false" ng-click="vm.delconform = false;vm.pdficon = true;" >Cancel</a>
+                  </div>
             </div>
-
       </div>
       <div class="mdl-ftr">
             <div class="upload-bar">
@@ -326,28 +330,30 @@
          <!-- ################ notes section########## -->
 
 
-         <div class="mdl-bdy ev-bdy bdy-notes" ng-show="vm.bdynotespanel">
+      <div class="mdl-bdy ev-bdy bdy-notes" ng-show="vm.bdynotespanel">
             <h1 class="ev-title">Notes</h1>
 
             <div class="update-btn" ng-click="vm.updateok();vm.updatebtn = !vm.updatebtn" ng-show="vm.updatebtn" data-type="notes"></div>
             <input ng-change="vm.myFunc12()" ng-model="vm.myValue"  type="text" class="form-control mdl-input new-note catch-enter" data-type="notes" placeholder="Add a new note...">
-            <div id="galleryNotes" class="gal-wrapper" data-type="notes"></div>
-
-            <div class="note-row ev-wrap" ng-show="vm.noterow" data-type="notes" data-ev-id="new">
-                        
-                  <div class="del-media" ng-show="vm.delnotemedia">
-                              <span class="del-title">Really Delete?</span>
-                              <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.noterow = false" >Confirm</a>
-                              <a class="btn btn-cancel del-false" ng-click="vm.delnotemedia = false">Cancel</a></div> 
-                  
-                  <i class="icon-cancel-circle remove-note" ng-click="vm.delnotemedia = !vm.delnotemedia"></i>
-                  <span class="note">{{vm.upVal}}</span>
-                  <span class="note-auth">
-                        <i class="icon-user"></i>
-                        <span class="auth">rogersmith</span>
-                  </span></div>
-         </div>
-
+            <div id="galleryNotes" class="gal-wrapper" data-type="notes">
+                  <div ng-repeat="value in vm.gallerynotesArr" >
+                        <div class="note-row ev-wrap" data-type="notes" data-ev-id="new">
+                              <div class="del-media" ng-show="vm.delnotemedia">
+                                    <span class="del-title">Really Delete?</span>
+                                    <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.noterow = false" >Confirm</a>
+                                    <a class="btn btn-cancel del-false" ng-click="vm.delnotemedia = false">Cancel</a>
+                              </div> 
+                              
+                              <i class="icon-cancel-circle remove-note" ng-click="vm.delnotemedia = !vm.delnotemedia"></i>
+                              <span class="note">{{vm.upVal}}</span>
+                              <span class="note-auth">
+                                    <i class="icon-user"></i>
+                                    <span class="auth">rogersmith</span>
+                              </span>
+                        </div>
+                  </div>
+            </div>
+      </div>
 
 
 <!-- ############# note section end ################# -->
@@ -361,21 +367,22 @@
             <div class="update-btn hidden" data-type="question"></div>
             <textarea type="text" class="form-control mdl-input q-answer" data-type="question" placeholder="Your answer..." rows="3"></textarea>
             <div id="galleryQuestions" class="gal-wrapper" data-type="questions"></div>
-
-            <div class="mdl-ftr">
-                  <div class="upload-bar">
-                     <div class="ul-prog"></div>
+                  <div ng-repeat="value in vm.galleryquestionArr" >
+                        <div class="mdl-ftr">
+                              <div class="upload-bar">
+                                    <div class="ul-prog"></div>
+                              </div>
+                                    <div id="addEv" data-type='cam'>
+                                          <span class="btn-pre">Add</span>
+                                          <span class="ftr-icn">
+                                                
+                                                      <i class="icn-question icon-bubble"></i>
+                                                </span>
+                                          <span class="btn-suf">New</span>
+                                          <div>{{vm.filename}}</div>
+                                    </div>
+                        </div>
                   </div>
-                  <div id="addEv" data-type='cam'>
-                     <span class="btn-pre">Add</span>
-                     <span class="ftr-icn">
-                             
-                              <i class="icn-question icon-bubble"></i>
-                          </span>
-                     <span class="btn-suf">New</span>
-                     <div>{{vm.filename}}</div>
-                  </div>
-               </div>
          </div>
          <!-- <div class="mdl-ftr">
             <div class="upload-bar">

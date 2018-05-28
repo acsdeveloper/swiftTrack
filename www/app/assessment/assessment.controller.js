@@ -1,10 +1,10 @@
 (function() {
     // 'use strict';
-    function assessmentCtrl(pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService) {
+    function assessmentCtrl(Constants,pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService) {
         console.log("after ctrl");
         var vm = this;
          
-
+        vm.localUrl=cordova.file.externalRootDirectory +'Uploadfolder/';
         vm.popupdata = null;
         if (!storageFactory.getJobAndMod()) { 
             $state.go('dashboard')
@@ -16,8 +16,8 @@
             vm.jobroleandmod['signoff_level'] = localStorage.getItem('signoff_level');
 
             console.log(vm.jobroleandmod)
-            ModuleService.ModuledetailsAjax(vm.jobroleandmod).then(function(resp) {
-                console.log(resp);
+            ModuleService.ModuledetailsPouch(vm.jobroleandmod).then(function(resp) {
+                console.log(resp,"assessment controller response");
                 vm.assessmentdetail_response = resp;
             });
         }
@@ -33,6 +33,28 @@
             else {
                 vm.userImageUrl = localStorage.getItem("images");
             }
+        }
+        vm.changelocalurl = function(url,type){
+             if(type=='image'){return vm.localUrl+url.split('/')[url.split('/').length-1];}
+             if(type=='movie'){return './img/icon-movie.jpg'}
+        }
+        vm.findfiletype = function(url){
+            var fileName=(vm.localUrl+url.split('/')[url.split('/').length-1]);
+                var ft = "";
+                if(fileName.indexOf(".MOV") > 0 || fileName.indexOf(".mov") > 0 || fileName.indexOf(".m4v") > 0 || fileName.indexOf(".M4V") > 0 || fileName.indexOf(".mp4") > 0 || fileName.indexOf(".MP4") > 0 )
+                {
+                    ft = "movie";
+                }
+                else if(fileName.indexOf(".pdf") > 0 || fileName.indexOf(".pdf") > 0 )
+                {
+                    ft = "pdf";
+                }
+                else {
+                    ft = "image";
+                }
+                return ft;
+            
+            
         }
         $scope.$watch(
             function($scope) {
@@ -168,32 +190,78 @@
         }
 
 
-        vm.assess_popupfun = function(key,assessdetails) {
+        vm.assess_popupfun = function(key,assessdetails,$event) {
+            vm.popupdata = key;
+            if (key.ind_is_q) {
+                    vm.bdycampanel = false;
+                    vm.bdypdfpanel = false;
+                    vm.bdynotespanel = false;
+                    vm.bdyquestpanel = true;
+                    vm.assessmentpopup = true;
+            }
+            else {
+                    vm.bdycampanel = true;
+                    vm.bdypdfpanel = false;
+                    vm.bdynotespanel = false;
+                    vm.bdyquestpanel = false;
+                    vm.assessmentpopup = true;
+            }
+            
             vm.indicatorname=key.final_content;
             vm.userimage=assessdetails.image;
             vm.username=assessdetails.name;
+            console.log(angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value)
+            var datapath=angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value;
+            
+            var datacam=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-ev'].value
+            var datapdf=angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-ev'].value
+            var datanotes=angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev'].value
+            var dataques=angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-ev'].value
+            
+            var datacamAuth=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-auth'].value
+            var datapdfAuth=angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-auth'].value
+            var datanotesAuth=angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-auth'].value
+            var dataquesAuth=angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-auth'].value
+            
+            var datacamEv_id=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-ev-ids'].value
+            var datapdfEv_id=angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-ev-ids'].value
+            var datanotesEv_id=angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev-ids'].value
+            var dataquesEv_id=angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-ev-ids'].value
+            
 
-                
-            vm.popupdata = key;
-            if (key.ind_is_q) {
-                vm.bdycampanel = false;
-                vm.bdypdfpanel = false;
-                vm.bdynotespanel = false;
-                vm.bdyquestpanel = true;
-            }
-            else {
-                vm.bdycampanel = true;
-                vm.bdypdfpanel = false;
-                vm.bdynotespanel = false;
-                vm.bdyquestpanel = false;
-            }
-            vm.assessmentpopup = true;
+           var finalarrcamAuth =datacamAuth.split(',')[0]==''?[]:datacamAuth.split(',');
+           var finalarrpdfAuth =datapdfAuth.split(',')[0]==''?[]:datapdfAuth.split(',');
+           var finalarrnotesAuth =datanotesAuth.split('_*_')[0]==''?[]:datanotesAuth.split('_*_');
+           var finalarrquestionAuth =dataquesAuth.split('_*_')[0]==''?[]:dataquesAuth.split('_*_');
+
+           var finalarrcamEv_id =datacamEv_id.split(',')[0]==''?[]:datacamEv_id.split(',');
+           var finalarrpdfEv_id =datapdfEv_id.split(',')[0]==''?[]:datapdfEv_id.split(',');
+           var finalarrnotesEv_id =datanotesEv_id.split('_*_')[0]==''?[]:datanotesEv_id.split('_*_');
+           var finalarrquestionEv_id =dataquesEv_id.split('_*_')[0]==''?[]:dataquesEv_id.split('_*_');
+
+           var finalarrcam =datacam.split(',')[0]==''?[]:datacam.split(',');
+           var finalarrpdf =datapdf.split(',')[0]==''?[]:datapdf.split(',');
+           var finalarrnotes =datanotes.split('_*_')[0]==''?[]:datanotes.split('_*_');
+           var finalarrquestion =dataques.split('_*_')[0]==''?[]:dataques.split('_*_');
+
+           vm.gallerycamArr=finalarrcam;
+           vm.gallerypdfArr=finalarrpdf;
+           vm.gallerynotesArr=finalarrnotes;
+           vm.galleryquestionArr=finalarrquestion;
+           
+            
+            console.log(vm.gallerycamArr,finalarrcam)
+            
 
         }
 
 
         vm.assesspopclose = function() {
             vm.assessmentpopup = false;
+            vm.bdycampanel = false;
+                    vm.bdypdfpanel = false;
+                    vm.bdynotespanel = false;
+                    vm.bdyquestpanel = false;
         }
 
         vm.resourcefunct = function(value) {
@@ -488,5 +556,5 @@
 
     angular.module('swiftTrack.assessment')
         .controller('assessmentCtrl', assessmentCtrl);
-    assessmentCtrl.$inject = ['PDFViewerService','$sce','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'ModuleService'];
+    assessmentCtrl.$inject = ['Constants','PDFViewerService','$sce','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'ModuleService'];
 }());

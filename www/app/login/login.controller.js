@@ -5,7 +5,9 @@
 
         var vm = this;
         vm.showloader = false;
-        vm.localDB = new PouchDB("Swifttrack",{revs_limit: 2});
+        vm.localDB = new PouchDB("Swifttrack", {
+            revs_limit: 2
+        });
         if (storageFactory.islogin()) {
             // vm.localDB.get('detailed_document').then(function (doc) {
             //     console.log("pouchdb document",doc);
@@ -24,14 +26,11 @@
             //end
             else if (vm.isNull(vm.organisation)) {
                 vm.errormessage = "Please Enter Organisation Name"
-            }
-            else if (vm.isNull(vm.username)) {
+            } else if (vm.isNull(vm.username)) {
                 vm.errormessage = "Please Enter Username"
-            }
-            else if (vm.isNull(vm.password)) {
+            } else if (vm.isNull(vm.password)) {
                 vm.errormessage = "Please Enter Password"
-            }
-            else {
+            } else {
                 vm.object["org"] = vm.organisation;
                 vm.object["username"] = vm.username;
                 vm.object["password"] = vm.password;
@@ -56,11 +55,10 @@
                         localStorage.setItem("fullname", resp.result[Object.keys(resp.result)].username);
                         localStorage.setItem("signoff_level", resp.result[Object.keys(resp.result)].signoff_level);
                         //call user details api and put storage factory service 
-                        vm.putDataPouch(resp.result[Object.keys(resp.result)],'localdata').then(function(){
+                        vm.putDataPouch(resp.result[Object.keys(resp.result)], 'localdata').then(function() {
                             vm.fetchfulldataAPI(resp);
                         })
-                    }
-                    else {
+                    } else {
                         vm.errormessage = resp.result;
                     }
                     // vm.showloader = false;
@@ -69,24 +67,23 @@
 
             }
         }
-        vm.fetchfulldataAPI = function(resp){
-            console.log(resp,"resp")
+        vm.fetchfulldataAPI = function(resp) {
+            console.log(resp, "resp")
             vm.obj = {};
             vm.obj.org_usr = vm.object["org"];
             vm.obj.login_user = resp.result[Object.keys(resp.result)].username;
             vm.obj.login_type = Object.keys(resp.result)[0];
-            vm.putDataPouch(vm.obj,'post_jsonobject').then(function(){
+            vm.putDataPouch(vm.obj, 'post_jsonobject').then(function() {
                 LoginService.fetchfulldata(vm.obj).then(function(resp) {
                     console.log("*********full response",resp);
                     vm.assessmentmediadownload(resp)
-                    vm.putDataPouch(resp,'detailed_document').then(function(){
+                    vm.putDataPouch(resp, 'detailed_document').then(function() {
                         $state.go('dashboard')
                     })
                 });
             })
         }
-        vm.assessmentmediadownload = function(response)
-        {
+        vm.assessmentmediadownload = function(response) {
             var resourcesection = response.assessment[Object.keys(response.assessment)[0]][Object.keys(response.assessment[Object.keys(response.assessment)[0]])[0]].resources;
             Object.keys(resourcesection).map(function(key, index) {
                 Object.keys(resourcesection[key].resource_sections).map(function(key1, index1) {
@@ -198,18 +195,18 @@
         vm.putDataPouch = function(data,doc_name){
             return new Promise(function(resolve, reject) {
                 // Do async job
-               function detailedDocfunc(doc) {
-                    doc=data;
+                function detailedDocfunc(doc) {
+                    doc = data;
                     return doc;
-                  }
-                  
-                  vm.localDB.upsert(doc_name, detailedDocfunc).then(function () {
+                }
+
+                vm.localDB.upsert(doc_name, detailedDocfunc).then(function() {
                     resolve('success')
-                  }).catch(function (err) {
+                }).catch(function(err) {
                     reject(err)
-                  });
+                });
             })
-            
+
         }
         vm.myFunct = function(event) {
             var keycode = (event.keyCode ? event.keyCode : event.which);
