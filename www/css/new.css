@@ -231,3 +231,8 @@ ion-content.assess-top {
     color: #333;
     font-size: 25px;
 }
+
+.assessment-page canvas{
+    height: 70vh !important;
+    width: 85vw !important;
+}

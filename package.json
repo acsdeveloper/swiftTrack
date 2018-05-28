@@ -25,6 +25,8 @@
     "file": "^0.2.2",
     "git": "^0.1.5",
     "maurodx-cordova-plugin-file-selector": "^1.0.0",
+    "ng-pdf": "^1.0.2",
+    "pdfjs-dist": "^2.0.489",
     "pouchdb-authentication": "^1.1.2",
     "webview": "0.0.1"
   },

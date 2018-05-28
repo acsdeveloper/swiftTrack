@@ -1,9 +1,10 @@
 (function() {
     // 'use strict';
 
-    function peopleCtrl($state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, reportService) {
+    function peopleCtrl($state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, reportService,$filter) {
         console.log('people coi=ntroller')
         var vm = this;
+
         vm.setProgressBarColor = function(percentage) {
             if (percentage == 100) { return "progressgreen"; }
             else if (99 >= percentage && percentage >= 36) { return "progressblue"; }
@@ -16,6 +17,7 @@
         }
         vm.assessmentdetails = function() {
             vm.reportobj = storageFactory.getuserreportid();
+            vm.targetPath = cordova.file.externalRootDirectory +"Uploadfolder";
             console.log(vm.reportobj)
             reportService.ReportdetailsPouch(vm.reportobj).then(function(resp) {
                 console.log("assessrepes", resp);
@@ -23,6 +25,8 @@
 
             });
         }
+
+        
 
         
 
@@ -93,6 +97,20 @@
             vm.logoutpopup = false;
             $state.go('login')
         }
+        
+   
+        // @ck260518
+        vm.reportpdf_localurl = function(url){
+            console.log("reportpdf_localurl function",url);
+            return true;
+        }
+        
+        vm.reportmedia_localurl = function(url){
+            console.log("reportmedia_localurl function",url);
+
+        }
+   
+   
     }
 
 
@@ -101,5 +119,17 @@
 
     angular.module('swiftTrack.progressreport')
         .controller('peopleCtrl', peopleCtrl);
-    peopleCtrl.$inject = ['$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'reportService'];
-}());
+   
+    peopleCtrl.$inject = ['$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'reportService', '$filter'];
+
+    angular.module('swiftTrack.progressreport')
+        .filter('filefilter', function($filter) {
+            return function (item) {
+                var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/";
+                var filename = item.substring(item.lastIndexOf('/')+1);
+                console.log("^^^^^^^^^",item,"filename",filename);
+                return targetPath+filename;
+            };
+        });
+
+ }());

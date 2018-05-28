@@ -77,6 +77,7 @@
             vm.obj.login_type = Object.keys(resp.result)[0];
             vm.putDataPouch(vm.obj,'post_jsonobject').then(function(){
                 LoginService.fetchfulldata(vm.obj).then(function(resp) {
+                    console.log("*********full response",resp);
                     vm.assessmentmediadownload(resp)
                     vm.putDataPouch(resp,'detailed_document').then(function(){
                         $state.go('dashboard')
@@ -89,9 +90,6 @@
             var resourcesection = response.assessment[Object.keys(response.assessment)[0]][Object.keys(response.assessment[Object.keys(response.assessment)[0]])[0]].resources;
             Object.keys(resourcesection).map(function(key, index) {
                 Object.keys(resourcesection[key].resource_sections).map(function(key1, index1) {
-                // console.log('key1'+key1+'index1'+index1);
-                
-                // console.log("testinggggggg",resourcesection[key].resource_sections[key1].item_media);
                 var mediafullurl = resourcesection[key].resource_sections[key1].item_media;
                 var filename = mediafullurl.substring(mediafullurl.lastIndexOf('/')+1);
                 vm.downloadImage(mediafullurl,filename)

@@ -418,8 +418,11 @@
    <div ng-show="vm.assesspdfpopup" id="mediaView" class="" style="height: auto;">
             <i class="icon-cancel-circle close-modal" ng-click="vm.assesspdfpopupclose($event)"></i>
             <div class="mv-content">
+
+
              <!-- <embed style="min-height: 400px; height: 133px;" ng-src="{{vm.pdflocallocation}}" alt="pdf">   -->
                   <!-- <object src="http://www.africau.edu/images/default/sample.pdf" width="500" height="700" type='application/pdf'>  </object> -->
+                 
                   <button ng-click="vm.prevPage()">&lt;</button>
                   <button ng-click="vm.nextPage()">&gt;</button>
                   <br>
@@ -427,6 +430,10 @@
                   <br>
                   <pdfviewer ng-src="{{vm.pdflocallocation}}" on-page-load='vm.pageLoaded(page,total)' id="viewer"></pdfviewer>
                   
+                  <!-- <ng-pdf url="{{vm.pdflocallocation}}"></ng-pdf> -->
+
+
+
                         <!-- <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url=http://www.africau.edu/images/default/sample.pdf" width="500" height="375">      <iframe src="http://www.africau.edu/images/default/sample.pdf" style="min-height: 400px; height: 133px;"></iframe> -->
                   <!-- <pdfviewer src="http://www.africau.edu/images/default/sample.pdf" style="min-height: 400px; height: 133px;" ></pdfviewer> -->
             </div>

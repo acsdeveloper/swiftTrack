@@ -244,7 +244,7 @@
 
         vm.evidenceupload = function() {
 
-            
+            console.log("****file chooser");
             fileChooser.open(
                 function fcSuccess(file){
                     vm.filename=file.name;
@@ -376,6 +376,8 @@
            
             var ft = new FileTransfer();
             var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/" + name;
+
+            console.log(" *****targetPath",targetPath);
             vm.pdflocallocation = targetPath;
             ft.download(
                 uri,
@@ -421,7 +423,8 @@
 
 
         // #################pdf
-        vm.viewer = pdf.Instance("viewer");
+
+    vm.viewer = pdf.Instance("viewer");
 
 	vm.nextPage = function() {
 		vm.viewer.nextPage();
@@ -435,6 +438,9 @@
 		vm.currentPage = curPage;
 		vm.totalPages = totalPages;
     };
+
+
+   
     
     // END###############
 

@@ -99,10 +99,10 @@
 
 							<div class="report-media" ng-if="indicator.pdf || indicator.media">
 								<div ng-repeat="pdf in indicator.pdf">
-									<a class="thu" data-type='{{pdf.data_type}}' data-path="{{pdf.media_url}}"><img ng-src="{{pdf.img_src}}" alt="" ng-click="vm.openimageModal(pdf.img_src)" ></a>
+									<a class="thu" data-type='{{pdf.data_type}}' data-path="{{pdf.media_url | filefilter}}"><img ng-src="{{pdf.img_src}}" alt="" ng-click="vm.openimageModal(pdf.img_src)" ></a>
 								</div>
 								<div ng-repeat="media in indicator.media">
-									<a class="thu" data-type='{{media.data_type}}' data-path="{{media.media_url}}"><img ng-src="{{media.img_src}}" alt=""></a>
+									<a class="thu" data-type='{{media.data_type}}' data-path="{{media.media_url | filefilter}}"><img ng-src="{{media.img_src}}" alt=""></a>
 								</div>
 							</div>
 						</div>
