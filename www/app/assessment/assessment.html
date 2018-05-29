@@ -73,12 +73,11 @@
                </div>
             </div>
             <div class="panel-rows">
-               <div  ng-repeat="(personid,indicatorsvalue) in assessvalue.indicators track by $index"  class="panel-row" data-id="{{personid}}" data-attribute-value="person_{{assesskey}}_{{personid}}_{{$index}}" data-q="0" data-level-set="{{vm.setlevel(indicatorsvalue)}}">
-                  <div class="ind" ng-click="assessvalue.signedoff? '' : vm.assess_popupfun(indicatorsvalue,assessvalue,$event)">
+               <div  ng-repeat="(personid,indicatorsvalue) in assessvalue.indicators track by $index"  class="panel-row" data-id="{{personid}}" data-attribute-value="person_{{assesskey}}_{{personid}}" data-q="0" data-level-set="{{vm.setlevel(indicatorsvalue)}}">
+                  <div class="ind" ng-click="assessvalue.training_signed_off? '' : vm.assess_popupfun(indicatorsvalue,assessvalue,$event)">
                      <span class="ind-content" ng-bind-html="indicatorsvalue.final_content"></span>
                      <br>
-                     {{indicatorsvalue.type_ref.media.length}}helo
-                     {{indicatorsvalue.type_ref.pdf.length}}
+                    
                      <span>
                         <i data-ev="{{indicatorsvalue.type_ref.media.data_ev}}" data-ev-ids="{{indicatorsvalue.type_ref.media.data_ev_ids}}" data-auth="{{indicatorsvalue.type_ref.media.data_auth}}" class="ev-cam icn icon-camera" ng-class=" indicatorsvalue.type_ref.media !== undefined ?'':'hidden'"></i>
                         <i data-ev="{{indicatorsvalue.type_ref.pdf.data_ev}}" data-ev-ids="{{indicatorsvalue.type_ref.pdf.data_ev_ids}}" data-auth="{{indicatorsvalue.type_ref.pdf.data_auth}}" class="ev-pdf icn icon-file-pdf " ng-class="indicatorsvalue.type_ref.pdf !== undefined ?'':'hidden'"></i>
@@ -237,8 +236,8 @@
                <img class="avatar" ng-src="{{vm.userimage}}" alt="">
             </div>
             <div class="ev-hdr-info">
-               <h4>{{vm.username}}</h4>
-               <h5>{{vm.indicatorname}}</h5>
+               <h4 ng-bind-html="vm.username"></h4>
+               <h5 ng-bind-html="vm.indicatorname"></h5>
             </div>
             <i ng-click="vm.assesspopclose()" class="icon-cancel-circle close-modal"></i>
          </div>
@@ -246,7 +245,7 @@
             <div class="ev-icon icn-cam" ng-click="vm.assesscam()"><i class="icon-camera"></i></div>
             <div class="ev-icon icn-pdf" ng-click="vm.assesspdf()"><i class="icon-file-pdf"></i></div>
             <div class="ev-icon icn-notes" ng-click="vm.assessnotes()"><i class="icon-file-text2"></i></div>
-            <div class="ev-icon icn-question" ng-click="vm.assessquest()"><i class="icon-bubble"></i></div>
+            <div class="ev-icon icn-question" ng-show="vm.questpanelicon" ng-click="vm.assessquest()"><i class="icon-bubble"></i></div>
          </div>
 
 
@@ -333,8 +332,8 @@
       <div class="mdl-bdy ev-bdy bdy-notes" ng-show="vm.bdynotespanel">
             <h1 class="ev-title">Notes</h1>
 
-            <div class="update-btn" ng-click="vm.updateok();vm.updatebtn = !vm.updatebtn" ng-show="vm.updatebtn" data-type="notes"></div>
-            <input ng-change="vm.myFunc12()" ng-model="vm.myValue"  type="text" class="form-control mdl-input new-note catch-enter" data-type="notes" placeholder="Add a new note...">
+            <div class="update-btn" ng-click="vm.addnotes();" ng-show="vm.updatebtn" data-type="notes"></div>
+            <input ng-change="vm.change_notes()" ng-model="vm.change_note"  type="text" class="form-control mdl-input new-note catch-enter" data-type="notes" placeholder="Add a new note...">
             <div id="galleryNotes" class="gal-wrapper" data-type="notes">
                   <div ng-repeat="(i,value) in vm.gallerynotesArr track by $index" >
                         <div class="note-row ev-wrap" data-type="notes" data-ev-id="{{vm.finalarrnotesEv_id[i]}}">
@@ -359,31 +358,29 @@
 <!-- ############# note section end ################# -->
 
 
-         <div class="mdl-bdy ev-bdy bdy-question" ng-show="vm.bdyquestpanel" ng-click="vm.assessquest(indicatorsvalue)">
+      <div class="mdl-bdy ev-bdy bdy-question" ng-show="vm.bdyquestpanel" ng-click="vm.assessquest(indicatorsvalue)">
             <h1 class="ev-title">Answer the Question&hellip;</h1>
 
 
             <h2 class="q-question-hdr"></h2>
-            <div class="update-btn hidden" data-type="question"></div>
-            <textarea type="text" class="form-control mdl-input q-answer" data-type="question" placeholder="Your answer..." rows="3"></textarea>
-            <div id="galleryQuestions" class="gal-wrapper" data-type="questions"></div>
-                  <div ng-repeat="value in vm.galleryquestionArr" >
-                        <div class="mdl-ftr">
-                              <div class="upload-bar">
-                                    <div class="ul-prog"></div>
-                              </div>
-                                    <div id="addEv" data-type='cam'>
-                                          <span class="btn-pre">Add</span>
-                                          <span class="ftr-icn">
-                                                
-                                                      <i class="icn-question icon-bubble"></i>
-                                                </span>
-                                          <span class="btn-suf">New</span>
-                                          <div>{{vm.filename}}</div>
-                                    </div>
+            <div class="update-btn " ng-click="vm.updateques()" ng-show="vm.showupdatbtn" data-type="question"></div>
+            <textarea type="text" ng-change="vm.showupdatebtn()" ng-model="vm.changemodel" class="form-control mdl-input q-answer" data-type="question" placeholder="Your answer..." rows="3"></textarea>
+            <div id="galleryQuestions" class="gal-wrapper" data-type="questions">
+                  <div ng-repeat="(i,value) in vm.galleryquestionArr" >
+                        <div class="note-row ev-wrap" data-type="question" data-ev-id="new">
+                              <i class="icon-cancel-circle remove-note"></i>
+                              <span class="edit-note" ng-click="vm.editquestions(value,$event)">
+                                <i class="icon-pencil2"></i>
+                              </span>
+                              <span class="note" ng-bind-html="value"><br></span>
+                              <span class="note-auth">
+                                <i class="icon-user"></i>
+                                <span class="auth" >{{vm.finalarrquestionAuth[i]}}</span>
+                              </span>
                         </div>
                   </div>
-         </div>
+            </div>
+      </div>
          <!-- <div class="mdl-ftr">
             <div class="upload-bar">
                <div class="ul-prog"></div>

@@ -112,7 +112,14 @@
                 console.log("filterrrrrrr",url);
                return $sce.trustAsResourceUrl(url);
             };
-        }]);
-
+        }])
+        .filter('filefilter', function($filter) {
+            return function (item) {
+                var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/";
+                var filename = item.substring(item.lastIndexOf('/')+1);
+                console.log("^^^^^^^^^",item,"filename",filename);
+                return targetPath+filename;
+            };
+        });
 
 }());
