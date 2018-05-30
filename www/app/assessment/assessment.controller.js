@@ -4,7 +4,7 @@
         console.log("after ctrl");
         var vm = this;
          
-        vm.localUrl=cordova.file.externalRootDirectory +'Uploadfolder/';
+        vm.localUrl=cordova.file.externalApplicationStorageDirectory +'files/';
         vm.popupdata = null;
         vm.showupdatbtn=false;
         vm.updatebtn=false;
@@ -306,7 +306,7 @@
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-auth'].value+='_*_'+vm.currentUser
             vm.gallerynotesArr.push(vm.change_note);
             vm.finalarrnotesAuth.push(vm.currentUser);
-            vm.showupdatbtn=false;
+            vm.updatebtn=false;
             vm.change_note='';
            }
             
@@ -387,7 +387,7 @@
             function downloadImage(uri,name,ftype){
                
                 var ft = new FileTransfer();
-                var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/" + name;
+                var targetPath = cordova.file.externalApplicationStorageDirectory +"files/" + name;
                 vm.videolocallocation = targetPath;
                 ft.download(
                     uri,

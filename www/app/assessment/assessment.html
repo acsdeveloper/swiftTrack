@@ -260,12 +260,13 @@
                               <img class="img-resource" ng-if="vm.findfiletype(value)=='image'" ng-src="{{value | filefilter}}" alt="" ng-click="vm.assessvideoplay('image',value)" >
                               <img class="img-resource" ng-if="vm.findfiletype(value)=='movie'" ng-src="{{value | filefilter}}" alt="" ng-click="vm.assessvideoplay('movie',value)" >
                               
+                              <div class="del-media" ng-show="vm.delconform">
+                                    <span class="del-title">Really Delete?</span>
+                                    <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.delconform = false">Confirm</a>
+                                    <a class="btn btn-cancel del-false" ng-click="vm.delconform = false" >Cancel</a>
+                              </div>
                         </div>
-                        <div class="del-media" ng-show="vm.delconform">
-                              <span class="del-title">Really Delete?</span>
-                              <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.delconform = false">Confirm</a>
-                              <a class="btn btn-cancel del-false" ng-click="vm.delconform = false" >Cancel</a>
-                        </div>
+                       
                   </div>
             </div>
             <div class="mdl-ftr">
@@ -298,12 +299,13 @@
                   <div class="media-wrapper ev-wrap" data-ev-id="{{vm.finalarrpdfEv_id[i]}}" data-auth="{{vm.finalarrpdfAuth[i]}}" >
                         <div class="icon-cancel-circle remove-media" ng-click="vm.delconform = !vm.delconform;vm.pdficon = false" ></div>
                         <img alt="" ng-src="./img/icon-pdf.jpg" ng-click="vm.pdfopen(value)">
+                        <div class="del-media" ng-show="vm.delconform">
+                              <span class="del-title">Really Delete?</span>
+                              <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.pdficon = false;vm.delconform = false;">Confirm</a>
+                              <a class="btn btn-cancel del-false" ng-click="vm.delconform = false;vm.pdficon = true;" >Cancel</a>
+                        </div>
                   </div>
-                  <div class="del-media" ng-show="vm.delconform">
-                        <span class="del-title">Really Delete?</span>
-                        <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.pdficon = false;vm.delconform = false;">Confirm</a>
-                        <a class="btn btn-cancel del-false" ng-click="vm.delconform = false;vm.pdficon = true;" >Cancel</a>
-                  </div>
+                  
             </div>
       </div>
       <div class="mdl-ftr">

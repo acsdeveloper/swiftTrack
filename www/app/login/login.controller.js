@@ -166,8 +166,8 @@
     vm.downloadImage = function(uri,name){
            
             var ft = new FileTransfer();
-            var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/" + name;
-            var path = cordova.file.externalRootDirectory +"Uploadfolder/";
+            var targetPath = cordova.file.externalApplicationStorageDirectory +"files/" + name;
+            var path = cordova.file.externalApplicationStorageDirectory +"files/";
             vm.videolocallocation = targetPath;
             var filename = name;
             window.resolveLocalFileSystemURL(path + filename, onSuccess, onFail);
