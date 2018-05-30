@@ -256,7 +256,7 @@
             <div id="gallery">
                   <div ng-repeat="(i,value) in vm.gallerycamArr track by $index" >
                         <div class="media-wrapper ev-wrap" data-ev-id="{{vm.finalarrcamEv_id[i]}}" data-auth="{{vm.finalarrcamAuth[i]}}">
-                              <div ng-click="vm.removeMedia()" class="icon-cancel-circle remove-media"></div>
+                              <div ng-click="vm.removeMedia(i,value,$event)" class="icon-cancel-circle remove-media"></div>
                               <img class="img-resource" ng-if="vm.findfiletype(value)=='image'" ng-src="{{value | filefilter}}" alt="" ng-click="vm.assessvideoplay('image',value)" >
                               <img class="img-resource" ng-if="vm.findfiletype(value)=='movie'" ng-src="{{value | filefilter}}" alt="" ng-click="vm.assessvideoplay('movie',value)" >
                               
@@ -268,6 +268,7 @@
                         </div>
                   </div>
             </div>
+            
             <div class="mdl-ftr">
                   <div class="upload-bar">
                      <div class="ul-prog"></div>

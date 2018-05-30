@@ -587,10 +587,11 @@
             vm.assesspdfpopup = false;
         }
 
-        vm.removeMedia = function()
+        vm.removeMedia = function(i,value,$event)
         {
-            
-            console.log("media remove function");
+            console.log("media remove function i",i);
+            console.log("media remove function value",value);
+            console.log("media remove function event",$event);
         }
         
 
