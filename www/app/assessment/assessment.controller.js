@@ -8,17 +8,16 @@
         vm.popupdata = null;
         vm.showupdatbtn=false;
         vm.updatebtn=false;
+        vm.deleteEvArr = new Array();
         if (!storageFactory.getJobAndMod()) { 
             $state.go('dashboard')
         }
         vm.assessmentdetails = function() {
+            ModuleService.LocaldatadetailsPouch().then(function(response){
+                vm.localdatadetails=response;
+            });
             vm.jobroleandmod = storageFactory.getJobAndMod();
-            vm.jobroleandmod['login_type'] = localStorage.getItem('login_type');
-            vm.jobroleandmod['login_user'] = localStorage.getItem('fullname');
-            vm.currentUser=localStorage.getItem('fullname');
-            vm.jobroleandmod['signoff_level'] = localStorage.getItem('signoff_level');
-
-            console.log(vm.jobroleandmod)
+            vm.currentUser=vm.localdatadetails.username;
             ModuleService.ModuledetailsPouch(vm.jobroleandmod).then(function(resp) {
                 console.log(resp,"assessment controller response");
                 vm.assessmentdetail_response = resp;
@@ -34,7 +33,7 @@
                 vm.userFirstName = vm.userdetails.first_name;
             }
             else {
-                vm.userImageUrl = localStorage.getItem("images");
+                vm.userImageUrl = vm.localdatadetails.images;
             }
         }
         vm.changelocalurl = function(url,type){
@@ -187,6 +186,54 @@
 
         }
         vm.confirm_savesession = function() {
+            //save functionality
+            var personIDsArr = new Array();
+            var indicatorIDsArr = new Array();
+            var levelsArr = new Array();
+            var evCamArr = new Array();
+            var evPDFArr = new Array();
+            var evNoteArr = new Array();
+            var evQuesArr = new Array();
+            $('.person-panel').each(function(){
+                var panelID = $(this).attr('id');
+                var personID = $(this).attr('data-newid');
+
+                $('#'+panelID+" .panel-row").each(function(){
+                    var indID = $(this).attr('data-id');
+                    var levelSet = $(this).attr('data-level-set');
+                    var evCamStr = ($(this).find('.ev-cam').attr('data-ev')).replace(/\,/g, '_*_');
+                    var evPDFStr = ($(this).find('.ev-pdf').attr('data-ev')).replace(/\,/g, '_*_');
+                    var evNoteStr = $(this).find('.ev-notes').attr('data-ev');
+                    var evQuesStr = $(this).find('.ev-question').attr('data-ev');
+
+                    personIDsArr.push(personID);
+                    indicatorIDsArr.push(indID);
+                    levelsArr.push(levelSet);
+                    evCamArr.push(evCamStr);
+                    evPDFArr.push(evPDFStr);
+                    evNoteArr.push(evNoteStr);
+                    evQuesArr.push(evQuesStr);
+                })
+            })
+            var personIDs = personIDsArr+"";
+            var indIDs = indicatorIDsArr+"";
+            var levels = levelsArr+"";
+            var camStr = evCamArr+"";
+            var pdfStr = evPDFArr+"";
+            var noteStr = evNoteArr+"";
+            var quesStr = evQuesArr+"";
+            var deleteEvStr = vm.deleteEvArr+"";
+            //
+
+            var objSave = {	person_ids:personIDs,
+                ind_ids:indIDs,
+                levels:levels,
+                cams:camStr,
+                pdfs:pdfStr,
+                notes:noteStr,
+                ques:quesStr,
+                del:deleteEvStr};
+                console.log(objSave,"objsave")
             $state.go('dashboard')
         }
         vm.cancel_savesession = function() {
@@ -268,7 +315,7 @@
            vm.finalarrquestionAuth=finalarrquestionAuth;
            
             
-            console.log(vm.gallerycamArr,finalarrcam)
+            console.log(vm.gallerypdfArr,vm.gallerycamArr,finalarrcam)
             
 
         }
@@ -372,28 +419,55 @@
         }
 
 
-        vm.evidenceupload = function() {
-
-            console.log("****file chooser");
+        vm.evidenceupload = function(datatype) {
+            
             fileChooser.open(
                 function fcSuccess(file){
                     vm.filename=file.name;
-                    downloadImage(file.uri,file.name,file.mime_type);
+                    vm.movefile(file.uri,file.name,file.mime_type,datatype);
                     },
                   function fcError(e){console.log(e);}
-           );
-    
-    
-            function downloadImage(uri,name,ftype){
+           );   
+           
+            }
+            vm.movefile=function(uri,name,ftype,datatype){
+                var filename;
+                
+                var type=name.split('.')[name.split('.').length-1];
+                console.log(datatype,type,name)
+                if(type=='pdf'){filename='pdf'};
+                if(type=='jpg' || type=='jpeg' || type=='mp4' || type=='avi' || type=='png' ||type=='svg'||type=='gif'||type=='flv' || type=='wmv' || type=='mov' ||type=='mkv'){
+                    filename='cam';
+                }
+                console.log(datatype,type,name,filename)
+                if(filename!=datatype){
+
+                    alert('error file type');
+                    return;
+                }
                
                 var ft = new FileTransfer();
                 var targetPath = cordova.file.externalApplicationStorageDirectory +"files/" + name;
                 vm.videolocallocation = targetPath;
-                ft.download(
-                    uri,
-                    targetPath,
-                    function(entry) {
-    
+                ft.download(uri,targetPath,downloadsuccess,downloadfailed)
+                    function downloadsuccess(entry) {
+
+                        angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value+=','+name
+                        angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-auth'].value+=','+vm.currentUser;
+                       if(datatype='cam'){
+                        vm.gallerycamArr.push(name);
+                        vm.finalarrcamEv_id.push('new')
+                        
+                       }
+                       else{
+                        vm.finalarrpdfAuth.push(vm.currentUser);
+                        vm.gallerypdfArr.push(name);
+                        vm.finalarrpdfEv_id.push('new')
+                       }
+                        // vm.galleryquestionArr=vm.changemodel.split('_*_');
+                        // vm.finalarrquestionAuth=vm.currentUser.split('_*_')
+
+
                         $scope.$apply(function () {
                             console.log("file type ..----------------.",typeof ftype);
                             console.log("file type ..-----###--------.",ftype);
@@ -401,19 +475,12 @@
                             vm.filetype = ftype;
                         });
                         
-                        console.log(entry);
-                        console.log("download complete: " + entry.fullPath);
-        
-                    },
-                    function(error) {
-                        console.log("error");
-                        console.log(error);
-                        console.log("download error" + error.code);
-                    }
-                );
                 
-    
-    
+                
+                    }
+                    function downloadfailed(error){
+                        console.log(error,error.code)
+                    }
                 // ##########################################
                     // file upload to server 
     
@@ -453,10 +520,6 @@
             
             
             }
-    
-               
-           
-            }
 
         vm.assessvideoplay = function(filetype,value)
         {
@@ -493,63 +556,66 @@
 
         }
         
-        vm.pdfevidence = function()
-        {
-            console.log("pdf evidence");
-            fileChooser.open(
-                function fcSuccess(file){
-                    vm.filename=file.name;
-                    console.log("file uri",file.uri,"file name",file.name,"file type",file.mime_type);
-                    downloadPdf(file.uri,file.name,file.mime_type);
-                    },
-                  function fcError(e){console.log(e);}
-           );
+        // vm.pdfevidence = function()
+        // {
+        //     console.log("pdf evidence");
+        //     fileChooser.open(
+        //         function fcSuccess(file){
+        //             vm.filename=file.name;
+        //             console.log("file uri",file.uri,"file name",file.name,"file type",file.mime_type);
+        //             downloadPdf(file.uri,file.name,file.mime_type);
+        //             },
+        //           function fcError(e){console.log(e);}
+        //    );
 
 
-           function downloadPdf(uri,name,ftype){
+        //    function downloadPdf(uri,name,ftype){
            
-            var ft = new FileTransfer();
-            var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/" + name;
+        //     var ft = new FileTransfer();
+        //     var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/" + name;
 
-            console.log(" *****targetPath",targetPath);
-            vm.pdflocallocation = targetPath;
-            ft.download(
-                uri,
-                targetPath,
-                function(entry) {
+        //     console.log(" *****targetPath",targetPath);
+        //     vm.pdflocallocation = targetPath;
+        //     ft.download(
+        //         uri,
+        //         targetPath,
+        //         function(entry) {
 
-                    $scope.$apply(function () {
-                        console.log("file type ...",ftype);
-                        vm.pdficon = true;
-                    });
+        //             $scope.$apply(function () {
+        //                 console.log("file type ...",ftype);
+        //                 vm.pdficon = true;
+        //             });
                     
-                    console.log(entry);
-                    console.log("download complete: " + entry.fullPath);
+        //             console.log(entry);
+        //             console.log("download complete: " + entry.fullPath);
     
-                },
-                function(error) {
-                    console.log("error");
-                    console.log(error);
-                    console.log("download error" + error.code);
-                }
-            );
+        //         },
+        //         function(error) {
+        //             console.log("error");
+        //             console.log(error);
+        //             console.log("download error" + error.code);
+        //         }
+        //     );
             
 
         
         
-        }
+        // }
 
 
 
 
 
-        }
+        // }
 
-        vm.pdfopen =function()
+        vm.pdfopen =function(url,datatype)
         {
             console.log("pdf open function...........---");
             vm.assesspdfpopup = true;
-
+            // vm.reportvideoimagepdfpopup = true;
+            vm.data_type = datatype;
+            vm.targetPath = cordova.file.externalRootDirectory +"Uploadfolder/"+url.substring(url.lastIndexOf('/')+1)
+            
         
      
         }
@@ -612,7 +678,7 @@
     }
 
 
-
+    
 
 
     angular.module('swiftTrack.assessment')

@@ -39,6 +39,24 @@
                 return vm.defered.promise;
             });
         };
+        vm.LocaldatadetailsPouch = function(obj) {
+            if (Constants.productionServer) {
+                vm.docname ='detailed_document';
+            }
+            else {
+                console.log('api call json');
+                vm.url = 'json/job.json';
+            }
+            vm.docname ='localdata';
+            vm.data=''
+            // vm.object=obj;
+
+            return Pouchfactory.get(vm.docname,vm.data).then(function(resp) {
+                vm.defered = $q.defer();
+                vm.defered.resolve(resp);
+                return vm.defered.promise;
+            });
+        };
 
     }
 
