@@ -97,13 +97,7 @@
     angular.module('swiftTrack.progressreport')
         .controller('peopleCtrl', peopleCtrl);
     peopleCtrl.$inject = ['$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'reportService', '$filter'];
-    // angular.module('swiftTrack.progressreport')
-    //     .filter('filefilter', function($filter) {
-    //         return function (item) {
-    //             var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/";
-    //             var filename = item.substring(item.lastIndexOf('/')+1);
-    //             return targetPath+filename;
-    //         };
-    //     });
+
+    
 
  }());

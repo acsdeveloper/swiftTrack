@@ -6,6 +6,8 @@
          
         vm.localUrl=cordova.file.externalRootDirectory +'Uploadfolder/';
         vm.popupdata = null;
+        vm.showupdatbtn=false;
+        vm.updatebtn=false;
         if (!storageFactory.getJobAndMod()) { 
             $state.go('dashboard')
         }
@@ -13,6 +15,7 @@
             vm.jobroleandmod = storageFactory.getJobAndMod();
             vm.jobroleandmod['login_type'] = localStorage.getItem('login_type');
             vm.jobroleandmod['login_user'] = localStorage.getItem('fullname');
+            vm.currentUser=localStorage.getItem('fullname');
             vm.jobroleandmod['signoff_level'] = localStorage.getItem('signoff_level');
 
             console.log(vm.jobroleandmod)
@@ -83,6 +86,7 @@
                             angular.element(value).addClass('unchecked');
                         }
                    });
+                   console.log(assesskey,personid,document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]'))
                     document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]').setAttribute("data-level-set", level)
                 }
                 else{
@@ -95,6 +99,7 @@
                             angular.element(value).removeClass('unchecked');
                         }
                     })
+                    console.log(assesskey,personid,document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]'))
                     document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]').setAttribute("data-level-set", parseInt(level)-1)
 
                 }
@@ -193,6 +198,7 @@
         vm.assess_popupfun = function(key,assessdetails,$event) {
             vm.popupdata = key;
             if (key.ind_is_q) {
+                    vm.questpanelicon=true;
                     vm.bdycampanel = false;
                     vm.bdypdfpanel = false;
                     vm.bdynotespanel = false;
@@ -200,6 +206,7 @@
                     vm.assessmentpopup = true;
             }
             else {
+                    vm.questpanelicon=false;
                     vm.bdycampanel = true;
                     vm.bdypdfpanel = false;
                     vm.bdynotespanel = false;
@@ -212,7 +219,7 @@
             vm.username=assessdetails.name;
             console.log(angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value)
             var datapath=angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value;
-            
+            vm.datapath=datapath;
             var datacam=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-ev'].value
             var datapdf=angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-ev'].value
             var datanotes=angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev'].value
@@ -247,21 +254,76 @@
            vm.gallerycamArr=finalarrcam;
            vm.gallerypdfArr=finalarrpdf;
            vm.gallerynotesArr=finalarrnotes;
+           console.log(finalarrquestion,"finalArr")
            vm.galleryquestionArr=finalarrquestion;
+
+           vm.finalarrcamEv_id=finalarrcamEv_id;
+           vm.finalarrpdfEv_id=finalarrpdfEv_id;
+           vm.finalarrnotesEv_id=finalarrnotesEv_id;
+           vm.finalarrquestionEv_id=finalarrquestionEv_id;
+
+           vm.finalarrcamAuth=finalarrcamAuth;
+           vm.finalarrpdfAuth=finalarrpdfAuth;
+           vm.finalarrnotesAuth=finalarrnotesAuth;
+           vm.finalarrquestionAuth=finalarrquestionAuth;
            
             
             console.log(vm.gallerycamArr,finalarrcam)
             
 
         }
+        vm.showupdatebtn = function(){
+            vm.showupdatbtn=true;
+        }
+        vm.editquestions = function(value,$event){
+            console.log(value,document.getElementsByClassName('q-answer'))
+            vm.changemodel=value;
+            // document.getElementsByClassName('q-answer')[0].value=value;
+        }
+        vm.updateques = function(){
+            angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-ev'].value=vm.changemodel
+            angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-auth'].value=vm.currentUser
+            vm.galleryquestionArr=vm.changemodel.split('_*_');
+            vm.finalarrquestionAuth=vm.currentUser.split('_*_')
+            vm.showupdatbtn=false;
+            vm.changemodel='';
 
+        }
+
+        //for notes
+        vm.change_notes = function(){
+            vm.updatebtn=true;
+        }
+        vm.editnotes = function(value,$event){
+            console.log(value,document.getElementsByClassName('q-answer'))
+            vm.changemodel=value;
+            // document.getElementsByClassName('q-answer')[0].value=value;
+        }
+        vm.addnotes = function(){
+            var val=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev'].value
+           if(vm.change_note!=''){
+            angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev'].value=val+'_*_'+vm.change_note
+            angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-auth'].value+='_*_'+vm.currentUser
+            vm.gallerynotesArr.push(vm.change_note);
+            vm.finalarrnotesAuth.push(vm.currentUser);
+            vm.showupdatbtn=false;
+            vm.change_note='';
+           }
+            
+
+        }
 
         vm.assesspopclose = function() {
             vm.assessmentpopup = false;
             vm.bdycampanel = false;
-                    vm.bdypdfpanel = false;
-                    vm.bdynotespanel = false;
-                    vm.bdyquestpanel = false;
+            vm.bdypdfpanel = false;
+            vm.bdynotespanel = false;
+            vm.bdyquestpanel = false; 
+            vm.assessmentpopup = false;
+            vm.bdycampanel = false;
+            vm.bdypdfpanel = false;
+            vm.bdynotespanel = false;
+            vm.bdyquestpanel = false;
         }
 
         vm.resourcefunct = function(value) {
@@ -380,7 +442,7 @@
     
                 options.params = params;
     
-                    var encodeuri="https://swifttrack-agilexcyber.c9users.io/ionic/fileupload.php";
+                    var encodeuri="https://swifttrack-agilexcyber.c9users.io/swiftMobile/api/uploadFiles.php";
                     console.log("encodeuri",encodeuri);
                     var ft = new FileTransfer();
                     ft.upload(targetPath, encodeURI(encodeuri),win,fail,options);
@@ -524,21 +586,16 @@
             console.log("pdf close fun-----");
             vm.assesspdfpopup = false;
         }
+
+        vm.removeMedia = function()
+        {
+            
+            console.log("media remove function");
+        }
         
 
         // var url = "file:///storage/emulated/0/360/sample.pdf";
 
-        vm.myFunc12 = function()
-        {
-            console.log("testing-------");
-            console.log("myValue",vm.myValue);
-            if(vm.myValue == ""){
-                console.log("nullll");
-                vm.updatebtn=false;
-
-                
-            }else{vm.updatebtn=true;}
-        }
 
         vm.updateok = function(){
             console.log("update ok....");
