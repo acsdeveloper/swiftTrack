@@ -1,6 +1,6 @@
 (function() {
     // 'use strict';
-    function assessmentCtrl(Constants,pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService) {
+    function assessmentCtrl(Constants,pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService,$filter) {
         console.log("after ctrl");
         var vm = this;
          
@@ -280,7 +280,7 @@
             vm.bdynotespanel = false;
             vm.bdyquestpanel = false;
         }
-
+        // vm.videolocallocation='tempurl/filenname'
         vm.assesspdf = function() {
             // console.log("mycam", vm.popupdata.type_ref.cam);
             // if (vm.popupdata.type_ref.pdf != undefined) {
@@ -396,11 +396,15 @@
            
             }
 
-        vm.assessvideoplay = function(filetype)
+        vm.assessvideoplay = function(filetype,value)
         {
-    
+            vm.videolocallocation = value;
             console.log("assess video function");
-            if(filetype == "video"){vm.assessvideopopup=true;}
+            console.log("assess filetype",filetype);
+            console.log("assess value",value);
+            if(filetype == "movie"){
+                vm.assessvideopopup=true;
+            }
             else if(filetype == "image"){
                 vm.assessimagepopup=true;
                }
@@ -556,5 +560,5 @@
 
     angular.module('swiftTrack.assessment')
         .controller('assessmentCtrl', assessmentCtrl);
-    assessmentCtrl.$inject = ['Constants','PDFViewerService','$sce','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'ModuleService'];
+    assessmentCtrl.$inject = ['Constants','PDFViewerService','$sce','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'ModuleService','$filter'];
 }());

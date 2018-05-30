@@ -258,9 +258,8 @@
                   <div ng-repeat="value in vm.gallerycamArr" >
                         <div class="media-wrapper ev-wrap"  >
                               <div ng-click="vm.removeMedia()" class="icon-cancel-circle remove-media"></div>
-                              <!-- <img class="img-resource" ng-if="vm.filetype == 'video/mp4'" ng-src="./img/icon-movie.jpg" alt="" ng-click="vm.assessvideoplay('video')" > -->
-                              <img class="img-resource" ng-if="vm.findfiletype(value)=='image'" ng-src="{{vm.changelocalurl(value,'image')}}" alt="" ng-click="vm.assessvideoplay(value)" >
-                              <img class="img-resource" ng-if="vm.findfiletype(value)=='movie'" ng-src="{{vm.changelocalurl(value,'movie')}}" alt="" ng-click="vm.assessvideoplay(value)" >
+                              <img class="img-resource" ng-if="vm.findfiletype(value)=='image'" ng-src="{{value | filefilter}}" alt="" ng-click="vm.assessvideoplay('image',value)" >
+                              <img class="img-resource" ng-if="vm.findfiletype(value)=='movie'" ng-src="{{value | filefilter}}" alt="" ng-click="vm.assessvideoplay('movie',value)" >
                               
                         </div>
                         <div class="del-media" ng-show="vm.delconform">
@@ -411,14 +410,14 @@
    <div ng-show="vm.assessvideopopup" id="mediaView" class="" style="height: auto;">
       <i class="icon-cancel-circle close-modal" ng-click="vm.assessvideopopupclose(vm.videolocallocation,$event)"></i>
       <div class="mv-content">
-                  <video controls ng-src="{{vm.videolocallocation}}"></video>     
+                  <video controls ng-src="{{vm.videolocallocation | filefilter}}"></video>     
       </div>
    </div>
 
    <div ng-show="vm.assessimagepopup" id="mediaView" class="" style="height: auto;">
-      <i class="icon-cancel-circle close-modal" ng-click="vm.assessimagepopup = !vm.assessimagepopup; vm.bdycampanel = true;"></i>
+      <i class="icon-cancel-circle close-modal" ng-click="vm.assessimagepopup = false; vm.bdycampanel = true;"></i>
       <div class="mv-content">
-            <img ng-src="{{vm.videolocallocation}}" alt="logo">    
+            <img ng-src="{{vm.videolocallocation | filefilter}}" alt="logo">    
       </div>
    </div>
 

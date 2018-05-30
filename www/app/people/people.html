@@ -1,4 +1,4 @@
-<ion-view cache-view="false">
+<ion-view cache-view="false" class="people-reportpage">
 	<button class="button back-button buttons button-icon ion-arrow-left-c header-item" ng-click="$ionicGoBack()">
         <a class="btn btn-md btn-default btn-back2dash">
 				<i class="icon-arrow-left"></i> Back <span class="hide-on-phone">to Dashboard</span></a>
@@ -97,13 +97,25 @@
 								<em class="">{{indicator.level}}</em>
 							</div>
 
-							<div class="report-media" ng-if="indicator.pdf || indicator.media">
-								<div ng-repeat="pdf in indicator.pdf">
+							<!-- <div class="report-media" ng-if="indicator.pdf || indicator.media"> -->
+									<div class="report-media" ng-if="indicator.pdf || indicator.media">
+									<span ng-if="indicator.pdf" ng-click="vm.reportvideoimagepdf(pdf.data_type,pdf.media_url)" ng-repeat="pdf in indicator.pdf" class="thu" data-type="{{pdf.data_type}}" data-path="{{pdf.media_url | filefilter}}">
+										<img src="./img/icon-pdf.jpg" alt="">
+									</span>
+									<span ng-if="indicator.media" ng-click="vm.reportvideoimagepdf(media.data_type,media.media_url)" ng-repeat="media in indicator.media" class="thu" data-type="{{media.data_type}}" data-path="{{media.media_url | filefilter}}">
+										<img ng-if="media.data_type == 'movie' " src="./img/icon-movie.jpg" alt="">
+										<img ng-if="media.data_type == 'image' " ng-src="{{media.img_src | filefilter}}" alt="">
+									</span>
+									<!-- <a class="thu" data-type="movie" data-path="https://mobile.swifttrack.co.uk/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/20170607_144927.mp4">
+										<img src="./img/icon-pdf.jpg" alt="">
+									</a> -->
+
+								<!-- <div ng-repeat="pdf in indicator.pdf">
 									<a class="thu" data-type='{{pdf.data_type}}' data-path="{{pdf.media_url | filefilter}}"><img ng-src="{{pdf.img_src}}" alt="" ng-click="vm.openimageModal(pdf.img_src)" ></a>
 								</div>
 								<div ng-repeat="media in indicator.media">
 									<a class="thu" data-type='{{media.data_type}}' data-path="{{media.media_url | filefilter}}"><img ng-src="{{media.img_src}}" alt=""></a>
-								</div>
+								</div> -->
 							</div>
 						</div>
 						<!--ng-repeatend-->
@@ -117,4 +129,29 @@
 		</div>
 		</div>
 	</ion-content>
+
+	
+	<div ng-show="vm.reportvideoimagepdfpopup" id="mediaView" class="" style="height: auto;">
+			<i class="icon-cancel-circle close-modal" ng-click="vm.reportmediaclose(vm.targetPath,$event)"></i>
+			
+			<div ng-if="vm.data_type == 'movie' " class="mv-content">
+			<video controls ng-src="{{vm.targetPath}}"></video>     
+			</div>
+
+			<div ng-if="vm.data_type == 'pdf'" class="mv-content">
+					<button ng-click="vm.prevPage()">&lt;</button>
+					  <button ng-click="vm.nextPage()">&gt;</button>
+					  <br>
+					  <span>{{vm.currentPage}}/{{vm.totalPages}}</span>
+					  <br>
+					  <pdfviewer ng-src="{{vm.targetPath}}" on-page-load='vm.pageLoaded(page,total)' id="viewer"></pdfviewer>
+			</div>
+
+			<div ng-if="vm.data_type == 'image'" class="mv-content">
+					<img controls ng-src="{{vm.targetPath}}"></img>     
+					</div>
+			
+		 
+		</div>
+		 
 </ion-view>

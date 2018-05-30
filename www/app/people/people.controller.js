@@ -25,42 +25,9 @@
 
             });
         }
-
-        
-
-        
-
-        // function downloadImage(uri,name){
-        //     console.log("people download");
-               
-        //     var ft = new FileTransfer();
-        //     var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/" + name;
-        //     vm.videolocallocation = targetPath;
-        //     ft.download(
-        //         uri,
-        //         targetPath,
-        //         function(entry) {
-                    
-        //             console.log(entry);
-        //             console.log("download complete: " + entry.fullPath);
-    
-        //         },
-        //         function(error) {
-        //             console.log("error");
-        //             console.log(error);
-        //             console.log("download error" + error.code);
-        //         }
-        //     );
-        // }
-
-
         vm.assessmentdetails();
-
         vm.openimageModal = function(image) {
-
-        }
-
-
+                }
         //header
 
         vm.headerimagefunction = function() {
@@ -73,6 +40,7 @@
                 vm.userImageUrl = localStorage.getItem("images");
             }
         }
+
         $scope.$watch(
             function($scope) {
                 vm.userdetails = storageFactory.getuserdetails();
@@ -82,6 +50,7 @@
         vm.logoutclick = function() {
             vm.logoutpopup = $scope.logoutpopup ? false : true;
         }
+
         vm.cancellogout = function() {
             vm.logoutpopup = false;
 
@@ -98,38 +67,43 @@
             $state.go('login')
         }
         
-   
-        // @ck260518
-        vm.reportpdf_localurl = function(url){
-            console.log("reportpdf_localurl function",url);
-            return true;
+        vm.reportvideoimagepdf = function(datatype,url)
+        {
+            console.log("datatype",datatype,"url",url);
+            vm.reportvideoimagepdfpopup = true;
+            vm.data_type = datatype;
+            vm.targetPath = cordova.file.externalRootDirectory +"Uploadfolder/"+url.substring(url.lastIndexOf('/')+1)
+            console.log(vm.targetPath,"88888tagettt");
         }
-        
-        vm.reportmedia_localurl = function(url){
-            console.log("reportmedia_localurl function",url);
-
+        vm.reportmediaclose = function(path,$event)
+        {
+            var srcelement=$event.target.nextElementSibling.children[0];
+            vm.reportvideoimagepdfpopup =false;
+            if(path.substring(path.lastIndexOf('.')+1) == 'mp4'){
+                video = angular.element(srcelement);
+                video[0].pause();
+            }
+            console.log("%%%%%%%%%%%%%%path",path);
+            console.log("report media event",event);
+            console.log("%%%%%%%%%%%%%%srcelement",srcelement);
+            // console.log("report media event",event.substring(event.lastIndexOf('.')+1));
         }
    
-   
+    
+    
     }
-
-
-
-
+    
 
     angular.module('swiftTrack.progressreport')
         .controller('peopleCtrl', peopleCtrl);
-   
     peopleCtrl.$inject = ['$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'reportService', '$filter'];
-
-    angular.module('swiftTrack.progressreport')
-        .filter('filefilter', function($filter) {
-            return function (item) {
-                var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/";
-                var filename = item.substring(item.lastIndexOf('/')+1);
-                console.log("^^^^^^^^^",item,"filename",filename);
-                return targetPath+filename;
-            };
-        });
+    // angular.module('swiftTrack.progressreport')
+    //     .filter('filefilter', function($filter) {
+    //         return function (item) {
+    //             var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/";
+    //             var filename = item.substring(item.lastIndexOf('/')+1);
+    //             return targetPath+filename;
+    //         };
+    //     });
 
  }());
