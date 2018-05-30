@@ -118,7 +118,7 @@
             return function (item) {
                 console.log(item)
                 if(item && item!=undefined){
-                    var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/";
+                    var targetPath = cordova.file.externalApplicationStorageDirectory +"files/";
                     var filename = item.substring(item.lastIndexOf('/')+1);
                     return targetPath+filename;
                 }
