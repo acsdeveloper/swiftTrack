@@ -220,7 +220,9 @@
             console.log(angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value)
             var datapath=angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value;
             vm.datapath=datapath;
-            var datacam=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-ev'].value
+            console.log("***********datapath",datapath);
+            var datacam=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-ev'].value;
+            console.log("datacam---");
             var datapdf=angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-ev'].value
             var datanotes=angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev'].value
             var dataques=angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-ev'].value
@@ -268,8 +270,11 @@
            vm.finalarrquestionAuth=finalarrquestionAuth;
            
             
-            console.log(vm.gallerycamArr,finalarrcam)
-            
+        console.log(" vm.datapath", vm.datapath);
+        console.log(" vm.gallerycamArr", vm.gallerycamArr);
+        console.log("vm.gallerypdfArr",vm.gallerypdfArr);
+        console.log(" vm.finalarrcamEv_id", vm.finalarrcamEv_id);
+        console.log("vm.finalarrcamAuth",vm.finalarrcamAuth);    
 
         }
         vm.showupdatebtn = function(){
@@ -460,6 +465,7 @@
 
         vm.assessvideoplay = function(filetype,value)
         {
+            angular.element('.del-media').addClass('ng-hide');
             vm.videolocallocation = value;
             console.log("assess video function");
             console.log("assess filetype",filetype);
@@ -472,6 +478,8 @@
                }
             vm.bdycampanel = false;
         }
+
+
         vm.assessvideopopupclose = function(videourl,$event)
         {
             
@@ -484,6 +492,83 @@
             vm.bdycampanel = true;
             
         }
+
+        vm.removeMedia = function(i,value,$event)
+        {
+            angular.element('.del-media').addClass('ng-hide');
+            angular.element($event.target).parent().children('.del-media').removeClass('ng-hide');
+            console.log("media remove function i",i);
+            console.log("media remove function value",value);
+            console.log("media remove function event",$event);
+        
+        }
+        vm.deleteconf = function(type,i,value,$event)
+        {
+            console.log(type,i,value,$event,"type-----");
+            console.log("vm.gallerynotesArr",vm.gallerynotesArr);
+
+            if(type == 'cam'){
+           
+              console.log(vm.gallerycamArr,"test1")
+               vm.gallerycamArr.splice(i,1);
+               console.log(vm.gallerycamArr,"test2")
+               vm.finalarrcamEv_id.splice(i,1);
+               angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-cam')[0].attributes['data-ev'].value=vm.gallerycamArr.join(',')
+               angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-ev-ids'].value = vm.finalarrcamEv_id.join(',')
+               //    vm.finalarrcamAuth.splice(i,1);
+               
+
+            }
+            else if(type == 'pdf'){
+                console.log("its pdf ");
+                vm.gallerypdfArr.splice(i,1);
+                vm.finalarrpdfEv_id.splice(i,1);
+                angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-ev'].value = vm.gallerypdfArr.join(',')
+                angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-ev-ids'].value = vm.finalarrpdfEv_id.join(',')
+                // vm.finalarrpdfAuth.splice(i,1);
+
+
+            }
+            else if(type == 'notes'){
+                vm.gallerynotesArr.splice(i,1);
+                vm.finalarrnotesEv_id.splice(i,1);
+                vm.finalarrnotesAuth.splice(i,1);
+                angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev'].value = vm.gallerynotesArr.join('_*_')
+                angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev-ids'].value =  vm.finalarrnotesEv_id.join('_*_')
+                angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-auth'].value =  vm.finalarrnotesAuth.join('_*_')
+                console.log("its notes");
+
+
+
+
+            }
+            else if(type == 'question'){
+
+                angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-ev'].value = vm.galleryquestionArr.join('_*_')
+                angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-ev-ids'].value = vm.finalarrquestionEv_id.join('_*_')
+                angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-auth'].value = vm.finalarrquestionAuth.join('_*_')
+            }
+
+
+            angular.element('.del-media').addClass('ng-hide');
+            
+
+
+
+            console.log("delete confirm",$event);
+            console.log("delete confirm index",i);
+            console.log("delete confirm value",value);
+
+
+        }
+        vm.cancelconf = function($event)
+        {
+            angular.element($event.target).parent().addClass('ng-hide');
+            console.log("cancel confirm",$event);
+        }
+
+
+
         vm.resourcevideosectionclose = function($event)
         {
             var srcele = $event.target.parentElement.nextElementSibling.children[1].children[0].children[0];
@@ -587,12 +672,7 @@
             vm.assesspdfpopup = false;
         }
 
-        vm.removeMedia = function(i,value,$event)
-        {
-            console.log("media remove function i",i);
-            console.log("media remove function value",value);
-            console.log("media remove function event",$event);
-        }
+       
         
 
         // var url = "file:///storage/emulated/0/360/sample.pdf";

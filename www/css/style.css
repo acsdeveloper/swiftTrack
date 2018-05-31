@@ -1399,6 +1399,7 @@ body.locked-page {
 }
 
 .del-media {
+	top:0;
 	width: 150px;
 	height: 150px;
 	background: rgba(0, 0, 0, 0.8);

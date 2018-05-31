@@ -262,8 +262,8 @@
                               
                               <div class="del-media" ng-show="vm.delconform">
                                     <span class="del-title">Really Delete?</span>
-                                    <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.delconform = false">Confirm</a>
-                                    <a class="btn btn-cancel del-false" ng-click="vm.delconform = false" >Cancel</a>
+                                    <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.deleteconf('cam',i,value,$event)">Confirm</a>
+                                    <a class="btn btn-cancel del-false" ng-click="vm.cancelconf($event)" >Cancel</a>
                               </div>
                         </div>
                        
@@ -298,12 +298,12 @@
       <div id="galleryPDF" >
             <div ng-repeat="(i,value) in vm.gallerypdfArr" >
                   <div class="media-wrapper ev-wrap" data-ev-id="{{vm.finalarrpdfEv_id[i]}}" data-auth="{{vm.finalarrpdfAuth[i]}}" >
-                        <div class="icon-cancel-circle remove-media" ng-click="vm.delconform = !vm.delconform;vm.pdficon = false" ></div>
+                        <div class="icon-cancel-circle remove-media" ng-click="vm.removeMedia(i,value,$event)"></div>
                         <img alt="" ng-src="./img/icon-pdf.jpg" ng-click="vm.pdfopen(value)">
                         <div class="del-media" ng-show="vm.delconform">
                               <span class="del-title">Really Delete?</span>
-                              <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.pdficon = false;vm.delconform = false;">Confirm</a>
-                              <a class="btn btn-cancel del-false" ng-click="vm.delconform = false;vm.pdficon = true;" >Cancel</a>
+                              <br><a class="btn btn-confirm del-true m-rgt-10"  ng-click="vm.deleteconf('pdf',i,value,$event)">Confirm</a>
+                              <a class="btn btn-cancel del-false"  ng-click="vm.cancelconf($event)" >Cancel</a>
                         </div>
                   </div>
                   
@@ -341,11 +341,12 @@
                         <div class="note-row ev-wrap" data-type="notes" data-ev-id="{{vm.finalarrnotesEv_id[i]}}">
                               <div class="del-media" ng-show="vm.delnotemedia">
                                     <span class="del-title">Really Delete?</span>
-                                    <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.noterow = false" >Confirm</a>
-                                    <a class="btn btn-cancel del-false" ng-click="vm.delnotemedia = false">Cancel</a>
+                                    <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.deleteconf('notes',i,value,$event)" >Confirm</a>
+                                    <a class="btn btn-cancel del-false" ng-click="vm.cancelconf($event)">Cancel</a>
                               </div> 
                               
-                              <i class="icon-cancel-circle remove-note" ng-click="vm.delnotemedia = !vm.delnotemedia"></i>
+                              <!-- <i class="icon-cancel-circle remove-note" ng-click="vm.delnotemedia = !vm.delnotemedia"></i> -->
+                              <i class="icon-cancel-circle remove-note" ng-click="vm.removeMedia(i,value,$event)"></i>
                               <span class="note" ng-bind-html="value"></span>
                               <span class="note-auth">
                                     <i class="icon-user"></i>
