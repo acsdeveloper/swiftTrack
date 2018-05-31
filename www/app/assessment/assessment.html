@@ -376,7 +376,7 @@
                                     <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.deleteconf('question',i,value,$event)" >Confirm</a>
                                     <a class="btn btn-cancel del-false" ng-click="vm.cancelconf($event)">Cancel</a>
                               </div> 
-                              <i class="icon-cancel-circle remove-note"></i>
+                              <i class="icon-cancel-circle remove-note" ng-click="vm.removeMedia(i,value,$event)"></i>
                               <span class="edit-note" ng-click="vm.editquestions(value,$event)">
                                 <i class="icon-pencil2"></i>
                               </span>
