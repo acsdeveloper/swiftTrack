@@ -379,6 +379,7 @@
             vm.bdypdfpanel = false;
             vm.bdynotespanel = false;
             vm.bdyquestpanel = false;
+            angular.element('.del-media').addClass('ng-hide');
         }
 
         vm.resourcefunct = function(value) {
@@ -396,19 +397,16 @@
             vm.bdypdfpanel = false;
             vm.bdynotespanel = false;
             vm.bdyquestpanel = false;
+            angular.element('.del-media').addClass('ng-hide');
+            
         }
-        // vm.videolocallocation='tempurl/filenname'
         vm.assesspdf = function() {
-            // console.log("mycam", vm.popupdata.type_ref.cam);
-            // if (vm.popupdata.type_ref.pdf != undefined) {
-            //     console.log("pdf okay");
-            //     vm.pdffile = vm.popupdata.type_ref.pdf;
-            // }
-
+            
             vm.bdycampanel = false;
             vm.bdypdfpanel = true;
             vm.bdynotespanel = false;
             vm.bdyquestpanel = false;
+            angular.element('.del-media').addClass('ng-hide');
 
         }
         vm.assessnotes = function() {
@@ -416,6 +414,7 @@
             vm.bdypdfpanel = false;
             vm.bdynotespanel = true;
             vm.bdyquestpanel = false;
+            angular.element('.del-media').addClass('ng-hide');
 
         }
         vm.assessquest = function() {
@@ -423,6 +422,7 @@
             vm.bdypdfpanel = false;
             vm.bdynotespanel = false;
             vm.bdyquestpanel = true;
+            angular.element('.del-media').addClass('ng-hide');
 
         }
 
