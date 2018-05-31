@@ -18,14 +18,17 @@
         }
         vm.init();
         vm.headerimagefunction = function() {
+            dashboardService.LocaldatadetailsPouch().then(function(resp){
+                vm.localdatadetails=resp;
+            })
             if (vm.userdetails !== undefined && vm.userdetails !== null) {
                 vm.userImageUrl = vm.userdetails.images;
                 vm.userFirstName = vm.userdetails.first_name;
                 vm.full_name = vm.userdetails.first_name + ' ' + vm.userdetails.last_name;
             }
             else {
-                vm.userFirstName = localStorage.getItem("first_name");
-                vm.full_name = localStorage.getItem("fullname");
+                vm.userFirstName = vm.localdatadetails.first_name;
+                vm.full_name = vm.localdatadetails.username;
             }
 
         }
@@ -119,7 +122,7 @@
                 vm.userFirstName = vm.userdetails.first_name;
             }
             else {
-                vm.userImageUrl = localStorage.getItem("images");
+                vm.userImageUrl = vm.localdatadetails.images;
             }
         }
         $scope.$watch(
@@ -143,8 +146,9 @@
             storageFactory.login(null);
             $cookieStore.remove('loginAuth');
             localStorage.setItem("loginAuth", false);
-            localStorage.removeItem("first_name");
-            localStorage.removeItem("images");
+
+            // localStorage.removeItem("first_name");
+            // localStorage.removeItem("images");
             vm.logoutpopup = false;
             $state.go('login')
         }

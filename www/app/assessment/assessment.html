@@ -58,7 +58,7 @@
    <ion-content class="assess-top" scroll="true">
       <div class="panel-container">
       <div class="fullvh">
-         <section id="panelIDVDK19N4X3Y" ng-attr-id="assessment_id_{{assesskey}}_{{$index}}" ng-repeat="(assesskey,assessvalue) in vm.assessmentdetail_response.people track by $index" class="panel person-panel pnl-brdr pnl-no-pad ">
+         <section data-newid="{{assesskey}}" ng-attr-id="assessment_id_{{assesskey}}_{{$index}}" ng-repeat="(assesskey,assessvalue) in vm.assessmentdetail_response.people track by $index" class="panel person-panel pnl-brdr pnl-no-pad ">
             <div class="panel-hdr">
                <div class="panel-title">
                   <div class="circ-person">
@@ -258,7 +258,7 @@
                         <div class="media-wrapper ev-wrap" data-ev-id="{{vm.finalarrcamEv_id[i]}}" data-auth="{{vm.finalarrcamAuth[i]}}">
                               <div ng-click="vm.removeMedia(i,value,$event)" class="icon-cancel-circle remove-media"></div>
                               <img class="img-resource" ng-if="vm.findfiletype(value)=='image'" ng-src="{{value | filefilter}}" alt="" ng-click="vm.assessvideoplay('image',value)" >
-                              <img class="img-resource" ng-if="vm.findfiletype(value)=='movie'" ng-src="{{value | filefilter}}" alt="" ng-click="vm.assessvideoplay('movie',value)" >
+                              <img class="img-resource" ng-if="vm.findfiletype(value)=='movie'" ng-src="./img/icon-movie.jpg" alt="" ng-click="vm.assessvideoplay('movie',value)" >
                               
                               <div class="del-media" ng-show="vm.delconform">
                                     <span class="del-title">Really Delete?</span>
@@ -274,13 +274,13 @@
                   <div class="upload-bar">
                      <div class="ul-prog"></div>
                   </div>
-                  <div id="addEv" ng-click="vm.evidenceupload()" data-type='cam'>
+                  <div id="addEv" ng-click="vm.evidenceupload('cam')" data-type='cam'>
                      <span class="btn-pre">Add</span>
                      <span class="ftr-icn">
                               <i class="icn-cam icon-camera"></i>
                           </span>
                      <span class="btn-suf">New</span>
-                     <div>{{vm.filename}}</div>
+                     <!-- <div>{{vm.filename}}</div> -->
                   </div>
             </div>
 
@@ -313,7 +313,7 @@
             <div class="upload-bar">
                <div class="ul-prog"></div>
             </div>
-            <div id="addEv" ng-click="vm.pdfevidence()" data-type='cam'>
+            <div id="addEv" ng-click="vm.evidenceupload('pdf')" data-type='pdf'>
                <span class="btn-pre">Add</span>
                <span class="ftr-icn">
                         
@@ -321,7 +321,7 @@
                       
                     </span>
                <span class="btn-suf">New</span>
-               <div>{{vm.filename}}</div>
+               <!-- <div>{{vm.filename}}</div> -->
             </div>
          </div>
    </div>
@@ -408,7 +408,7 @@
    </div>
 
 
-   <div ng-show="vm.assessvideopopup" id="mediaView" class="" style="height: auto;">
+   <div ng-show="vm.assessvideopopup" id="mediaView" class="" style="height: 100vh;">
       <i class="icon-cancel-circle close-modal" ng-click="vm.assessvideopopupclose(vm.videolocallocation,$event)"></i>
       <div class="mv-content">
                   <video controls ng-src="{{vm.videolocallocation | filefilter}}"></video>     
@@ -427,13 +427,11 @@
             <div class="mv-content">
              <!-- <embed style="min-height: 400px; height: 133px;" ng-src="{{vm.pdflocallocation}}" alt="pdf">   -->
                   <!-- <object src="http://www.africau.edu/images/default/sample.pdf" width="500" height="700" type='application/pdf'>  </object> -->
-                  <button ng-click="vm.prevPage()">&lt;</button>
-                  <button ng-click="vm.nextPage()">&gt;</button>
-                  <br>
                   <span>{{vm.currentPage}}/{{vm.totalPages}}</span>
                   <br>
-                  <pdfviewer ng-src="{{vm.pdflocallocation}}" on-page-load='vm.pageLoaded(page,total)' id="viewer"></pdfviewer>
-                  
+                  <pdfviewer ng-src="{{vm.targetPath}}" on-page-load='vm.pageLoaded(page,total)' id="viewer"></pdfviewer>
+                  <button ng-click="vm.prevPage()">Previous Page</button>
+                  <button style="float: right;" ng-click="vm.nextPage()">Next page</button>
                         <!-- <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url=http://www.africau.edu/images/default/sample.pdf" width="500" height="375">      <iframe src="http://www.africau.edu/images/default/sample.pdf" style="min-height: 400px; height: 133px;"></iframe> -->
                   <!-- <pdfviewer src="http://www.africau.edu/images/default/sample.pdf" style="min-height: 400px; height: 133px;" ></pdfviewer> -->
             </div>

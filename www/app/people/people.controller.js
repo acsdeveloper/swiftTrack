@@ -16,14 +16,18 @@
             $state.go('dashboard')
         }
         vm.assessmentdetails = function() {
-            vm.reportobj = storageFactory.getuserreportid();
-            vm.targetPath = cordova.file.externalRootDirectory +"Uploadfolder";
-            console.log(vm.reportobj)
-            reportService.ReportdetailsPouch(vm.reportobj).then(function(resp) {
-                console.log("assessrepes", resp);
-                vm.report_response = resp;
-
-            });
+            reportService.LocaldatadetailsPouch().then(function(response){
+                vm.localdatadetails=response;
+                vm.reportobj = storageFactory.getuserreportid();
+                vm.targetPath = cordova.file.externalRootDirectory +"Uploadfolder";
+                console.log(vm.reportobj)
+                reportService.ReportdetailsPouch(vm.reportobj).then(function(resp) {
+                    console.log("assessrepes", resp);
+                    vm.report_response = resp;
+    
+                });
+            })
+           
         }
         vm.assessmentdetails();
         vm.openimageModal = function(image) {
@@ -37,7 +41,7 @@
                 vm.userFirstName = vm.userdetails.first_name;
             }
             else {
-                vm.userImageUrl = localStorage.getItem("images");
+                vm.userImageUrl = vm.localdatadetails.images;
             }
         }
 
@@ -61,8 +65,8 @@
             storageFactory.login(null);
             $cookieStore.remove('loginAupercentage');
             localStorage.setItem("loginAupercentage", false);
-            localStorage.removeItem("first_name");
-            localStorage.removeItem("images");
+            // localStorage.removeItem("first_name");
+            // localStorage.removeItem("images");
             vm.logoutpopup = false;
             $state.go('login')
         }
