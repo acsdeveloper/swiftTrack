@@ -124,7 +124,7 @@
         //header
         vm.headerimagefunction = function() {
             if (vm.userdetails !== undefined && vm.userdetails !== null) {
-                vm.userImageUrl = vm.userdetails.images;
+                vm.userImageUrl = vm.userdetails.images; 
                 console.log(vm.userImageUrl);
                 vm.userFirstName = vm.userdetails.first_name;
             }
