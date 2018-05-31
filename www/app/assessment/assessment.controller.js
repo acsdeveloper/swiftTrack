@@ -336,6 +336,7 @@
         vm.updateques = function(){
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-ev'].value=vm.changemodel
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-auth'].value=vm.currentUser
+            angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question').removeClass("hidden");
             vm.galleryquestionArr=vm.changemodel.split('_*_');
             vm.finalarrquestionAuth=vm.currentUser.split('_*_')
             vm.showupdatbtn=false;
@@ -357,6 +358,7 @@
            if(vm.change_note!=''){
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev'].value=val+'_*_'+vm.change_note
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-auth'].value+='_*_'+vm.currentUser
+            angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes').removeClass("hidden");
             vm.gallerynotesArr.push(vm.change_note);
             vm.finalarrnotesAuth.push(vm.currentUser);
             vm.updatebtn=false;
