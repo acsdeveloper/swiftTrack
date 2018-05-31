@@ -48,14 +48,14 @@
 				<div class="panel-container">
 					<section class="panel">
 						<div class="row">
-							<div id="notifications-d-n" ng-if="vm.login_type!=='people'" ng-show="vm.usrNotBar" class="col-sm-12">
+							<div id="notifications-d-n" ng-if="vm.login_type!=='person'" ng-show="vm.usrNotBar" class="col-sm-12">
 								<div class="alert alert-info">
 									<span><strong>You are up to date: </strong> Hello,{{vm.userFirstName}}. You are ready to perform an assessment.</span>
 									<a ng-click="vm.closeUsrNoti()" style="cursor:pointer" class="close">×</a>
 								</div>
 							</div>
 							<div class="col-xs-12" style="min-height: 70vh;">
-								<h3 class="dash-title Hel-font" ng-bind="vm.login_type!=='people'?'Job Roles':vm.full_name"> </h3>
+								<h3 class="dash-title Hel-font" ng-bind="vm.login_type!=='person'?'Job Roles':vm.full_name"> </h3>
 
 
 								<!--ng repeat starts-->
@@ -64,8 +64,8 @@
 									<div class="dash-tabs" class="parentClass" id="parentId">
 										<ul class="nav nav-tabs tabs">
 											<li class="active"><a ng-click="vm.competencyBtn(jobrolesKey)"><strong>Competencies</strong> </a></li>
-											<li ng-if="vm.login_type !== 'people'"><a ng-click="vm.peopleBtn(jobrolesKey)">People <span>{{vm.getlength(jobroles.people)}}</span></a></li>
-											<li ng-if="vm.login_type == 'people'"><a ng-click="vm.progressreport(jobrolesKey)">My Progress Report</a></li>
+											<li ng-if="vm.login_type !== 'person'"><a ng-click="vm.peopleBtn(jobrolesKey)">People <span>{{vm.getlength(jobroles.people)}}</span></a></li>
+											<li ng-if="vm.login_type == 'person'"><a ng-click="vm.progressreport(jobrolesKey)">My Progress Report</a></li>
 										</ul>
 										<div class="tab-content">
 											<div class="tab-pane active" id="competencies{{jobrolesKey}}">
@@ -78,7 +78,7 @@
 													</div>
 												</div>
 											</div>
-											<div class="tab-pane" ng-if="vm.login_type !== 'people'" id="people{{vm.clearspace(jobrolesKey)}}">
+											<div class="tab-pane" ng-if="vm.login_type !== 'person'" id="people{{vm.clearspace(jobrolesKey)}}">
 												<div ng-repeat="(peopleKey,peoples) in jobroles.people" ng-click="document.location='https://swifttrack-agilexcyber.c9users.io/report/{{people.id}}/'" class="person-holder">
 													<div class="p_perc">{{peoples[0].p_perc}}%</div>
 													<div class="p_name">{{peoples[0].p_name+" "+peoples[0].last_name}}</div>
@@ -88,7 +88,7 @@
 			                                    </span>
 												</div>
 											</div>
-											<div class="tab-pane" ng-if="vm.login_type == 'people'" id="myprogressreport{{vm.clearspace(jobrolesKey)}}">
+											<div class="tab-pane" ng-if="vm.login_type == 'person'" id="myprogressreport{{vm.clearspace(jobrolesKey)}}">
 												<div role="tabpanel" class="tab-pane active" id="individualReport">
 													<div class="dash-comp-title">
 														<h4>See How You're Progressing</h4>

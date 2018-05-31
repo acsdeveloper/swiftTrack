@@ -103,7 +103,9 @@
         angular.element(document).ready(function() {
             dashboardService.LocaldatadetailsPouch().then(function(resp){
                 vm.localdatadetails=resp;
+                storageFactory.setuserdetails(resp);
                 vm.login_type = vm.localdatadetails.login_type;
+                console.log(vm.login_type,"login type test")
                 $timeout(function() {
                     vm.dashboardAPIcall();
                 }, 300);
@@ -125,6 +127,9 @@
                 vm.userImageUrl = vm.userdetails.images;
                 console.log(vm.userImageUrl);
                 vm.userFirstName = vm.userdetails.first_name;
+            }
+            else{
+
             }
             // else {
             //     vm.userImageUrl = vm.localdatadetails.images;

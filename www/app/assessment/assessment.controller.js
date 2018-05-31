@@ -273,6 +273,7 @@
             console.log("datacam---");
             var datapdf=angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-ev'].value
             var datanotes=angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev'].value
+            console.log(datanotes,"notes test error")
             var dataques=angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-ev'].value
             
             var datacamAuth=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-auth'].value
@@ -355,10 +356,12 @@
         vm.addnotes = function(){
             var val=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev'].value
            if(vm.change_note!=''){
-            angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev'].value=val+'_*_'+vm.change_note
-            angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-auth'].value+='_*_'+vm.currentUser
+            angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev'].value=val==''?vm.change_note:val+'_*_'+vm.change_note
+            var authnew=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-auth'].value;
+            angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-auth'].value=authnew==''?vm.currentUser:authnew+'_*_'+vm.currentUser
             vm.gallerynotesArr.push(vm.change_note);
             vm.finalarrnotesAuth.push(vm.currentUser);
+            console.log(vm.gallerynotesArr,vm.finalarrnotesAuth)
             vm.updatebtn=false;
             vm.change_note='';
            }
@@ -577,6 +580,8 @@
               console.log(vm.gallerycamArr,"test1")
                vm.gallerycamArr.splice(i,1);
                console.log(vm.gallerycamArr,"test2")
+               vm.deleteEvArr.push(vm.finalarrcamEv_id.splice(i,1)[0]);
+               console.log(vm.deleteEvArr,"error id")
                vm.finalarrcamEv_id.splice(i,1);
                angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-cam')[0].attributes['data-ev'].value=vm.gallerycamArr.join(',')
                angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-cam')[0].attributes['data-ev-ids'].value = vm.finalarrcamEv_id.join(',')
@@ -588,6 +593,7 @@
                 console.log("its pdf ");
                 vm.gallerypdfArr.splice(i,1);
                 vm.finalarrpdfEv_id.splice(i,1);
+                vm.deleteEvArr.push(vm.finalarrpdfEv_id.splice(i,1)[0]);
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-pdf')[0].attributes['data-ev'].value = vm.gallerypdfArr.join(',')
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-pdf')[0].attributes['data-ev-ids'].value = vm.finalarrpdfEv_id.join(',')
                 // vm.finalarrpdfAuth.splice(i,1);
@@ -598,13 +604,11 @@
                 vm.gallerynotesArr.splice(i,1);
                 vm.finalarrnotesEv_id.splice(i,1);
                 vm.finalarrnotesAuth.splice(i,1);
+                vm.deleteEvArr.push(vm.finalarrnotesEv_id.splice(i,1)[0]);
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev'].value = vm.gallerynotesArr.join('_*_')
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev-ids'].value =  vm.finalarrnotesEv_id.join('_*_')
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-auth'].value =  vm.finalarrnotesAuth.join('_*_')
                 console.log("its notes");
-
-
-
 
             }
             else if(type == 'question'){
