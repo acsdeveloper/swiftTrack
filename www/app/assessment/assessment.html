@@ -206,7 +206,7 @@
 
                <div class="col-xs-12" ng-if="resouval.type_id == 5">
                         <video width="280" height="240" controls>
-                              <source src="" dynamic-url dynamic-url-src="{{resouval.item_media}}">
+                              <source src="" dynamic-url dynamic-url-src="{{resouval.item_media | filefilter}}">
                           </video>
                </div>
                <div class="col-xs-12" ng-if="resouval.type_id == 2">
@@ -216,8 +216,8 @@
                   <p>{{resouval.item_content}}</p>
                   <div class="pad-15"></div>
                </div>
-               <div col-6 class="col-xs-6" ng-if="resouval.type_id == 3"><img class="img-resource" ng-src="{{resouval.item_media}}" alt=""></div>
-               <div col-6 class="col-xs-6" ng-if="resouval.type_id == 4"><img class="img-resource" ng-src="{{resouval.item_media}}" alt=""></div>
+               <div col-6 class="col-xs-6" ng-if="resouval.type_id == 3"><img class="img-resource" ng-src="{{resouval.item_media | filefilter}}" alt=""></div>
+               <div col-6 class="col-xs-6" ng-if="resouval.type_id == 4"><img class="img-resource" ng-src="{{resouval.item_media | filefilter}}" alt=""></div>
                <div col-6 class="col-xs-6" ng-if="resouval.type_id == 4">
                   <p>{{resouval.item_content}}</p>
                   <div class="pad-15"></div>
@@ -371,6 +371,11 @@
             <div id="galleryQuestions" class="gal-wrapper" data-type="questions">
                   <div ng-repeat="(i,value) in vm.galleryquestionArr" >
                         <div class="note-row ev-wrap" data-type="question" data-ev-id="new">
+                              <div class="del-media" ng-show="vm.delnotemedia">
+                                    <span class="del-title">Really Delete?</span>
+                                    <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.deleteconf('question',i,value,$event)" >Confirm</a>
+                                    <a class="btn btn-cancel del-false" ng-click="vm.cancelconf($event)">Cancel</a>
+                              </div> 
                               <i class="icon-cancel-circle remove-note"></i>
                               <span class="edit-note" ng-click="vm.editquestions(value,$event)">
                                 <i class="icon-pencil2"></i>

@@ -463,12 +463,13 @@
                        if(datatype='cam'){
                         vm.gallerycamArr.push(name);
                         vm.finalarrcamEv_id.push('new')
-                        
+                        angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'').removeClass("hidden");
                        }
                        else{
                         vm.finalarrpdfAuth.push(vm.currentUser);
                         vm.gallerypdfArr.push(name);
                         vm.finalarrpdfEv_id.push('new')
+                        angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'').removeClass("hidden");
                        }
                         // vm.galleryquestionArr=vm.changemodel.split('_*_');
                         // vm.finalarrquestionAuth=vm.currentUser.split('_*_')
@@ -556,6 +557,10 @@
             vm.bdycampanel = true;
             
         }
+        vm.iconclass = function($event)
+        {
+            console.log("icon class $event",$event);
+        }
 
         vm.removeMedia = function(i,value,$event)
         {
@@ -576,6 +581,10 @@
            
               console.log(vm.gallerycamArr,"test1")
                vm.gallerycamArr.splice(i,1);
+               console.log("delete agllery array length", vm.gallerycamArr.length);
+              if(vm.gallerycamArr.length == 0){
+                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-cam').addClass('hidden');
+              }
                console.log(vm.gallerycamArr,"test2")
                vm.finalarrcamEv_id.splice(i,1);
                angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-cam')[0].attributes['data-ev'].value=vm.gallerycamArr.join(',')
@@ -588,6 +597,9 @@
                 console.log("its pdf ");
                 vm.gallerypdfArr.splice(i,1);
                 vm.finalarrpdfEv_id.splice(i,1);
+                if(vm.gallerypdfArr.length == 0){
+                    angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-pdf').addClass('hidden');
+                 }
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-pdf')[0].attributes['data-ev'].value = vm.gallerypdfArr.join(',')
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-pdf')[0].attributes['data-ev-ids'].value = vm.finalarrpdfEv_id.join(',')
                 // vm.finalarrpdfAuth.splice(i,1);
@@ -598,6 +610,9 @@
                 vm.gallerynotesArr.splice(i,1);
                 vm.finalarrnotesEv_id.splice(i,1);
                 vm.finalarrnotesAuth.splice(i,1);
+                if(vm.gallerynotesArr.length == 0){
+                    angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes').addClass('hidden');
+                 }
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev'].value = vm.gallerynotesArr.join('_*_')
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev-ids'].value =  vm.finalarrnotesEv_id.join('_*_')
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-auth'].value =  vm.finalarrnotesAuth.join('_*_')
@@ -608,7 +623,12 @@
 
             }
             else if(type == 'question'){
-
+                vm.galleryquestionArr.splice(i,1);
+                vm.finalarrquestionEv_id.splice(i,1);
+                vm.finalarrquestionAuth.splice(i,1);
+                if(vm.galleryquestionArr.length == 0){
+                    angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question').addClass('hidden');
+                 }
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-ev'].value = vm.galleryquestionArr.join('_*_')
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-ev-ids'].value = vm.finalarrquestionEv_id.join('_*_')
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-auth'].value = vm.finalarrquestionAuth.join('_*_')
@@ -636,10 +656,16 @@
 
         vm.resourcevideosectionclose = function($event)
         {
-            var srcele = $event.target.parentElement.nextElementSibling.children[1].children[0].children[0];
+            // console.log(" resourcevideosectionclose id",id);
+         
+                var srcele = $event.target.parentElement.nextElementSibling.children[1].children[0].children[0];
             video = angular.element(srcele);
-            video[0].pause();
-            vm.assessreport = !vm.assessreport;
+           console.log("video function",video,"src",srcele.tagName);
+            if(srcele.tagName == 'VIDEO'){video[0].pause();}
+
+            
+            
+            vm.assessreport = false;
 
         }
         
