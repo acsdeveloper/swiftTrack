@@ -15,13 +15,14 @@
         vm.assessmentdetails = function() {
             ModuleService.LocaldatadetailsPouch().then(function(response){
                 vm.localdatadetails=response;
-            });
-            vm.jobroleandmod = storageFactory.getJobAndMod();
+                vm.jobroleandmod = storageFactory.getJobAndMod();
             vm.currentUser=vm.localdatadetails.username;
             ModuleService.ModuledetailsPouch(vm.jobroleandmod).then(function(resp) {
                 console.log(resp,"assessment controller response");
                 vm.assessmentdetail_response = resp;
             });
+            });
+            
         }
         vm.assessmentdetails();
         //header
@@ -32,9 +33,9 @@
                 console.log(vm.userImageUrl);
                 vm.userFirstName = vm.userdetails.first_name;
             }
-            else {
-                vm.userImageUrl = vm.localdatadetails.images;
-            }
+            // else {
+            //     vm.userImageUrl = vm.localdatadetails.images;
+            // }
         }
         vm.changelocalurl = function(url,type){
              if(type=='image'){return vm.localUrl+url.split('/')[url.split('/').length-1];}
@@ -569,6 +570,7 @@
         {
             console.log(type,i,value,$event,"type-----");
             console.log("vm.gallerynotesArr",vm.gallerynotesArr);
+            angular.element('.del-media').addClass('ng-hide');
 
             if(type == 'cam'){
            
@@ -577,7 +579,7 @@
                console.log(vm.gallerycamArr,"test2")
                vm.finalarrcamEv_id.splice(i,1);
                angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-cam')[0].attributes['data-ev'].value=vm.gallerycamArr.join(',')
-               angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-ev-ids'].value = vm.finalarrcamEv_id.join(',')
+               angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-cam')[0].attributes['data-ev-ids'].value = vm.finalarrcamEv_id.join(',')
                //    vm.finalarrcamAuth.splice(i,1);
                
 
@@ -586,8 +588,8 @@
                 console.log("its pdf ");
                 vm.gallerypdfArr.splice(i,1);
                 vm.finalarrpdfEv_id.splice(i,1);
-                angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-ev'].value = vm.gallerypdfArr.join(',')
-                angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-ev-ids'].value = vm.finalarrpdfEv_id.join(',')
+                angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-pdf')[0].attributes['data-ev'].value = vm.gallerypdfArr.join(',')
+                angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-pdf')[0].attributes['data-ev-ids'].value = vm.finalarrpdfEv_id.join(',')
                 // vm.finalarrpdfAuth.splice(i,1);
 
 
@@ -596,9 +598,9 @@
                 vm.gallerynotesArr.splice(i,1);
                 vm.finalarrnotesEv_id.splice(i,1);
                 vm.finalarrnotesAuth.splice(i,1);
-                angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev'].value = vm.gallerynotesArr.join('_*_')
-                angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev-ids'].value =  vm.finalarrnotesEv_id.join('_*_')
-                angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-auth'].value =  vm.finalarrnotesAuth.join('_*_')
+                angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev'].value = vm.gallerynotesArr.join('_*_')
+                angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev-ids'].value =  vm.finalarrnotesEv_id.join('_*_')
+                angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-auth'].value =  vm.finalarrnotesAuth.join('_*_')
                 console.log("its notes");
 
 
@@ -607,9 +609,9 @@
             }
             else if(type == 'question'){
 
-                angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-ev'].value = vm.galleryquestionArr.join('_*_')
-                angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-ev-ids'].value = vm.finalarrquestionEv_id.join('_*_')
-                angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-auth'].value = vm.finalarrquestionAuth.join('_*_')
+                angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-ev'].value = vm.galleryquestionArr.join('_*_')
+                angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-ev-ids'].value = vm.finalarrquestionEv_id.join('_*_')
+                angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-auth'].value = vm.finalarrquestionAuth.join('_*_')
             }
 
 
@@ -699,7 +701,8 @@
             vm.assesspdfpopup = true;
             // vm.reportvideoimagepdfpopup = true;
             vm.data_type = datatype;
-            vm.targetPath = cordova.file.externalRootDirectory +"Uploadfolder/"+url.substring(url.lastIndexOf('/')+1)
+            
+            vm.targetPath = cordova.file.externalApplicationStorageDirectory +"files/"+url.substring(url.lastIndexOf('/')+1)
             
         
      

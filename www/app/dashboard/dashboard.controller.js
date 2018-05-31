@@ -5,6 +5,9 @@
 
         var vm = this;
         vm.init = function() {
+            dashboardService.LocaldatadetailsPouch().then(function(resp){
+                vm.localdatadetails=resp;
+            })
 
             if (!storageFactory.islogin()) {
                 $state.go('login')
@@ -17,26 +20,24 @@
             vm.peoplepane = false;
         }
         vm.init();
-        vm.headerimagefunction = function() {
-            dashboardService.LocaldatadetailsPouch().then(function(resp){
-                vm.localdatadetails=resp;
-            })
-            if (vm.userdetails !== undefined && vm.userdetails !== null) {
-                vm.userImageUrl = vm.userdetails.images;
-                vm.userFirstName = vm.userdetails.first_name;
-                vm.full_name = vm.userdetails.first_name + ' ' + vm.userdetails.last_name;
-            }
-            else {
-                vm.userFirstName = vm.localdatadetails.first_name;
-                vm.full_name = vm.localdatadetails.username;
-            }
+        // vm.headerimagefunction = function() {
+            
+        //     if (vm.userdetails !== undefined && vm.userdetails !== null) {
+        //         vm.userImageUrl = vm.userdetails.images;
+        //         vm.userFirstName = vm.userdetails.first_name;
+        //         vm.full_name = vm.userdetails.first_name + ' ' + vm.userdetails.last_name;
+        //     }
+        //     else {
+        //         vm.userFirstName = vm.localdatadetails.first_name;
+        //         vm.full_name = vm.localdatadetails.username;
+        //     }
 
-        }
-        $scope.$watch(
-            function($scope) {
-                vm.userdetails = storageFactory.getuserdetails();
-                vm.headerimagefunction();
-            });
+        // }
+        // $scope.$watch(
+        //     function($scope) {
+        //         vm.userdetails = storageFactory.getuserdetails();
+        //         vm.headerimagefunction();
+        //     });
 
         vm.goreportpage = function(val) {
             vm.object = {};
@@ -100,17 +101,21 @@
         }
 
         angular.element(document).ready(function() {
-            vm.login_type = localStorage.getItem('login_type');
-            console.log(storageFactory.getdashboarddetailsresponse(), "null")
-            if (storageFactory.getdashboarddetailsresponse() == null) {
+            dashboardService.LocaldatadetailsPouch().then(function(resp){
+                vm.localdatadetails=resp;
+                vm.login_type = vm.localdatadetails.login_type;
                 $timeout(function() {
                     vm.dashboardAPIcall();
                 }, 300);
-            }
-            else {
-                vm.fullresponseData = storageFactory.getdashboarddetailsresponse();
-                Loader.stopLoading();
-            }
+            })
+            console.log(storageFactory.getdashboarddetailsresponse(), "null")
+            // if (storageFactory.getdashboarddetailsresponse() == null) {
+               
+            // }
+            // else {
+            //     vm.fullresponseData = storageFactory.getdashboarddetailsresponse();
+            //     Loader.stopLoading();
+            // }
 
         });
 
@@ -121,9 +126,9 @@
                 console.log(vm.userImageUrl);
                 vm.userFirstName = vm.userdetails.first_name;
             }
-            else {
-                vm.userImageUrl = vm.localdatadetails.images;
-            }
+            // else {
+            //     vm.userImageUrl = vm.localdatadetails.images;
+            // }
         }
         $scope.$watch(
             function($scope) {

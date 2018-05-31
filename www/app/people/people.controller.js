@@ -19,7 +19,8 @@
             reportService.LocaldatadetailsPouch().then(function(response){
                 vm.localdatadetails=response;
                 vm.reportobj = storageFactory.getuserreportid();
-                vm.targetPath = cordova.file.externalRootDirectory +"Uploadfolder";
+                cordova.file.externalApplicationStorageDirectory +'files/'
+                // vm.targetPath = cordova.file.externalRootDirectory +"Uploadfolder";
                 console.log(vm.reportobj)
                 reportService.ReportdetailsPouch(vm.reportobj).then(function(resp) {
                     console.log("assessrepes", resp);
@@ -40,9 +41,9 @@
                 console.log(vm.userImageUrl);
                 vm.userFirstName = vm.userdetails.first_name;
             }
-            else {
-                vm.userImageUrl = vm.localdatadetails.images;
-            }
+            // else {
+            //     vm.userImageUrl = vm.localdatadetails.images;
+            // }
         }
 
         $scope.$watch(
@@ -76,8 +77,9 @@
             console.log("datatype",datatype,"url",url);
             vm.reportvideoimagepdfpopup = true;
             vm.data_type = datatype;
-            vm.targetPath = cordova.file.externalRootDirectory +"Uploadfolder/"+url.substring(url.lastIndexOf('/')+1)
-            console.log(vm.targetPath,"88888tagettt");
+            // cordova.file.externalApplicationStorageDirectory +'files/'
+            vm.targetPath = cordova.file.externalApplicationStorageDirectory +"files/"+url.substring(url.lastIndexOf('/')+1)
+            // console.log(vm.targetPath,"88888tagettt");
         }
         vm.reportmediaclose = function(path,$event)
         {
