@@ -621,7 +621,7 @@
                 console.log("its notes");
 
 
-
+    
 
             }
             else if(type == 'question'){
