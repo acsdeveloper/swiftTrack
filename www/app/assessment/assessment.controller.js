@@ -534,7 +534,7 @@
             vm.bdypdfpanel = false;
             vm.bdynotespanel = false;
             vm.bdyquestpanel = false;
-            angular.element('.del-media').addClass('ng-hide');
+            // angular.element('.del-media').addClass('ng-hide');
             
         }
         vm.assesspdf = function() {
@@ -543,7 +543,7 @@
             vm.bdypdfpanel = true;
             vm.bdynotespanel = false;
             vm.bdyquestpanel = false;
-            angular.element('.del-media').addClass('ng-hide');
+            // angular.element('.del-media').addClass('ng-hide');
 
         }
         vm.assessnotes = function() {
@@ -551,7 +551,7 @@
             vm.bdypdfpanel = false;
             vm.bdynotespanel = true;
             vm.bdyquestpanel = false;
-            angular.element('.del-media').addClass('ng-hide');
+            // angular.element('.del-media').addClass('ng-hide');
 
         }
         vm.assessquest = function() {
@@ -559,7 +559,7 @@
             vm.bdypdfpanel = false;
             vm.bdynotespanel = false;
             vm.bdyquestpanel = true;
-            angular.element('.del-media').addClass('ng-hide');
+            // angular.element('.del-media').addClass('ng-hide');
 
         }
 
@@ -604,12 +604,13 @@
                         var evidenceid=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev-ids'].value;
                         angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev-ids'].value=evidenceid==''?'new':evidenceid+',new';
                         // angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-auth'].value+=','+vm.currentUser;
-                       if(datatype='cam'){
+                       if(datatype =='cam'){
                         vm.gallerycamArr.push(name);
                         vm.finalarrcamEv_id.push('new')
                         angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'').removeClass("hidden");
                        }
                        else{
+                           console.log("$$$$$$pdf");
                         vm.finalarrpdfAuth.push(vm.currentUser);
                         vm.gallerypdfArr.push(name);
                         vm.finalarrpdfEv_id.push('new')
@@ -708,11 +709,15 @@
 
         vm.removeMedia = function(i,value,$event)
         {
+            
             angular.element('.del-media').addClass('ng-hide');
+            console.log("deletemedia angular element", angular.element($event.target).parent().children('.del-media'));
+            console.log(" angular.element($event.target).parent().children('.del-media').removeClass('ng-hide')");
             angular.element($event.target).parent().children('.del-media').removeClass('ng-hide');
+            console.log("question remove media");
             //console.log("media remove function i",i);
             //console.log("media remove function value",value);
-            //console.log("media remove function event",$event);
+            console.log("media remove function event",$event);
         
         }
         vm.deleteconf = function(type,i,value,$event)
@@ -766,7 +771,7 @@
 
             }
             else if(type == 'question'){
-                //console.log('question');
+                console.log('question');
                 vm.deleteEvArr.push(vm.finalarrquestionEv_id.splice(i,1)[0]);
                 // vm.finalarrquestionEv_id.splice(i,1);
                 vm.galleryquestionArr.splice(i,1);
