@@ -14,6 +14,7 @@
                 return;
             }
             Loader.startLoading();
+
             vm.usrNotBar = true;
             vm.logoutpopup = false;
             vm.competencypane = true;
@@ -54,7 +55,7 @@
             $state.go('assessment');
 
         }
-
+        
         vm.dashboardAPIcall = function() {
             vm.object = {};
             // vm.object["jobroleids"] = localStorage.getItem('job_role_ids');
@@ -63,6 +64,16 @@
                 storageFactory.setdashboarddetailsresponse(resp);
                 console.log(resp)
                 vm.fullresponseData = resp;
+                vm.signoffstatus = resp.signoffstatus.comps_count;
+               
+                if(vm.signoffstatus !== 0)
+                {
+                    console.log("signoff conditions ",vm.signoffstatus);
+                    vm.signoffnotif = true;
+                    vm.personnot = false;
+
+                }
+                else{vm.personnot = true;}
             });
         }
         vm.getlength = function(mt) {
@@ -104,6 +115,7 @@
             dashboardService.LocaldatadetailsPouch().then(function(resp){
                 vm.localdatadetails=resp;
                 storageFactory.setuserdetails(resp);
+                // console.log("ck test ",resp);
                 vm.login_type = vm.localdatadetails.login_type;
                 console.log(vm.login_type,"login type test")
                 $timeout(function() {
