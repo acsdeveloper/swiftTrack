@@ -71,8 +71,8 @@
                   <div class="level-label">Understands</div>
                   <div class="level-label">Competent</div>
                </div>
-               <div class="alert alert-warning signed-off-alert">
-                  <i class="icon-checkmark"></i> All modules for this competency completed. Signed off on Thursday, 31st  May &nbsp;2018 at 14:28:37 by Roger Smith (assessor).
+               <div class="alert alert-warning signed-off-alert" ng-if="assessvalue.training_signed_off==true">
+                  <i class="icon-checkmark"></i> All modules for this competency completed. Signed off on <span ng-bind-html="assessvalue.time_stamp"></span>by {{assessvalue.assessor_name}} (assessor).
                </div>
             </div>
             <div class="panel-rows">

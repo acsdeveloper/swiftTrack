@@ -3,7 +3,9 @@
     function assessmentCtrl(Constants,pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService,$filter) {
         //console.log("after ctrl");
         var vm = this;
-         
+        vm.localDB = new PouchDB("Swifttrack", {
+            revs_limit: 2
+        });
         vm.localUrl=cordova.file.externalApplicationStorageDirectory +'files/';
         vm.popupdata = null;
         vm.showupdatbtn=false;
@@ -243,7 +245,7 @@
 
 
             //save in main DATA
-            vm.jobroleandmod                                                    
+                                                              
             var localdatavalue=vm.assessmentdetail_response.people;
             //console.log(localdatavalue,personIDsArr.length,"finaldata")
             for(i=0;i<=personIDsArr.length-1;i++){
@@ -277,18 +279,7 @@
                 // }
                 
             }
-            console.log(localdatavalue,"finaldata")
-
-            personIDsArr.map(function(value1){
-                indicatorIDsArr.map(function(value2){
-                    Object.keys(localdatavalue[value1]['indicators'][value2].levels).map(function(key, index) {
-                        // if(){}
-                    });
-                    
-                })
-                
-            })
-
+            vm.putDataPouchDetailedDoc(localdatavalue,'detailed_document');
 
             var objSave = {	person_ids:personIDs,
                 ind_ids:indIDs,
@@ -298,8 +289,87 @@
                 notes:noteStr,
                 ques:quesStr,
                 del:deleteEvStr};
-                //console.log(objSave,"objsave")
+                console.log(objSave,"objsave");
+                //save as api passing data
+                function isEmpty(obj) {
+                    for(var key in obj) {
+                        if(obj.hasOwnProperty(key))
+                            return false;
+                    }
+                    return true;
+                }
+                function detailedDocfunc1(doc) {
+                    if(isEmpty(doc)){
+                        var doc={
+                            "indicators":{
+                                
+                            }
+                        }
+                        modobj=new Object();
+                        subobj=new Object();
+                        compobj=new Object();
+                    }
+                    subobj.comp_id=vm.jobroleandmod.comp_id;
+                    subobj.mod_id=vm.jobroleandmod.m_id
+                    subobj.dept_id=vm.jobroleandmod.departmentid;
+                    subobj.dept_sub_id=vm.jobroleandmod.subDepartmentId;
+                    subobj.job_role_id=vm.jobroleandmod.jr_id;
+                    subobj.indicators=objsave;
+
+
+                    modobj[vm.jobroleandmod.m_id]=subobj;
+                    compobj[vm.jobroleandmod.jr_id]=modobj;
+                    doc.indicators=compobj;
+                    console.log(doc)
+                    // doc.indicators[vm.jobroleandmod.jr_id]=.comp_id
+                    
+                    
+                    
+                    
+                    
+                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].mod_id=vm.jobroleandmod.m_id
+                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].dept_id=vm.jobroleandmod.departmentid
+                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].dept_sub_id=vm.jobroleandmod.subDepartmentId
+                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].job_role_id=vm.jobroleandmod.jr_id
+                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].indicators=objSave;
+
+                    
+
+                    console.log(doc,"obset");
+
+                    return doc;
+                }
+
+                vm.localDB.upsert('saveAPIdata', detailedDocfunc1).then(function() {
+                    // resolve('success')
+                    console.log('success')
+                }).catch(function(err) {
+                    // reject(err)
+                    console.log(err)
+                });
+                
+                //
+
             $state.go('dashboard')
+        }
+        vm.putDataPouchDetailedDoc = function(data,doc_name){
+            return new Promise(function(resolve, reject) {
+                // Do async job
+                function detailedDocfunc(doc) {
+                    console.log(vm.jobroleandmod);
+                    console.log(doc);
+                    console.log(data)
+                    doc['assessment'][vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].people = data;
+                    return doc;
+                }
+
+                vm.localDB.upsert(doc_name, detailedDocfunc).then(function() {
+                    resolve('success')
+                }).catch(function(err) {
+                    reject(err)
+                });
+            })
+
         }
         vm.cancel_savesession = function() {
             vm.assessoksavepopup = false;
