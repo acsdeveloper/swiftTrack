@@ -537,6 +537,15 @@
         //console.log("vm.finalarrcamAuth",vm.finalarrcamAuth);    
 
         }
+        vm.iconobjcheck = function(obj)
+        {
+            for(var key in obj) {
+                if(obj.hasOwnProperty(key))
+                    return false;
+            }
+            return true;
+
+        }
         vm.showupdatebtn = function(){
             vm.showupdatbtn=true;
         }
@@ -718,12 +727,14 @@
     
     
                 var win = function (r) {
+                    console.log("*****win function r",r);
                     //console.log("Code = " + r.responseCode);
                     //console.log("Response = " + r.response);
                     //console.log("Sent = " + r.bytesSent);
                 }
                 
                 var fail = function (error) {
+                    console.log("**************** fail function error ",error)
                     alert("An error has occurred: Code = " + error.code);
                     //console.log("upload error source " + error.source);
                     //console.log("upload error target " + error.target);
