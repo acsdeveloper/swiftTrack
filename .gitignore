@@ -25,6 +25,7 @@ temp/
 platforms/
 www/lib/
 www/js/
+www/app/signoff/
 backup/
 plugins/
 plugins/android.json

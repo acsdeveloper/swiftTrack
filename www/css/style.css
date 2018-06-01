@@ -1862,3 +1862,15 @@ footer {
 	margin-top: 5px;
 	font-size: 12px;
 }
+
+.btn-success {
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
+}
+ .btn-sm {
+    padding: 5px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+}
