@@ -390,6 +390,15 @@
         //console.log("vm.finalarrcamAuth",vm.finalarrcamAuth);    
 
         }
+        vm.iconobjcheck = function(obj)
+        {
+            for(var key in obj) {
+                if(obj.hasOwnProperty(key))
+                    return false;
+            }
+            return true;
+
+        }
         vm.showupdatebtn = function(){
             vm.showupdatbtn=true;
         }
