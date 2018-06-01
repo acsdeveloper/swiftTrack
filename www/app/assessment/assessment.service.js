@@ -62,7 +62,7 @@
             return Pouchfactory.get(vm.docname,vm.data).then(function(resp) {
                 console.log(resp)
                 vm.defered = $q.defer();
-                vm.defered.resolve(resp[vm.object.jr_id][vm.object.m_id]);
+                vm.defered.resolve(resp);
                 return vm.defered.promise;
             });
         };
