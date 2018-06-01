@@ -3,7 +3,9 @@
     function assessmentCtrl(Constants,pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService,$filter) {
         //console.log("after ctrl");
         var vm = this;
-         
+        vm.localDB = new PouchDB("Swifttrack", {
+            revs_limit: 2
+        });
         vm.localUrl=cordova.file.externalApplicationStorageDirectory +'files/';
         vm.popupdata = null;
         vm.showupdatbtn=false;
@@ -243,7 +245,7 @@
 
 
             //save in main DATA
-            vm.jobroleandmod                                                    
+                                                              
             var localdatavalue=vm.assessmentdetail_response.people;
             //console.log(localdatavalue,personIDsArr.length,"finaldata")
             for(i=0;i<=personIDsArr.length-1;i++){
@@ -277,18 +279,7 @@
                 // }
                 
             }
-            console.log(localdatavalue,"finaldata")
-
-            personIDsArr.map(function(value1){
-                indicatorIDsArr.map(function(value2){
-                    Object.keys(localdatavalue[value1]['indicators'][value2].levels).map(function(key, index) {
-                        // if(){}
-                    });
-                    
-                })
-                
-            })
-
+            vm.putDataPouchDetailedDoc(localdatavalue,'detailed_document');
 
             var objSave = {	person_ids:personIDs,
                 ind_ids:indIDs,
@@ -298,8 +289,87 @@
                 notes:noteStr,
                 ques:quesStr,
                 del:deleteEvStr};
-                //console.log(objSave,"objsave")
+                console.log(objSave,"objsave");
+                //save as api passing data
+                function isEmpty(obj) {
+                    for(var key in obj) {
+                        if(obj.hasOwnProperty(key))
+                            return false;
+                    }
+                    return true;
+                }
+                function detailedDocfunc1(doc) {
+                    if(isEmpty(doc)){
+                        var doc={
+                            "indicators":{
+                                
+                            }
+                        }
+                        modobj=new Object();
+                        subobj=new Object();
+                        compobj=new Object();
+                    }
+                    subobj.comp_id=vm.jobroleandmod.comp_id;
+                    subobj.mod_id=vm.jobroleandmod.m_id
+                    subobj.dept_id=vm.jobroleandmod.departmentid;
+                    subobj.dept_sub_id=vm.jobroleandmod.subDepartmentId;
+                    subobj.job_role_id=vm.jobroleandmod.jr_id;
+                    subobj.indicators=objsave;
+
+
+                    modobj[vm.jobroleandmod.m_id]=subobj;
+                    compobj[vm.jobroleandmod.jr_id]=modobj;
+                    doc.indicators=compobj;
+                    console.log(doc)
+                    // doc.indicators[vm.jobroleandmod.jr_id]=.comp_id
+                    
+                    
+                    
+                    
+                    
+                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].mod_id=vm.jobroleandmod.m_id
+                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].dept_id=vm.jobroleandmod.departmentid
+                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].dept_sub_id=vm.jobroleandmod.subDepartmentId
+                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].job_role_id=vm.jobroleandmod.jr_id
+                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].indicators=objSave;
+
+                    
+
+                    console.log(doc,"obset");
+
+                    return doc;
+                }
+
+                vm.localDB.upsert('saveAPIdata', detailedDocfunc1).then(function() {
+                    // resolve('success')
+                    console.log('success')
+                }).catch(function(err) {
+                    // reject(err)
+                    console.log(err)
+                });
+                
+                //
+
             $state.go('dashboard')
+        }
+        vm.putDataPouchDetailedDoc = function(data,doc_name){
+            return new Promise(function(resolve, reject) {
+                // Do async job
+                function detailedDocfunc(doc) {
+                    console.log(vm.jobroleandmod);
+                    console.log(doc);
+                    console.log(data)
+                    doc['assessment'][vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].people = data;
+                    return doc;
+                }
+
+                vm.localDB.upsert(doc_name, detailedDocfunc).then(function() {
+                    resolve('success')
+                }).catch(function(err) {
+                    reject(err)
+                });
+            })
+
         }
         vm.cancel_savesession = function() {
             vm.assessoksavepopup = false;
@@ -468,16 +538,7 @@
             
         }
         vm.assesspdf = function() {
-<<<<<<< HEAD
-            // //console.log("mycam", vm.popupdata.type_ref.cam);
-            // if (vm.popupdata.type_ref.pdf != undefined) {
-            //     //console.log("pdf okay");
-            //     vm.pdffile = vm.popupdata.type_ref.pdf;
-            // }
-
-=======
             
->>>>>>> a97660ce3bfa8c59e740e05957ec8766e5acd678
             vm.bdycampanel = false;
             vm.bdypdfpanel = true;
             vm.bdynotespanel = false;
@@ -510,7 +571,7 @@
                     vm.filename=file.name;
                     vm.movefile(file.uri,file.name,file.mime_type,datatype);
                     },
-                  function fcError(e){//console.log(e);}
+                  function fcError(e){console.log(e);}
            );   
            
             }
@@ -538,10 +599,10 @@
 
                         var evidence=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value;
 
-                        angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value=evidence==''?name:','+name;
+                        angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value=evidence==''?name:evidence+','+name;
                         
                         var evidenceid=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev-ids'].value;
-                        angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev-ids'].value=evidenceid==''?'new':',new';
+                        angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev-ids'].value=evidenceid==''?'new':evidenceid+',new';
                         // angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-auth'].value+=','+vm.currentUser;
                        if(datatype='cam'){
                         vm.gallerycamArr.push(name);

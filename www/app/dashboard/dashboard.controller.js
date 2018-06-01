@@ -46,10 +46,13 @@
             $state.go('progressreport')
         }
 
-        vm.goassessmentpage = function(jobrole, mod_id) {
+        vm.goassessmentpage = function(jobrole, mod_id,departmentid,subDepartmentId,comp_id) {
             vm.object = {};
             vm.object["m_id"] = mod_id;
             vm.object['jr_id'] = jobrole;
+            vm.object['departmentid'] = departmentid;
+            vm.object['subDepartmentId'] = subDepartmentId;
+            vm.object['comp_id']=comp_id;
             storageFactory.setJobAndMod(vm.object);
             $state.go('assessment');
 
