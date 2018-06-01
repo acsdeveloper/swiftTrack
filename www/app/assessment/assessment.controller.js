@@ -1,7 +1,7 @@
 (function() {
     // 'use strict';
     function assessmentCtrl(Constants,pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService,$filter) {
-        console.log("after ctrl");
+        //console.log("after ctrl");
         var vm = this;
          
         vm.localUrl=cordova.file.externalApplicationStorageDirectory +'files/';
@@ -18,7 +18,7 @@
                 vm.jobroleandmod = storageFactory.getJobAndMod();
             vm.currentUser=vm.localdatadetails.username;
             ModuleService.ModuledetailsPouch(vm.jobroleandmod).then(function(resp) {
-                console.log(resp,"assessment controller response");
+                //console.log(resp,"assessment controller response");
                 vm.assessmentdetail_response = resp;
             });
             });
@@ -30,7 +30,7 @@
         vm.headerimagefunction = function() {
             if (vm.userdetails !== undefined && vm.userdetails !== null) {
                 vm.userImageUrl = vm.userdetails.images;
-                console.log(vm.userImageUrl);
+                //console.log(vm.userImageUrl);
                 vm.userFirstName = vm.userdetails.first_name;
             }
             // else {
@@ -86,7 +86,7 @@
                             angular.element(value).addClass('unchecked');
                         }
                    });
-                   console.log(assesskey,personid,document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]'))
+                   //console.log(assesskey,personid,document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]'))
                     document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]').setAttribute("data-level-set", level)
                 }
                 else{
@@ -99,7 +99,7 @@
                             angular.element(value).removeClass('unchecked');
                         }
                     })
-                    console.log(assesskey,personid,document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]'))
+                    //console.log(assesskey,personid,document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]'))
                     document.querySelector('[data-attribute-value="person_'+assesskey+'_'+personid+'"]').setAttribute("data-level-set", parseInt(level)-1)
 
                 }
@@ -111,7 +111,7 @@
             //     var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             //     for (var i = 0; i < 10; i++)
             //     text += possible.charAt(Math.floor(Math.random() * possible.length));
-            //     console.log(text)
+            //     //console.log(text)
             //     return text;
             // }
         // vm.logoutclick = function() {
@@ -154,7 +154,7 @@
             }
 
 
-            // console.log("aa", a);
+            // //console.log("aa", a);
         }
 
         vm.assess_cancel = function($event) {
@@ -195,6 +195,12 @@
             var evPDFArr = new Array();
             var evNoteArr = new Array();
             var evQuesArr = new Array();
+            
+            var camevid= new Array();
+            var pdfevid= new Array();
+            var notesevid= new Array();
+            var quesevid=new Array();
+
             $('.person-panel').each(function(){
                 var panelID = $(this).attr('id');
                 var personID = $(this).attr('data-newid');
@@ -202,10 +208,19 @@
                 $('#'+panelID+" .panel-row").each(function(){
                     var indID = $(this).attr('data-id');
                     var levelSet = $(this).attr('data-level-set');
-                    var evCamStr = ($(this).find('.ev-cam').attr('data-ev')).replace(/\,/g, '_*_');
-                    var evPDFStr = ($(this).find('.ev-pdf').attr('data-ev')).replace(/\,/g, '_*_');
+                    var evCamStr = ($(this).find('.ev-cam').attr('data-ev'))
+                    var evCamidStr = ($(this).find('.ev-cam').attr('data-ev-ids'))
+                    var evPDFStr = ($(this).find('.ev-pdf').attr('data-ev'))
+                    var evPDFidStr = ($(this).find('.ev-pdf').attr('data-ev-ids'))
                     var evNoteStr = $(this).find('.ev-notes').attr('data-ev');
+                    var evNoteidStr = $(this).find('.ev-notes').attr('data-ev-ids');
                     var evQuesStr = $(this).find('.ev-question').attr('data-ev');
+                    var evQuesidStr = $(this).find('.ev-question').attr('data-ev-ids');
+                    
+                    camevid.push(evCamidStr);
+                    pdfevid.push(evPDFidStr);
+                    notesevid.push(evNoteidStr);
+                    quesevid.push(evQuesidStr);
 
                     personIDsArr.push(personID);
                     indicatorIDsArr.push(indID);
@@ -226,6 +241,55 @@
             var deleteEvStr = vm.deleteEvArr+"";
             //
 
+
+            //save in main DATA
+            vm.jobroleandmod                                                    
+            var localdatavalue=vm.assessmentdetail_response.people;
+            //console.log(localdatavalue,personIDsArr.length,"finaldata")
+            for(i=0;i<=personIDsArr.length-1;i++){
+                localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].levels[1].level_achieved=levelsArr[i]<1?false:true;
+                localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].levels[2].level_achieved=levelsArr[i]<2?false:true;
+                localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].levels[3].level_achieved=levelsArr[i]<3?false:true;
+                // if(vm.deletemedia==true){
+                    console.log('deletemedia get inside')
+                    if(evCamArr[i]!=''){
+                        localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.media.data_ev=evCamArr[i];
+                        localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.media.data_ev_ids=camevid[i];
+                    }
+               // }
+                // if(vm.deletepdf==true){
+                    if(evPDFArr[i]!==''){
+                        localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.pdf.data_ev=evPDFArr[i];
+                        localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.pdf.data_ev_ids=pdfevid[i];
+                    }
+                // }
+                // if(vm.deletenotes==true){
+                    if(evNoteArr[i]!==''){
+                        localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.notes.data_ev=evNoteArr[i];
+                        localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.notes.data_ev_ids=notesevid[i];
+                    }
+                // }
+                // if(vm.deleteques==true){
+                    if(evQuesArr[i]!==''){
+                        localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.question.data_ev=evQuesArr[i];                    
+                        localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.question.data_ev_ids=quesevid[i];                    
+                    }
+                // }
+                
+            }
+            console.log(localdatavalue,"finaldata")
+
+            personIDsArr.map(function(value1){
+                indicatorIDsArr.map(function(value2){
+                    Object.keys(localdatavalue[value1]['indicators'][value2].levels).map(function(key, index) {
+                        // if(){}
+                    });
+                    
+                })
+                
+            })
+
+
             var objSave = {	person_ids:personIDs,
                 ind_ids:indIDs,
                 levels:levels,
@@ -234,7 +298,7 @@
                 notes:noteStr,
                 ques:quesStr,
                 del:deleteEvStr};
-                console.log(objSave,"objsave")
+                //console.log(objSave,"objsave")
             $state.go('dashboard')
         }
         vm.cancel_savesession = function() {
@@ -265,15 +329,15 @@
             vm.indicatorname=key.final_content;
             vm.userimage=assessdetails.image;
             vm.username=assessdetails.name;
-            console.log(angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value)
+            //console.log(angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value)
             var datapath=angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value;
             vm.datapath=datapath;
-            console.log("***********datapath",datapath);
+            //console.log("***********datapath",datapath);
             var datacam=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-ev'].value;
-            console.log("datacam---");
+            //console.log("datacam---");
             var datapdf=angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-ev'].value
             var datanotes=angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev'].value
-            console.log(datanotes,"notes test error")
+            //console.log(datanotes,"notes test error")
             var dataques=angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-ev'].value
             
             var datacamAuth=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-auth'].value
@@ -305,7 +369,7 @@
            vm.gallerycamArr=finalarrcam;
            vm.gallerypdfArr=finalarrpdf;
            vm.gallerynotesArr=finalarrnotes;
-           console.log(finalarrquestion,"finalArr")
+           //console.log(finalarrquestion,"finalArr")
            vm.galleryquestionArr=finalarrquestion;
 
            vm.finalarrcamEv_id=finalarrcamEv_id;
@@ -319,18 +383,18 @@
            vm.finalarrquestionAuth=finalarrquestionAuth;
            
             
-        console.log(" vm.datapath", vm.datapath);
-        console.log(" vm.gallerycamArr", vm.gallerycamArr);
-        console.log("vm.gallerypdfArr",vm.gallerypdfArr);
-        console.log(" vm.finalarrcamEv_id", vm.finalarrcamEv_id);
-        console.log("vm.finalarrcamAuth",vm.finalarrcamAuth);    
+        //console.log(" vm.datapath", vm.datapath);
+        //console.log(" vm.gallerycamArr", vm.gallerycamArr);
+        //console.log("vm.gallerypdfArr",vm.gallerypdfArr);
+        //console.log(" vm.finalarrcamEv_id", vm.finalarrcamEv_id);
+        //console.log("vm.finalarrcamAuth",vm.finalarrcamAuth);    
 
         }
         vm.showupdatebtn = function(){
             vm.showupdatbtn=true;
         }
         vm.editquestions = function(value,$event){
-            console.log(value,document.getElementsByClassName('q-answer'))
+            //console.log(value,document.getElementsByClassName('q-answer'))
             vm.changemodel=value;
             // document.getElementsByClassName('q-answer')[0].value=value;
         }
@@ -350,7 +414,7 @@
             vm.updatebtn=true;
         }
         vm.editnotes = function(value,$event){
-            console.log(value,document.getElementsByClassName('q-answer'))
+            //console.log(value,document.getElementsByClassName('q-answer'))
             vm.changemodel=value;
             // document.getElementsByClassName('q-answer')[0].value=value;
         }
@@ -363,7 +427,7 @@
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes').removeClass("hidden");
             vm.gallerynotesArr.push(vm.change_note);
             vm.finalarrnotesAuth.push(vm.currentUser);
-            console.log(vm.gallerynotesArr,vm.finalarrnotesAuth)
+            //console.log(vm.gallerynotesArr,vm.finalarrnotesAuth)
             vm.updatebtn=false;
             vm.change_note='';
            }
@@ -385,14 +449,14 @@
         }
 
         vm.resourcefunct = function(value) {
-            console.log("resou this value", value);
-            console.log("resou name", value.resource_name);
+            //console.log("resou this value", value);
+            //console.log("resou name", value.resource_name);
             vm.resouobj = value;
             vm.assessreport = !vm.assessreport;
             // angular.element('body').addClass('locked-page hidden-main');
         }
         vm.bdycampanel = true;
-        console.log("temp check");
+        //console.log("temp check");
 
         vm.assesscam = function() {
             vm.bdycampanel = true;
@@ -402,9 +466,9 @@
         }
         // vm.videolocallocation='tempurl/filenname'
         vm.assesspdf = function() {
-            // console.log("mycam", vm.popupdata.type_ref.cam);
+            // //console.log("mycam", vm.popupdata.type_ref.cam);
             // if (vm.popupdata.type_ref.pdf != undefined) {
-            //     console.log("pdf okay");
+            //     //console.log("pdf okay");
             //     vm.pdffile = vm.popupdata.type_ref.pdf;
             // }
 
@@ -437,7 +501,7 @@
                     vm.filename=file.name;
                     vm.movefile(file.uri,file.name,file.mime_type,datatype);
                     },
-                  function fcError(e){console.log(e);}
+                  function fcError(e){//console.log(e);}
            );   
            
             }
@@ -445,12 +509,12 @@
                 var filename;
                 
                 var type=name.split('.')[name.split('.').length-1];
-                console.log(datatype,type,name)
+                //console.log(datatype,type,name)
                 if(type=='pdf'){filename='pdf'};
                 if(type=='jpg' || type=='jpeg' || type=='mp4' || type=='avi' || type=='png' ||type=='svg'||type=='gif'||type=='flv' || type=='wmv' || type=='mov' ||type=='mkv'){
                     filename='cam';
                 }
-                console.log(datatype,type,name,filename)
+                //console.log(datatype,type,name,filename)
                 if(filename!=datatype){
 
                     alert('error file type');
@@ -463,8 +527,13 @@
                 ft.download(uri,targetPath,downloadsuccess,downloadfailed)
                     function downloadsuccess(entry) {
 
-                        angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value+=','+name
-                        angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-auth'].value+=','+vm.currentUser;
+                        var evidence=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value;
+
+                        angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value=evidence==''?name:','+name;
+                        
+                        var evidenceid=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev-ids'].value;
+                        angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev-ids'].value=evidenceid==''?'new':',new';
+                        // angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-auth'].value+=','+vm.currentUser;
                        if(datatype='cam'){
                         vm.gallerycamArr.push(name);
                         vm.finalarrcamEv_id.push('new')
@@ -481,8 +550,8 @@
 
 
                         $scope.$apply(function () {
-                            console.log("file type ..----------------.",typeof ftype);
-                            console.log("file type ..-----###--------.",ftype);
+                            //console.log("file type ..----------------.",typeof ftype);
+                            //console.log("file type ..-----###--------.",ftype);
                             vm.playvideo = true;
                             vm.filetype = ftype;
                         });
@@ -491,30 +560,30 @@
                 
                     }
                     function downloadfailed(error){
-                        console.log(error,error.code)
+                        //console.log(error,error.code)
                     }
                 // ##########################################
                     // file upload to server 
     
     
                 var win = function (r) {
-                    console.log("Code = " + r.responseCode);
-                    console.log("Response = " + r.response);
-                    console.log("Sent = " + r.bytesSent);
+                    //console.log("Code = " + r.responseCode);
+                    //console.log("Response = " + r.response);
+                    //console.log("Sent = " + r.bytesSent);
                 }
                 
                 var fail = function (error) {
                     alert("An error has occurred: Code = " + error.code);
-                    console.log("upload error source " + error.source);
-                    console.log("upload error target " + error.target);
+                    //console.log("upload error source " + error.source);
+                    //console.log("upload error target " + error.target);
                 }
     
                 var options = new FileUploadOptions();
                 options.fileKey = "file";
                 options.fileName =name; 
                 options.mimeType = ftype;
-                console.log("option obj",options);
-                console.log("targetPath",targetPath);
+                //console.log("option obj",options);
+                //console.log("targetPath",targetPath);
                 var params = {};
                 params.value1 = "test";
                 params.value2 = "param";
@@ -522,7 +591,7 @@
                 options.params = params;
     
                     var encodeuri="https://swifttrack-agilexcyber.c9users.io/swiftMobile/api/uploadFiles.php";
-                    console.log("encodeuri",encodeuri);
+                    //console.log("encodeuri",encodeuri);
                     var ft = new FileTransfer();
                     ft.upload(targetPath, encodeURI(encodeuri),win,fail,options);
           
@@ -537,9 +606,9 @@
         {
             angular.element('.del-media').addClass('ng-hide');
             vm.videolocallocation = value;
-            console.log("assess video function");
-            console.log("assess filetype",filetype);
-            console.log("assess value",value);
+            //console.log("assess video function");
+            //console.log("assess filetype",filetype);
+            //console.log("assess value",value);
             if(filetype == "movie"){
                 vm.assessvideopopup=true;
             }
@@ -564,36 +633,32 @@
         }
         vm.iconclass = function($event)
         {
-            console.log("icon class $event",$event);
+            //console.log("icon class $event",$event);
         }
 
         vm.removeMedia = function(i,value,$event)
         {
             angular.element('.del-media').addClass('ng-hide');
             angular.element($event.target).parent().children('.del-media').removeClass('ng-hide');
-            console.log("media remove function i",i);
-            console.log("media remove function value",value);
-            console.log("media remove function event",$event);
+            //console.log("media remove function i",i);
+            //console.log("media remove function value",value);
+            //console.log("media remove function event",$event);
         
         }
         vm.deleteconf = function(type,i,value,$event)
         {
-            console.log(type,i,value,$event,"type-----");
-            console.log("vm.gallerynotesArr",vm.gallerynotesArr);
+            //console.log(type,i,value,$event,"type-----");
+            //console.log("vm.gallerynotesArr",vm.gallerynotesArr);
             angular.element('.del-media').addClass('ng-hide');
 
             if(type == 'cam'){
-           
-              console.log(vm.gallerycamArr,"test1")
+                vm.deleteEvArr.push(vm.finalarrcamEv_id.splice(i,1)[0]);
                vm.gallerycamArr.splice(i,1);
-               console.log("delete agllery array length", vm.gallerycamArr.length);
               if(vm.gallerycamArr.length == 0){
                  angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-cam').addClass('hidden');
               }
-               console.log(vm.gallerycamArr,"test2")
-               vm.deleteEvArr.push(vm.finalarrcamEv_id.splice(i,1)[0]);
-               console.log(vm.deleteEvArr,"error id")
-               vm.finalarrcamEv_id.splice(i,1);
+               
+            //    vm.finalarrcamEv_id.splice(i,1);
                angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-cam')[0].attributes['data-ev'].value=vm.gallerycamArr.join(',')
                angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-cam')[0].attributes['data-ev-ids'].value = vm.finalarrcamEv_id.join(',')
                //    vm.finalarrcamAuth.splice(i,1);
@@ -601,10 +666,10 @@
 
             }
             else if(type == 'pdf'){
-                console.log("its pdf ");
-                vm.gallerypdfArr.splice(i,1);
-                vm.finalarrpdfEv_id.splice(i,1);
+                //console.log("its pdf ");
                 vm.deleteEvArr.push(vm.finalarrpdfEv_id.splice(i,1)[0]);
+                vm.gallerypdfArr.splice(i,1);
+                // vm.finalarrpdfEv_id.splice(i,1);
                 if(vm.gallerypdfArr.length == 0){
                     angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-pdf').addClass('hidden');
                  }
@@ -615,24 +680,28 @@
 
             }
             else if(type == 'notes'){
-                vm.gallerynotesArr.splice(i,1);
-                vm.finalarrnotesEv_id.splice(i,1);
-                vm.finalarrnotesAuth.splice(i,1);
                 vm.deleteEvArr.push(vm.finalarrnotesEv_id.splice(i,1)[0]);
+                vm.gallerynotesArr.splice(i,1);
+                // vm.finalarrnotesEv_id.splice(i,1);
+                vm.finalarrnotesAuth.splice(i,1);
+                
                 if(vm.gallerynotesArr.length == 0){
                     angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes').addClass('hidden');
                  }
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev'].value = vm.gallerynotesArr.join('_*_')
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev-ids'].value =  vm.finalarrnotesEv_id.join('_*_')
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-auth'].value =  vm.finalarrnotesAuth.join('_*_')
-                console.log("its notes");
+                //console.log("its notes");
 
 
             }
             else if(type == 'question'){
-                vm.finalarrquestionEv_id.splice(i,1);
-                vm.finalarrquestionAuth.splice(i,1);
+                //console.log('question');
                 vm.deleteEvArr.push(vm.finalarrquestionEv_id.splice(i,1)[0]);
+                // vm.finalarrquestionEv_id.splice(i,1);
+                vm.galleryquestionArr.splice(i,1);
+                vm.finalarrquestionAuth.splice(i,1);
+                
                 if(vm.galleryquestionArr.length == 0){
                     angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question').addClass('hidden');
                 }
@@ -641,33 +710,33 @@
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-auth'].value = vm.finalarrquestionAuth.join('_*_')
             }
 
-
+//console.log(vm.deleteEvArr,"delete evidence arr")
             angular.element('.del-media').addClass('ng-hide');
             
 
 
 
-            console.log("delete confirm",$event);
-            console.log("delete confirm index",i);
-            console.log("delete confirm value",value);
+            //console.log("delete confirm",$event);
+            //console.log("delete confirm index",i);
+            //console.log("delete confirm value",value);
 
 
         }
         vm.cancelconf = function($event)
         {
             angular.element($event.target).parent().addClass('ng-hide');
-            console.log("cancel confirm",$event);
+            //console.log("cancel confirm",$event);
         }
 
 
 
         vm.resourcevideosectionclose = function($event)
         {
-            // console.log(" resourcevideosectionclose id",id);
+            // //console.log(" resourcevideosectionclose id",id);
          
                 var srcele = $event.target.parentElement.nextElementSibling.children[1].children[0].children[0];
             video = angular.element(srcele);
-           console.log("video function",video,"src",srcele.tagName);
+           //console.log("video function",video,"src",srcele.tagName);
             if(srcele.tagName == 'VIDEO'){video[0].pause();}
 
             
@@ -678,14 +747,14 @@
         
         // vm.pdfevidence = function()
         // {
-        //     console.log("pdf evidence");
+        //     //console.log("pdf evidence");
         //     fileChooser.open(
         //         function fcSuccess(file){
         //             vm.filename=file.name;
-        //             console.log("file uri",file.uri,"file name",file.name,"file type",file.mime_type);
+        //             //console.log("file uri",file.uri,"file name",file.name,"file type",file.mime_type);
         //             downloadPdf(file.uri,file.name,file.mime_type);
         //             },
-        //           function fcError(e){console.log(e);}
+        //           function fcError(e){//console.log(e);}
         //    );
 
 
@@ -694,7 +763,7 @@
         //     var ft = new FileTransfer();
         //     var targetPath = cordova.file.externalRootDirectory +"Uploadfolder/" + name;
 
-        //     console.log(" *****targetPath",targetPath);
+        //     //console.log(" *****targetPath",targetPath);
         //     vm.pdflocallocation = targetPath;
         //     ft.download(
         //         uri,
@@ -702,18 +771,18 @@
         //         function(entry) {
 
         //             $scope.$apply(function () {
-        //                 console.log("file type ...",ftype);
+        //                 //console.log("file type ...",ftype);
         //                 vm.pdficon = true;
         //             });
                     
-        //             console.log(entry);
-        //             console.log("download complete: " + entry.fullPath);
+        //             //console.log(entry);
+        //             //console.log("download complete: " + entry.fullPath);
     
         //         },
         //         function(error) {
-        //             console.log("error");
-        //             console.log(error);
-        //             console.log("download error" + error.code);
+        //             //console.log("error");
+        //             //console.log(error);
+        //             //console.log("download error" + error.code);
         //         }
         //     );
             
@@ -730,7 +799,7 @@
 
         vm.pdfopen =function(url,datatype)
         {
-            console.log("pdf open function...........---");
+            //console.log("pdf open function...........---");
             vm.assesspdfpopup = true;
             // vm.reportvideoimagepdfpopup = true;
             vm.data_type = datatype;
@@ -770,7 +839,7 @@
 
 
         vm.assesspdfpopupclose = function($event){
-            console.log("pdf close fun-----");
+            //console.log("pdf close fun-----");
             vm.assesspdfpopup = false;
         }
 
@@ -781,7 +850,7 @@
 
 
         vm.updateok = function(){
-            console.log("update ok....");
+            //console.log("update ok....");
             var a = vm.myValue;
             vm.upVal = a;
             vm.myValue = "";

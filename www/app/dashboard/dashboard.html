@@ -59,7 +59,7 @@
 
 
 								<!--ng repeat starts-->
-								<div ng-repeat="(jobrolesKey,jobroles) in vm.fullresponseData">
+								<div ng-repeat="(jobrolesKey,jobroles) in vm.fullresponseData" ng-if="jobrolesKey!=='signoffstatus'">
 									<h4 class="dash-title Hel-font">{{jobroles.jr_id}} <span>&vellip; {{jobroles.department}}</span></h4>
 									<div class="dash-tabs" class="parentClass" id="parentId">
 										<ul class="nav nav-tabs tabs">
