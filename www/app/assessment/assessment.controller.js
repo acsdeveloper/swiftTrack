@@ -1,6 +1,6 @@
 (function() {
     // 'use strict';
-    function assessmentCtrl(Constants,pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService,$filter) {
+    function assessmentCtrl($ionicPopup,NetworkInformation,Constants,pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService,$filter) {
         //console.log("after ctrl");
         var vm = this;
         vm.localDB = new PouchDB("Swifttrack", {
@@ -22,7 +22,12 @@
             ModuleService.ModuledetailsPouch(vm.jobroleandmod).then(function(resp) {
                 //console.log(resp,"assessment controller response");
                 vm.assessmentdetail_response = resp;
+                ModuleService.ReportdetailsPouch(vm.jobroleandmod).then(function(resp1) {
+                    console.log(resp1,"assessment controller response");
+                    vm.reportdetail_response = resp1;
+                });
             });
+           
             });
             
         }
@@ -188,7 +193,58 @@
 
 
         }
-        vm.confirm_savesession = function() {
+        vm.isEmpty = function(obj) {
+            for(var key in obj) {
+                if(obj.hasOwnProperty(key))
+                    return false;
+            }
+            return true;
+        }
+        vm.putDataPouchDetailedDoc = function(data,doc_name){
+            return new Promise(function(resolve, reject) {
+                // Do async job
+                function detailedDocfunc(doc) {
+                    console.log(vm.jobroleandmod);
+                    console.log(doc);
+                    console.log(data)
+                    doc['assessment'][vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].people = data;
+                    return doc;
+                }
+
+                vm.localDB.upsert(doc_name, detailedDocfunc).then(function() {
+                    resolve('success')
+                }).catch(function(err) {
+                    reject(err)
+                });
+            })
+
+        }
+        vm.confirm_savesession = function(){
+            vm.savefunction().then(function(){
+                console.log("asssessment ends");
+                console.log(NetworkInformation.isOnline(),"isonline")
+                if(NetworkInformation.isOnline()==true){
+                    ModuleService.saveAPIOnline().then(function(res){
+                        console.log(res,'response dasta from assesmemr');
+                        // ModuleService.fetchfulldata().then(function())
+                        $state.go('dashboard');
+                    })
+                }
+                else{
+                    $ionicPopup.alert({
+                        title: 'No Internet',
+                        template: 'You are Offline. Your data will sync once you are online'
+                    }).then(function(res) {
+                        $state.go('dashboard');
+                    });
+                   
+                }
+                
+                
+            })
+        }
+        vm.savefunction = function() {
+            return new Promise(function(resolve, reject) {
             //save functionality
             var personIDsArr = new Array();
             var indicatorIDsArr = new Array();
@@ -203,6 +259,11 @@
             var notesevid= new Array();
             var quesevid=new Array();
 
+            var camauth = new Array();
+            var pdfauth = new Array();
+            var notesauth = new Array();
+            var quesauth = new Array();
+
             $('.person-panel').each(function(){
                 var panelID = $(this).attr('id');
                 var personID = $(this).attr('data-newid');
@@ -210,19 +271,32 @@
                 $('#'+panelID+" .panel-row").each(function(){
                     var indID = $(this).attr('data-id');
                     var levelSet = $(this).attr('data-level-set');
+
                     var evCamStr = ($(this).find('.ev-cam').attr('data-ev'))
                     var evCamidStr = ($(this).find('.ev-cam').attr('data-ev-ids'))
+                    var evCamauthStr = ($(this).find('.ev-cam').attr('data-auth'))
+
                     var evPDFStr = ($(this).find('.ev-pdf').attr('data-ev'))
                     var evPDFidStr = ($(this).find('.ev-pdf').attr('data-ev-ids'))
+                    var evPDFauthStr = ($(this).find('.ev-pdf').attr('data-auth'))
+
                     var evNoteStr = $(this).find('.ev-notes').attr('data-ev');
                     var evNoteidStr = $(this).find('.ev-notes').attr('data-ev-ids');
+                    var evNoteauthStr = $(this).find('.ev-notes').attr('data-auth');
+
                     var evQuesStr = $(this).find('.ev-question').attr('data-ev');
+                    var evQuesAuthStr = $(this).find('.ev-question').attr('data-auth');
                     var evQuesidStr = $(this).find('.ev-question').attr('data-ev-ids');
                     
                     camevid.push(evCamidStr);
                     pdfevid.push(evPDFidStr);
                     notesevid.push(evNoteidStr);
                     quesevid.push(evQuesidStr);
+
+                    camauth.push(evCamauthStr);
+                    pdfauth.push(evPDFauthStr);
+                    notesauth.push(evNoteauthStr);
+                    quesauth.push(evQuesAuthStr);
 
                     personIDsArr.push(personID);
                     indicatorIDsArr.push(indID);
@@ -247,8 +321,15 @@
             //save in main DATA
                                                               
             var localdatavalue=vm.assessmentdetail_response.people;
+            var localreportvalue=vm.reportdetail_response;
+            console.log(localreportvalue);
             //console.log(localdatavalue,personIDsArr.length,"finaldata")
             for(i=0;i<=personIDsArr.length-1;i++){
+
+                // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].levels[1].level_achieved=levelsArr[i]<1?false:true;
+                // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].levels[2].level_achieved=levelsArr[i]<1?false:true;
+                // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].levels[3].level_achieved=levelsArr[i]<1?false:true;
+
                 localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].levels[1].level_achieved=levelsArr[i]<1?false:true;
                 localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].levels[2].level_achieved=levelsArr[i]<2?false:true;
                 localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].levels[3].level_achieved=levelsArr[i]<3?false:true;
@@ -257,31 +338,56 @@
                     if(evCamArr[i]!=''){
                         localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.media.data_ev=evCamArr[i];
                         localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.media.data_ev_ids=camevid[i];
+                        localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.media.data_auth=camauth[i];
+
+                        // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.media.data_ev=evCamArr[i];
+                        // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.media.data_ev_ids=camevid[i];
+                        // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.media.data_auth=camauth[i];
                     }
                // }
                 // if(vm.deletepdf==true){
                     if(evPDFArr[i]!==''){
                         localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.pdf.data_ev=evPDFArr[i];
                         localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.pdf.data_ev_ids=pdfevid[i];
+                        localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.pdf.data_auth=pdfauth[i];
+                        
+                        // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.pdf.data_ev=evPDFArr[i];
+                        // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.pdf.data_ev_ids=pdfevid[i];
+                        // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.pdf.data_auth=pdfauth[i];
+
                     }
                 // }
                 // if(vm.deletenotes==true){
                     if(evNoteArr[i]!==''){
                         localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.notes.data_ev=evNoteArr[i];
                         localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.notes.data_ev_ids=notesevid[i];
+                        localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.notes.data_auth=notesauth[i];
+
+                        // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.notes.data_ev=evNoteArr[i];
+                        // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.notes.data_ev_ids=notesevid[i];
+                        // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.notes.data_auth=notesauth[i];
+
+                        
                     }
                 // }
                 // if(vm.deleteques==true){
                     if(evQuesArr[i]!==''){
                         localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.question.data_ev=evQuesArr[i];                    
                         localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.question.data_ev_ids=quesevid[i];                    
+                        localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.question.data_auth=quesauth[i];  
+                        
+                        // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.question.data_ev=evQuesArr[i];                    
+                        // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.question.data_ev_ids=quesevid[i];                    
+                        // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.question.data_auth=quesauth[i];  
+
+                        
                     }
                 // }
                 
             }
             vm.putDataPouchDetailedDoc(localdatavalue,'detailed_document');
 
-            var objSave = {	person_ids:personIDs,
+            vm.objSave = {	person_ids:personIDs,
                 ind_ids:indIDs,
                 levels:levels,
                 cams:camStr,
@@ -289,88 +395,63 @@
                 notes:noteStr,
                 ques:quesStr,
                 del:deleteEvStr};
-                console.log(objSave,"objsave");
+                console.log(vm.objSave,"objsave");
                 //save as api passing data
-                function isEmpty(obj) {
-                    for(var key in obj) {
-                        if(obj.hasOwnProperty(key))
-                            return false;
-                    }
-                    return true;
-                }
-                function detailedDocfunc1(doc) {
-                    if(isEmpty(doc)){
-                        var doc={
-                            "indicators":{
-                                
-                            }
-                        }
-                        modobj=new Object();
-                        subobj=new Object();
-                        compobj=new Object();
-                    }
-                    subobj.comp_id=vm.jobroleandmod.comp_id;
-                    subobj.mod_id=vm.jobroleandmod.m_id
-                    subobj.dept_id=vm.jobroleandmod.departmentid;
-                    subobj.dept_sub_id=vm.jobroleandmod.subDepartmentId;
-                    subobj.job_role_id=vm.jobroleandmod.jr_id;
-                    subobj.indicators=objsave;
-
-
-                    modobj[vm.jobroleandmod.m_id]=subobj;
-                    compobj[vm.jobroleandmod.jr_id]=modobj;
-                    doc.indicators=compobj;
-                    console.log(doc)
-                    // doc.indicators[vm.jobroleandmod.jr_id]=.comp_id
-                    
-                    
-                    
-                    
-                    
-                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].mod_id=vm.jobroleandmod.m_id
-                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].dept_id=vm.jobroleandmod.departmentid
-                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].dept_sub_id=vm.jobroleandmod.subDepartmentId
-                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].job_role_id=vm.jobroleandmod.jr_id
-                    // doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].indicators=objSave;
-
-                    
-
-                    console.log(doc,"obset");
-
-                    return doc;
-                }
-
-                vm.localDB.upsert('saveAPIdata', detailedDocfunc1).then(function() {
-                    // resolve('success')
-                    console.log('success')
-                }).catch(function(err) {
-                    // reject(err)
-                    console.log(err)
-                });
-                
-                //
-
-            $state.go('dashboard')
-        }
-        vm.putDataPouchDetailedDoc = function(data,doc_name){
-            return new Promise(function(resolve, reject) {
-                // Do async job
-                function detailedDocfunc(doc) {
-                    console.log(vm.jobroleandmod);
-                    console.log(doc);
-                    console.log(data)
-                    doc['assessment'][vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].people = data;
-                    return doc;
-                }
-
-                vm.localDB.upsert(doc_name, detailedDocfunc).then(function() {
-                    resolve('success')
+              
+                vm.pouchSaveApiData(vm.objSave).then(function(){
+                   resolve('success')
                 }).catch(function(err) {
                     reject(err)
-                });
-            })
+                    console.log(err)
+                })
 
+            });
         }
+        vm.pouchSaveApiData = function(objSave){
+            return new Promise(function(resolve, reject) {
+            function detailedDocfunc1(doc) {
+                console.log(doc,"entry");
+                if(vm.isEmpty(doc)){
+                    var doc={
+                        "indicators":{
+                            
+                        }
+                    }
+
+                }
+                var modobj=new Object();
+                var subobj=new Object();
+                var compobj=new Object();
+                subobj.comp_id=vm.jobroleandmod.comp_id;
+                subobj.mod_id=vm.jobroleandmod.m_id
+                subobj.dept_id=vm.jobroleandmod.departmentid;
+                subobj.dept_sub_id=vm.jobroleandmod.subDepartmentId;
+                subobj.job_role_id=vm.jobroleandmod.jr_id;
+                subobj.indicators=vm.objSave;
+
+
+                
+                if(doc.indicators[vm.jobroleandmod.jr_id]){
+                   doc.indicators[vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id]=subobj;
+                }
+                else{
+                    modobj[vm.jobroleandmod.m_id]=subobj;
+                    doc.indicators[vm.jobroleandmod.jr_id]=modobj;
+                }
+
+                return doc;
+            }
+
+            vm.localDB.upsert('saveAPIdata', detailedDocfunc1).then(function() {
+                resolve('success')
+                console.log('success')
+            }).catch(function(err) {
+                reject(err)
+                console.log(err)
+            });
+        });
+        }
+
         vm.cancel_savesession = function() {
             vm.assessoksavepopup = false;
             angular.element('.assessment-page header #saveSession').css('color', 'rgb(229, 229, 229)');
@@ -479,6 +560,7 @@
         }
         vm.updateques = function(){
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-ev'].value=vm.changemodel
+            angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-ev-ids'].value='new'
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-auth'].value=vm.currentUser
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question').removeClass("hidden");
             vm.galleryquestionArr=vm.changemodel.split('_*_');
@@ -503,6 +585,8 @@
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev'].value=val==''?vm.change_note:val+'_*_'+vm.change_note
             var authnew=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-auth'].value;
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-auth'].value=authnew==''?vm.currentUser:authnew+'_*_'+vm.currentUser
+            var evidnew=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev-ids'].value;
+            angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes')[0].attributes['data-ev-ids'].value=evidnew==''?'new':evidnew+'_*_'+'new';
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-notes').removeClass("hidden");
             vm.gallerynotesArr.push(vm.change_note);
             vm.finalarrnotesAuth.push(vm.currentUser);
@@ -639,7 +723,9 @@
                 }
                
                 var ft = new FileTransfer();
-                var targetPath = cordova.file.externalApplicationStorageDirectory +"files/" + name;
+                var time = new Date();
+                var newfilename=name.split('.')[name.split('.').length-1]+'_'+time.getTime()+'.'+name.split('.')[name.split('.').length-1]
+                var targetPath = cordova.file.externalApplicationStorageDirectory +"files/" + newfilename;
                 vm.videolocallocation = targetPath;
                 ft.download(uri,targetPath,downloadsuccess,downloadfailed)
                     function downloadsuccess(entry) {
@@ -683,9 +769,44 @@
                 // ##########################################
                     // file upload to server 
     
+            
+            }
+            vm.fileuploadfunction = function(){
+
+    
+                var win = function (r) {
+                    console.log("*****win function r",r);
+                    //console.log("Code = " + r.responseCode);
+                    //console.log("Response = " + r.response);
+                    //console.log("Sent = " + r.bytesSent);
+                }
+                
+                var fail = function (error) {
+                    console.log("**************** fail function error ",error)
+                    alert("An error has occurred: Code = " + error.code);
+                    //console.log("upload error source " + error.source);
+                    //console.log("upload error target " + error.target);
+                }
+    
+                var options = new FileUploadOptions();
+                options.fileKey = "file";
+                options.fileName =name; 
+                options.mimeType = ftype;
+                //console.log("option obj",options);
+                //console.log("targetPath",targetPath);
+                var params = {};
+                params.value1 = "test";
+                params.value2 = "param";
+    
+                options.params = params;
+    
+                    var encodeuri="https://swifttrack-agilexcyber.c9users.io/swiftMobile/api/uploadFiles.php";
+                    //console.log("encodeuri",encodeuri);
+                    var ft = new FileTransfer();
+                    ft.upload(targetPath, encodeURI(encodeuri),win,fail,options);
+          
             // #######################################
             // ----------end-------
-            
             
             
             }
@@ -961,5 +1082,5 @@
 
     angular.module('swiftTrack.assessment')
         .controller('assessmentCtrl', assessmentCtrl);
-    assessmentCtrl.$inject = ['Constants','PDFViewerService','$sce','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'ModuleService','$filter'];
+    assessmentCtrl.$inject = ['$ionicPopup','NetworkInformation','Constants','PDFViewerService','$sce','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'ModuleService','$filter'];
 }());
