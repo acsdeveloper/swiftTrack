@@ -7,6 +7,8 @@
             usrdtl = null,
             JobAndMod = null,
             userId = null,
+            signoffdata=null,
+            changesinsignoff=null,
             dashboarddetailsresponse = null;
 
 
@@ -55,13 +57,27 @@
             getdashboarddetailsresponse: function() {
                 return dashboarddetailsresponse;
             },
+            setSignoffData:function(data){
+                signoffdata=data;
+            },
+            getSignoffData : function(){
+                return signoffdata;
+            },
+            getchangessignoff:function(){
+                return changesinsignoff;
+            },
+            setchangessignoff:function(data){
+                changesinsignoff=data
+            },
             clearAllStorage: function() {
                 loginValue = null;
                 userdetails = null;
                 usrdtl = null;
                 JobAndMod = null;
                 userId = null;
+                changesinsignoff=null;
                 dashboarddetailsresponse = null;
+                signoffdata = null;
                 
             }
 

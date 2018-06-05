@@ -222,9 +222,11 @@
         vm.confirm_savesession = function(){
             vm.savefunction().then(function(){
                 console.log("asssessment ends");
+                console.log(NetworkInformation.isOnline(),"isonline")
                 if(NetworkInformation.isOnline()==true){
                     ModuleService.saveAPIOnline().then(function(res){
-                        console.log(res,'response dasta from assesmemr')
+                        console.log(res,'response dasta from assesmemr');
+                        // ModuleService.fetchfulldata().then(function())
                         $state.go('dashboard');
                     })
                 }
@@ -683,7 +685,9 @@
                 }
                
                 var ft = new FileTransfer();
-                var targetPath = cordova.file.externalApplicationStorageDirectory +"files/" + name;
+                var time = new Date();
+                var newfilename=name.split('.')[name.split('.').length-1]+'_'+time.getTime()+'.'+name.split('.')[name.split('.').length-1]
+                var targetPath = cordova.file.externalApplicationStorageDirectory +"files/" + newfilename;
                 vm.videolocallocation = targetPath;
                 ft.download(uri,targetPath,downloadsuccess,downloadfailed)
                     function downloadsuccess(entry) {
@@ -727,6 +731,10 @@
                 // ##########################################
                     // file upload to server 
     
+            
+            }
+            vm.fileuploadfunction = function(){
+
     
                 var win = function (r) {
                     console.log("*****win function r",r);
@@ -761,7 +769,6 @@
           
             // #######################################
             // ----------end-------
-            
             
             
             }

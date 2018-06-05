@@ -54,7 +54,7 @@
 									<span><strong>You are up to date: </strong> Hello,{{vm.userFirstName}}. You are ready to perform an assessment.</span>
 									<a ng-click="vm.closeUsrNoti()" style="cursor:pointer" class="close">×</a>
 								</div>
-								<div  ng-show="vm.signoffnotif" class="alert dash-top-alert"><span><strong>{{vm.signoffstatus}} competencies completed. </strong> You have competencies waiting to be signed off.</span> <a id="signOffBtn" class="btn btn-success btn-sm">Sign-off now</a></div>
+								<div  ng-show="vm.signoffnotif" class="alert dash-top-alert"><span><strong>{{vm.signoffstatus}} competencies completed. </strong> You have competencies waiting to be signed off.</span> <a ng-click="vm.goSignofPage(vm.fullresponseData.signoffstatus)" id="signOffBtn" class="btn btn-success btn-sm">Sign-off now</a></div>
 							</div>
 							
 						

@@ -14,6 +14,7 @@
             'swiftTrack.loader',
             'swiftTrack.networkInformation',
             'swiftTrack.pouchservice',
+            'swiftTrack.signoff',
             'ionic',
             'ngPDFViewer',
             'ngCookies',
@@ -22,7 +23,7 @@
 
         ])
 
-        .run(function($ionicPlatform, $ionicHistory, $rootScope, $state, $ionicNavBarDelegate) {
+        .run(function(storageFactory,SignoffService,$ionicPlatform, $ionicHistory, $rootScope, $state, $ionicNavBarDelegate,$cordovaNetwork) {
             $ionicPlatform.ready(function() {
                 console.log(navigator.connection.type)
                 // if (window.cordova && cordovaPlugin.Keyboard) {
@@ -55,6 +56,23 @@
                         $ionicHistory.goBack();
                         $ionicHistory.clearHistory();
                         $ionicHistory.clearCache();
+                    }
+                    else if("signoff"==$ionicHistory.currentStateName()){
+                        console.log($cordovaNetwork.isOnline(),"locatopnmj")
+                        if($cordovaNetwork.isOnline()==true && storageFactory.getchangessignoff()){
+                            SignoffService.fetchfulldata().then(function(val){
+                                    $ionicHistory.goBack();
+                                    $ionicHistory.clearHistory();
+                                    $ionicHistory.clearCache();
+                                SignoffService.putDataPouch(val).then(function(){
+                                    
+                                })
+                            })
+                        }else{
+                            $ionicHistory.goBack();
+                            $ionicHistory.clearHistory();
+                            $ionicHistory.clearCache();
+                        }
                     }
 
                     else {

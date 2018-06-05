@@ -21,6 +21,12 @@
             vm.peoplepane = false;
         }
         vm.init();
+
+        vm.goSignofPage = function(data){
+            console.log(data)
+            storageFactory.setSignoffData(data);
+            $state.go('signoff')
+        }
         // vm.headerimagefunction = function() {
             
         //     if (vm.userdetails !== undefined && vm.userdetails !== null) {
