@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <ion-view cache-view="false" class="signoff-page">
 	<button class="button back-button buttons button-icon ion-arrow-left-c header-item" ng-click="$ionicGoBack()">
         <a class="btn btn-md btn-default btn-back2dash">
@@ -81,4 +82,93 @@
       </div>
       </div>
     </ion-content>
+=======
+<ion-view cache-view="false" class="signoff-page">
+	<button class="button back-button buttons button-icon ion-arrow-left-c header-item" ng-click="$ionicGoBack()">
+        <a class="btn btn-md btn-default btn-back2dash">
+				<i class="icon-arrow-left"></i> Back <span class="hide-on-phone">to Dashboard</span></a>
+    <span class="back-text"></span></button>
+	<header class="fixed-hdr">
+		<div class="">
+			<div class="">
+				<img class="logo" src="https://app.swifttrack.co.uk/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/settings/nf-logo.jpg" alt="logo">
+			</div>
+		</div>
+		<div class="peopleprogressreport">
+			<div class="top-r tr-single-btn">
+				<a ng-click="vm.logoutpopup=!vm.logoutpopup; $event.preventDefault(); $event.stopPropagation();" class="btn-circ btn-top-r btn-logout">
+			 <i class="icon-switch"></i>
+			 </a>
+				<div ng-show="vm.logoutpopup" class="popover fade bottom in" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:94px;margin-left: 0px;">
+					<div class="arrow" style="left: 50%;">
+						<i class="icon ion-arrow-up-b"></i>
+					</div>
+					<h3 class="popover-title">Log out of SwiftTrack?</h3>
+					<div class="popover-content">
+						<a ng-click="vm.confirmlogout($event)" class="btn btn-warning m-rgt-10 btn-logout-confirm">Confirm</a>
+						<a ng-click="vm.cancellogout()" id="cancelLogout" class="btn btn-cancel">Cancel</a>
+					</div>
+				</div>
+				<div class="avatar"><img ng-src="{{vm.userImageUrl}}" alt="User-Avatar"></div>
+			</div>
+		</div>
+	</header>
+	<ion-content scroll="true">
+		<div class="panel-container peoplereport">
+        <section class="panel">
+            <div class="row">
+               <div class="col-xs-12">
+                  <h3 class="dash-title">Sign Off Competencies</h3>
+                  <p>The following people have completed all modules within the specified competencies and are awaiting sign-off.</p>
+                  <div id="signOffs">
+                     <div class="signoff-box" ng-repeat="(i,username) in vm.names_pplArr track by $index">
+                        <div class="row textbox">
+                           <div class="col-sm-4 col-xs-12">
+                              <h4 ng-bind-html="username"></h4>
+                              <h5>Completed: <strong ng-bind-html="vm.names_comps[i]"></strong></h5>
+                           </div>
+                           <div class="col-sm-5 col-xs-12 report">
+                             <textarea class="form-control" placeholder="Leave any final comments on this person's record…"></textarea>
+                            </div>
+                           <div class="col-sm-3 col-xs-12 text-right">
+                             <a ng-click="vm.signoffnow(vm.ids_compsArr[i],vm.ids_pplArr[i],$event)" data-p-id="3" data-c-id="7" data-key="0" class="sign-off btn btn-success btn-lg"><i class="icon-checkmark"></i>&nbsp;&nbsp;Sign off now</a>
+                            </div>
+                        </div>
+                     </div>
+                     <!-- <div class="signoff-box">
+                        <div class="row">
+                           <div class="col-sm-4 col-xs-12">
+                              <h4>David Michaels</h4>
+                              <h5>Completed: <strong>Example Competency 2</strong></h5>
+                           </div>
+                           <div class="col-sm-5 col-xs-12 report"><textarea class="form-control" placeholder="Leave any final comments on this person's record…"></textarea></div>
+                           <div class="col-sm-3 col-xs-12 text-right"><a data-p-id="3" data-c-id="8" data-key="1" class="sign-off btn btn-success btn-lg"><i class="icon-checkmark"></i>&nbsp;&nbsp;Sign off now</a></div>
+                        </div>
+                     </div> -->
+                  </div>
+                  <div class="box-template hidden">
+                     <div class="signoff-box">
+                        <div class="row">
+                           <div class="col-sm-4 col-xs-12">
+                              <h4>_PersonsName_</h4>
+                              <h5>Completed: <strong>_CompName_</strong></h5>
+                           </div>
+                           <div class="col-sm-5 col-xs-12 report"><textarea class="form-control" placeholder="Leave any final comments on this person's record…"></textarea></div>
+                           <div class="col-sm-3 col-xs-12 text-right"><a data-p-id="_pid_" data-c-id="_cid_" data-key="_key_" class="sign-off btn btn-success btn-lg"><i class="icon-checkmark"></i>&nbsp;&nbsp;Sign off now</a></div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="clearfix"></div>
+               <div class="pad-60"></div>
+               <div class="pad-60"></div>
+            </div>
+         </section>
+
+        <div class="pad-15"></div>
+        <footer>&copy; 2018 SwiftTrack V1.1&nbsp;&nbsp;&vellip;&nbsp;&nbsp;Licensed to Food International</footer>
+      </div>
+      </div>
+    </ion-content>
+>>>>>>> 7a559af5b185d2df101df4afb5706d26a15085c8
   </ion-view>
