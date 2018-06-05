@@ -573,6 +573,44 @@
         }
 
 
+        vm.filetoserver = function()
+        {
+            
+    
+            var win = function (r) {
+                console.log("*****win function r",r);
+                //console.log("Code = " + r.responseCode);
+                //console.log("Response = " + r.response);
+                //console.log("Sent = " + r.bytesSent);
+            }
+            
+            var fail = function (error) {
+                console.log("**************** fail function error ",error)
+                alert("An error has occurred: Code = " + error.code);
+                //console.log("upload error source " + error.source);
+                //console.log("upload error target " + error.target);
+            }
+
+            var options = new FileUploadOptions();
+            options.fileKey = "file";
+            options.fileName =name; 
+            options.mimeType = ftype;
+            //console.log("option obj",options);
+            //console.log("targetPath",targetPath);
+            var params = {};
+            params.value1 = "test";
+            params.value2 = "param";
+
+            options.params = params;
+
+                var encodeuri="https://swifttrack-agilexcyber.c9users.io/swiftMobile/api/uploadFiles.php";
+                //console.log("encodeuri",encodeuri);
+                var ft = new FileTransfer();
+                ft.upload(targetPath, encodeURI(encodeuri),win,fail,options);
+      
+        }
+
+
         vm.evidenceupload = function(datatype) {
             
             fileChooser.open(
@@ -645,38 +683,6 @@
                 // ##########################################
                     // file upload to server 
     
-    
-                var win = function (r) {
-                    console.log("*****win function r",r);
-                    //console.log("Code = " + r.responseCode);
-                    //console.log("Response = " + r.response);
-                    //console.log("Sent = " + r.bytesSent);
-                }
-                
-                var fail = function (error) {
-                    console.log("**************** fail function error ",error)
-                    alert("An error has occurred: Code = " + error.code);
-                    //console.log("upload error source " + error.source);
-                    //console.log("upload error target " + error.target);
-                }
-    
-                var options = new FileUploadOptions();
-                options.fileKey = "file";
-                options.fileName =name; 
-                options.mimeType = ftype;
-                //console.log("option obj",options);
-                //console.log("targetPath",targetPath);
-                var params = {};
-                params.value1 = "test";
-                params.value2 = "param";
-    
-                options.params = params;
-    
-                    var encodeuri="https://swifttrack-agilexcyber.c9users.io/swiftMobile/api/uploadFiles.php";
-                    //console.log("encodeuri",encodeuri);
-                    var ft = new FileTransfer();
-                    ft.upload(targetPath, encodeURI(encodeuri),win,fail,options);
-          
             // #######################################
             // ----------end-------
             
