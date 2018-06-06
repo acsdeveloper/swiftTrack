@@ -45,6 +45,7 @@
                         storageFactory.setuserdetails(resp.result[Object.keys(resp.result)]);
                         console.log(storageFactory.getuserdetails())
                         $cookieStore.put('loginAuth', true);
+                        $cookieStore.put('sessionkey', resp.result[Object.keys(resp.result)].sessionkey);
                         localStorage.setItem("loginAuth", true);
                         // localStorage.setItem("first_name", resp.result[Object.keys(resp.result)].first_name);
                         // localStorage.setItem("images", resp.result[Object.keys(resp.result)].images);

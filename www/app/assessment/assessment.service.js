@@ -1,5 +1,5 @@
 (function() {
-    function ModuleService(Pouchfactory,Request, Constants, $q) {
+    function ModuleService(Pouchfactory,Request, Constants, $q,$cookieStore) {
         var vm = this;
         vm.data = {};
 
@@ -20,6 +20,7 @@
                 return vm.localDB.get('post_jsonobject').then(function(resp2){
                     console.log(resp2);
                     resp2.indicators=resp1.indicators;
+                    resp2.sessionkey=$cookieStore.get('sessionkey')
                     return Request.post(vm.url, resp2).then(function(resp) {
                         console.log(resp,"response from assessment service")
                         vm.defered = $q.defer();
@@ -96,5 +97,5 @@
 
     angular.module('swiftTrack.assessment')
         .service('ModuleService', ModuleService)
-    ModuleService.$inject = ['Pouchfactory','Request', 'Constants', '$q'];
+    ModuleService.$inject = ['Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
 }())
