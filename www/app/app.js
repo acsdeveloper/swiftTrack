@@ -25,6 +25,25 @@
 
         .run(function(storageFactory,SignoffService,$ionicPlatform, $ionicHistory, $rootScope, $state, $ionicNavBarDelegate,$cordovaNetwork) {
             $ionicPlatform.ready(function() {
+
+                //sync code start 
+                document.addEventListener("offline", onOffline, false);
+
+                function onOffline() {
+                    console.log('Offline detected');
+                    storageFactory.setdeviceOnline(false);
+                    // Handle the offline event
+                }
+        
+                document.addEventListener("online", onOnline, false);
+        
+                function onOnline() {
+                    console.log('Online detected');
+                    storageFactory.setdeviceOnline(true);
+                    // Handle the online event
+                }
+                //sync code end
+
                 console.log(navigator.connection.type)
                 // if (window.cordova && cordovaPlugin.Keyboard) {
                 //     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -62,10 +81,7 @@
                         if($cordovaNetwork.isOnline()==true && storageFactory.getchangessignoff()){
                             SignoffService.fetchfulldata().then(function(val){
                                     $ionicHistory.goBack();
-                                    $ionicHistory.clearHistory();
-                                    $ionicHistory.clearCache();
                                 SignoffService.putDataPouch(val).then(function(){
-                                    
                                 })
                             })
                         }else{

@@ -1,5 +1,5 @@
 (function() {
-    function signoffservice(Pouchfactory,Request, Constants, $q) {
+    function signoffservice(Pouchfactory,Request, Constants, $q,$cookieStore) {
         var vm = this;
         vm.localDB = new PouchDB("Swifttrack", {
             revs_limit: 2
@@ -25,6 +25,7 @@
             }
 
             return vm.localDB.get('signoffdata').then(function(data){
+                data.sessionkey=$cookieStore.get('sessionkey')
                 return Request.post(vm.url, data).then(function(resp) {
                     vm.defered = $q.defer();
                     vm.defered.resolve(resp);
@@ -63,7 +64,8 @@
             // vm.object=obj;
 
              return Pouchfactory.get(vm.docname,vm.data).then(function(data) {
-                 console.log(data)
+                 console.log(data);
+                 data.sessionkey=$cookieStore.get('sessionkey');
                 return Request.post(vm.url,data).then(function(resp) {
                     console.log(resp)
                     vm.defered = $q.defer();
@@ -78,5 +80,5 @@
 
     angular.module('swiftTrack.signoff')
         .service('SignoffService', signoffservice)
-        signoffservice.$inject = ['Pouchfactory','Request', 'Constants', '$q'];
+        signoffservice.$inject = ['Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
 }())

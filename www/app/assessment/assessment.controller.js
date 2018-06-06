@@ -205,9 +205,9 @@
             return new Promise(function(resolve, reject) {
                 // Do async job
                 function detailedDocfunc(doc) {
-                    console.log(vm.jobroleandmod);
-                    console.log(doc);
-                    console.log(data)
+                    // console.log(vm.jobroleandmod);
+                    // console.log(doc);
+                    // console.log(data)
                     doc['assessment'][vm.jobroleandmod.jr_id][vm.jobroleandmod.m_id].people = data;
                     return doc;
                 }
@@ -255,8 +255,10 @@
                            vm.filetoserver(a);
                         })
                         console.log(res,'response data from assesmemr');
-                        // ModuleService.fetchfulldata().then(function())
-                        $state.go('dashboard');
+                        ModuleService.fetchfulldata().then(function(){
+                            $state.go('dashboard');
+                        })
+                       
                     })
                 }
                 else{
@@ -352,27 +354,43 @@
                                                               
             var localdatavalue=vm.assessmentdetail_response.people;
             var localreportvalue=vm.reportdetail_response;
-            console.log(localreportvalue);
+            console.log(localreportvalue,"process data value");
             //console.log(localdatavalue,personIDsArr.length,"finaldata")
             for(i=0;i<=personIDsArr.length-1;i++){
-
-                // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].levels[1].level_achieved=levelsArr[i]<1?false:true;
-                // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].levels[2].level_achieved=levelsArr[i]<1?false:true;
-                // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].levels[3].level_achieved=levelsArr[i]<1?false:true;
-
+                console.log(localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id],"v1 test")
+                console.log(localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]],"v2 test")
+                console.log(localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].color,levelsArr[i],"v3 test")
+                localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].color=levelsArr[i]==1?'255,180,0':levelsArr[i]==2?'61,169,224':levelsArr[i]==3?'71,180,117':null;
+                
                 localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].levels[1].level_achieved=levelsArr[i]<1?false:true;
                 localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].levels[2].level_achieved=levelsArr[i]<2?false:true;
                 localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].levels[3].level_achieved=levelsArr[i]<3?false:true;
                 // if(vm.deletemedia==true){
                     console.log('deletemedia get inside')
                     if(evCamArr[i]!=''){
+
                         localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.media.data_ev=evCamArr[i];
                         localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.media.data_ev_ids=camevid[i];
                         localdatavalue[personIDsArr[i]]['indicators'][indicatorIDsArr[i]].type_ref.media.data_auth=camauth[i];
-
-                        // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.media.data_ev=evCamArr[i];
+                        var objmedia=[];
+                        console.log(evCamArr,"test v1 new")
+                        evCamArr[i].split(',').map((val,ind)=>{
+                            // objmedia=[];
+                            var valueobj={
+                                'datatype':vm.findfiletype(val),
+                                'media_url':val,
+                                'img_src':val
+                            }
+                            objmedia.push(valueobj)
+                        })
+                        console.log(evCamArr,objmedia,"test v1 new")
+                        localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].media=objmedia;
+                        
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.media.data_ev_ids=camevid[i];
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.media.data_auth=camauth[i];
+                    }
+                    else{
+                        localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].media=[];
                     }
                // }
                 // if(vm.deletepdf==true){
@@ -384,7 +402,23 @@
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.pdf.data_ev=evPDFArr[i];
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.pdf.data_ev_ids=pdfevid[i];
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.pdf.data_auth=pdfauth[i];
-
+                        var objmedia=[];
+                        console.log(evPDFArr,"test v1 new")
+                        evPDFArr[i].split(',').map((val,ind)=>{
+                            // objmedia=[];
+                            var valueobj={
+                                'datatype':vm.findfiletype(val),
+                                'media_url':val,
+                                'img_src':val
+                            }
+                            objmedia.push(valueobj)
+                        })
+                        console.log(evPDFArr,objmedia,"test v1 new")
+                        localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].pdf=objmedia;
+                        
+                    }
+                    else{
+                        localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].pdf=[];
                     }
                 // }
                 // if(vm.deletenotes==true){
@@ -396,8 +430,23 @@
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.notes.data_ev=evNoteArr[i];
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.notes.data_ev_ids=notesevid[i];
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.notes.data_auth=notesauth[i];
-
+                        var objmedia=[];
+                        console.log(evNoteArr,"test v1 new")
+                        evNoteArr[i].split(',').map((val,ind)=>{
+                            // objmedia=[];
+                            var valueobj={
+                                'value':val,
+                                'auth':notesauth[ind],
+                            }
+                            objmedia.push(valueobj)
+                        })
+                        console.log(evNoteArr,objmedia,"test v1 new")
+                        localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].notes=objmedia;
                         
+                        
+                    }
+                    else{
+                        localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].notes=[];
                     }
                 // }
                 // if(vm.deleteques==true){
@@ -409,12 +458,25 @@
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.question.data_ev=evQuesArr[i];                    
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.question.data_ev_ids=quesevid[i];                    
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.question.data_auth=quesauth[i];  
-
+                        var objmedia=[];
+                        console.log(evNoteArr,"test v1 new")
+                        evQuesArr[i].split(',').map((val,ind)=>{
+                            // objmedia=[];
+                            var valueobj={
+                                'value':val,
+                                'auth':notesauth[ind],
+                            }
+                            objmedia.push(valueobj)
+                        })
+                        console.log(evQuesArr,objmedia,"test v1 new")
+                        localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].notes=objmedia;
+                        
                         
                     }
                 // }
                 
             }
+            console.log(localreportvalue,'ck changes')
             vm.putDataPouchDetailedDoc(localdatavalue,'detailed_document');
 
             vm.objSave = {	person_ids:personIDs,
@@ -743,6 +805,22 @@
            );   
            
             }
+            vm.findfiletype=function(name){
+                console.log(name)
+                var filename;
+                
+                var type=name.split('.')[name.split('.').length-1];
+                //console.log(datatype,type,name)
+                if(type=='pdf'){filename='pdf'}
+                else if(type=='jpg' || type=='jpeg' ||type=='png' ||type=='svg'||type=='gif'){
+                    filename='image';
+                }else if( type=='mp4' || type=='avi' || type=='flv' || type=='wmv' || type=='mov' ||type=='mkv'){
+                    filename='movie'
+                }
+                return filename;
+                //console.log(datatype,type,name,filename)
+                
+            }
             vm.movefile=function(uri,name,ftype,datatype){
                 var filename;
                 
@@ -797,7 +875,7 @@
                         angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'').removeClass("hidden");
                        }
                        else{
-                           console.log("$$$$$$pdf");
+                        //    console.log("$$$$$$pdf");
                         vm.finalarrpdfAuth.push(vm.currentUser);
                         vm.gallerypdfArr.push(newfilename);
                         vm.finalarrpdfEv_id.push('new')
@@ -904,8 +982,8 @@
         {
             
             angular.element('.del-media').addClass('ng-hide');
-            console.log("deletemedia angular element", angular.element($event.target).parent().children('.del-media'));
-            console.log(" angular.element($event.target).parent().children('.del-media').removeClass('ng-hide')");
+            // console.log("deletemedia angular element", angular.element($event.target).parent().children('.del-media'));
+            // console.log(" angular.element($event.target).parent().children('.del-media').removeClass('ng-hide')");
             angular.element($event.target).parent().children('.del-media').removeClass('ng-hide');
            
             
