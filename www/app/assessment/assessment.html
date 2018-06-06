@@ -14,7 +14,7 @@
             <i class="icon-cross"></i>
             </a>
 
-            <div ng-show="vm.assesscancelsavepopup" class="popover fade bottom in" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:94px;margin-left: 45px;">
+            <div ng-show="vm.assesscancelsavepopup" class="popover fade bottom in" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:auto;margin-left: 45px;">
                <div class="arrow" style="left: 50%;">
                   <i class="icon ion-arrow-up-b"></i>
                </div>
@@ -24,7 +24,7 @@
                   <a ng-click="vm.cancel_without_save()" id="cancelLogout" class="btn btn-cancel">Cancel</a>
                </div>
             </div>
-            <div ng-show="vm.assessoksavepopup" class="popover fade bottom in" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:94px;margin-left: 0px;">
+            <div ng-show="vm.assessoksavepopup" class="popover fade bottom in" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:auto;margin-left: 0px;">
                <div class="arrow" style="left: 50%;">
                   <i class="icon ion-arrow-up-b"></i>
                </div>
@@ -198,6 +198,11 @@
 
    </ion-content>
 
+   <!-- <div class="mdl mdl-sml" ng-show ="vm.withoutsave">
+      <div class="mdl-hdr mh-warning">Ending Session Without Saving</div>
+      <div class="mdl-bdy">Are you sure you want to end this session <b>WITHOUT SAVING?</b><br><a ng-click="vm.retdashboard()" class="btn btn-default btn-return m-top-10 w-100"><b>Yes,</b> Return to Dashboard</a><br><a ng-click="vm.contsection()" class="btn btn-cancel btn-continue m-top-10 w-100"><b>No,</b> Continue Session</a></div>
+   </div> -->
+
 
    <div ng-show="vm.assessreport" class="custom-modal resource-model-overlay" id="resourceModal">
       <div class="mdl mdl-full-page">
@@ -338,7 +343,7 @@
             <h1 class="ev-title">Notes</h1>
 
             <div class="update-btn" ng-click="vm.addnotes();" ng-show="vm.updatebtn" data-type="notes"></div>
-            <input ng-change="vm.change_notes()" ng-model="vm.change_note"  type="text" class="form-control mdl-input new-note catch-enter" data-type="notes" placeholder="Add a new note...">
+            <input ng-change="vm.change_notes()" ng-model="vm.change_note"  type="text" class="form-control mdl-input new-note catch-enter" data-type="notes" placeholder=" Add a new note...">
             <div id="galleryNotes" class="gal-wrapper" data-type="notes">
                   <div ng-repeat="(i,value) in vm.gallerynotesArr track by $index" >
                         <div class="note-row ev-wrap" data-type="notes" data-ev-id="{{vm.finalarrnotesEv_id[i]}}">

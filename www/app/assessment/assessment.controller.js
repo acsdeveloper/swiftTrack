@@ -185,9 +185,23 @@
 
         }
         vm.confirm_without_save = function() {
+            // vm.withoutsave = true;
+            // vm.assesscancelsavepopup =false;
             $state.go('dashboard')
 
         }
+        // vm.retdashboard = function()
+        // {
+        //     vm.withoutsave = false;
+        //        $state.go('dashboard')
+        // }
+
+        // vm.contsection = function()
+        // {
+        //     vm.withoutsave = false;
+
+        // }
+
         vm.cancel_without_save = function() {
             vm.assesscancelsavepopup = false;
             angular.element('.assessment-page header #cancelSession').css('color', 'rgb(229, 229, 229)');
@@ -255,10 +269,10 @@
                            vm.filetoserver(a);
                         })
                         console.log(res,'response data from assesmemr');
-                        ModuleService.fetchfulldata().then(function(){
-                            $state.go('dashboard');
-                        })
-                       
+                        // ModuleService.fetchfulldata().then(function(){
+                           
+                        // })
+                        $state.go('dashboard');
                     })
                 }
                 else{
@@ -1099,6 +1113,7 @@
             
             
             vm.assessreport = false;
+            vm.assesstray = true;
 
         }
         

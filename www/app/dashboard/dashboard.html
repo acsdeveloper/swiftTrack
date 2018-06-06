@@ -91,7 +91,7 @@
 													<div class="p_name">{{peoples[0].p_name+" "+peoples[0].last_name}}</div>
 													<span class="person-disc" ng-click="vm.goreportpage(peoples[0].p_id)">
 			                                   		<!--<img ng-src="{{peoples[0].p_image}}" alt="">-->
-			                                   		<img ng-src="{{peoples[0].p_image == '' ? 'https://swifttrack-agilexcyber.c9users.io/frontend/img/no-img-person.jpg' : peoples[0].p_image  }}" alt="">
+			                                   		<img ng-src="{{peoples[0].p_image == '' ? 'https://swifttrack-agilexcyber.c9users.io/frontend/img/no-img-person.jpg' : peoples[0].p_image | filefilter  }}" alt="">
 			                                    </span>
 												</div>
 											</div>

@@ -158,7 +158,21 @@
                 }
                 
             };
+        })
+
+        .filter('prof_imag_filter', function($filter) {
+            return function (item) {
+                console.log(item)
+                if(item && item!=undefined){
+                    var targetPath = cordova.file.externalApplicationStorageDirectory +"files/";
+                    var filename = item.substring(item.lastIndexOf('/')+1);
+                    return targetPath+filename;
+                }
+                
+            };
         });
+
+        
 
 
 }());

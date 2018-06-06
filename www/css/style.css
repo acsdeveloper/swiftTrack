@@ -1586,8 +1586,8 @@ video {
 }
 
 .mdl-input:focus {
-	box-shadow: 0 0 5px rgba(81, 203, 238, 0);
-	border: 10px solid #ffdd95;
+	/* box-shadow: 0 0 5px rgba(81, 203, 238, 0);
+	border: 10px solid #ffdd95; */
 }
 
 .q-answer {

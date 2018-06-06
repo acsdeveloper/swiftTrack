@@ -14,7 +14,7 @@
 				<a ng-click="vm.logoutpopup=!vm.logoutpopup; $event.preventDefault(); $event.stopPropagation();" class="btn-circ btn-top-r btn-logout">
 			 <i class="icon-switch"></i>
 			 </a>
-				<div ng-show="vm.logoutpopup" class="popover fade bottom in" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:94px;margin-left: 0px;">
+				<div ng-show="vm.logoutpopup" class="popover fade bottom in" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:auto;margin-left: 0px;">
 					<div class="arrow" style="left: 50%;">
 						<i class="icon ion-arrow-up-b"></i>
 					</div>
@@ -24,7 +24,7 @@
 						<a ng-click="vm.cancellogout()" id="cancelLogout" class="btn btn-cancel">Cancel</a>
 					</div>
 				</div>
-				<div class="avatar"><img ng-src="{{vm.userImageUrl}}" alt="User-Avatar"></div>
+				<div class="avatar"><img ng-src="{{vm.userImageUrl | filefilter}}" alt="User-Avatar"></div>
 			</div>
 		</div>
 	</header>
