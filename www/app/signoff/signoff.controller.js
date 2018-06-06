@@ -1,7 +1,7 @@
 (function() {
     // 'use strict';
 
-    function signoffCtrl(NetworkInformation,SignoffService,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, $filter) {
+    function signoffCtrl(SyncService,NetworkInformation,SignoffService,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, $filter) {
         console.log('signoff controller')
         var vm = this;
 
@@ -36,6 +36,7 @@
 
                             })
                         }else{
+                            $cookieStore.put("ChangesBoolean", true);
                             angular.element($event.target).parents('.textbox').find('.report').html(templateoffline);
                             angular.element($event.target).hide();
                         }
@@ -54,6 +55,9 @@
             }
             vm.putPouchsignoffDoc = function(data,idObj,doc_name){
                 return new Promise(function(resolve, reject) {
+                    vm.localDB = new PouchDB("Swifttrack", {
+                        revs_limit: 2
+                    });
                     // Do async job
                     function detailedDocfunc(doc) {
 
@@ -109,6 +113,9 @@
 
         }
         vm.confirmlogout = function(event) {
+            SyncService.logout().then(function(){
+                $state.go('login')
+            })
             event.preventDefault();
             event.stopPropagation();
             storageFactory.login(null);
@@ -117,13 +124,13 @@
             // localStorage.removeItem("first_name");
             // localStorage.removeItem("images");
             vm.logoutpopup = false;
-            $state.go('login')
+            
         }
     }
 
     angular.module('swiftTrack.signoff')
         .controller('signoffCtrl', signoffCtrl);
-        signoffCtrl.$inject = ['NetworkInformation','SignoffService','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', '$filter'];
+        signoffCtrl.$inject = ['SyncService','NetworkInformation','SignoffService','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', '$filter'];
 
     
 

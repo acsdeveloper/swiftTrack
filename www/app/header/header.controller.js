@@ -1,7 +1,7 @@
 (function() {
     // 'use strict';
 
-    function headerCtrl($state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory) {
+    function headerCtrl(SyncService,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory) {
 
         var vm = this;
 
@@ -34,6 +34,9 @@
 
         }
         vm.confirmlogout = function(event) {
+            SyncService.logout().then(function(){
+                $state.go('login')
+            })
             event.preventDefault(); 
             event.stopPropagation();
             storageFactory.login(null);
@@ -42,11 +45,11 @@
             localStorage.removeItem("first_name");
             localStorage.removeItem("images");
             vm.logoutpopup = false;
-            $state.go('login')
+           
         }
     }
 
     angular.module('swiftTrack.header')
         .controller('headerCtrl', headerCtrl);
-    headerCtrl.$inject = ['$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory'];
+    headerCtrl.$inject = ['SyncService','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory'];
 }());

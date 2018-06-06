@@ -265,9 +265,9 @@
                 if(NetworkInformation.isOnline()==true){
                     ModuleService.saveAPIOnline().then(function(res){
                         console.log("confirm save vm.localfilemediaarray",vm.localfilemediaarray);
-                        vm.localfilemediaarray.map((a)=>{
+                        vm.localfilemediaarray.map(function(a){
                            vm.filetoserver(a);
-                        })
+                        });
                         console.log(res,'response data from assesmemr');
                         // ModuleService.fetchfulldata().then(function(){
                            
@@ -276,6 +276,7 @@
                     })
                 }
                 else{
+                    $cookieStore.put("ChangesBoolean", true);
                     $ionicPopup.alert({
                         title: 'No Internet',
                         template: 'You are Offline. Your data will sync once you are online'

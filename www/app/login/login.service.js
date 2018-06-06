@@ -28,7 +28,7 @@
                 console.log('api call json');
                 vm.url = 'json/job.json';
             }
-obj.sessionkey=$cookieStore.get('sessionkey');
+            obj.sessionkey=$cookieStore.get('sessionkey');
             vm.object=obj;
 
             return Request.post(vm.url,vm.object).then(function(resp) {

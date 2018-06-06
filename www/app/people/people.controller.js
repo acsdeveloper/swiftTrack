@@ -1,7 +1,7 @@
 (function() {
     // 'use strict';
 
-    function peopleCtrl($state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, reportService,$filter) {
+    function peopleCtrl(SyncService,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, reportService,$filter) {
         console.log('people coi=ntroller')
         var vm = this;
 
@@ -61,6 +61,9 @@
 
         }
         vm.confirmlogout = function(event) {
+            SyncService.logout().then(function(){
+                $state.go('login')
+            })
             event.preventDefault();
             event.stopPropagation();
             storageFactory.login(null);
@@ -69,7 +72,7 @@
             // localStorage.removeItem("first_name");
             // localStorage.removeItem("images");
             vm.logoutpopup = false;
-            $state.go('login')
+            
         }
         
         vm.reportvideoimagepdf = function(datatype,url)
@@ -102,7 +105,7 @@
 
     angular.module('swiftTrack.progressreport')
         .controller('peopleCtrl', peopleCtrl);
-    peopleCtrl.$inject = ['$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'reportService', '$filter'];
+    peopleCtrl.$inject = ['SyncService','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'reportService', '$filter'];
 
     
 
