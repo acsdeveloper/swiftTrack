@@ -564,7 +564,7 @@ section .panel-hdr .ind-labels {
 	width: auto;
 	min-height: 65px;
 	padding-left: 10px;
-	padding-right: 10px;
+	/* padding-right: 10px; */
 	border: 1px solid #fff;
 	overflow: hidden;
 	/*display: none;*/
@@ -1369,6 +1369,13 @@ body.locked-page {
 #galleryPDF .media-wrapper .remove-media {
 	color: #ccc;
 }
+
+#gallery,
+#galleryPDF
+{
+	height: 370px !important;
+}
+
 
 #gallery,
 #galleryPDF,

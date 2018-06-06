@@ -1,24 +1,3 @@
-<<<<<<< HEAD
-(function() {
-    'use strict';
-
-    angular.module('swiftTrack.signoffpage', ['ui.router'])
-        .config(['$stateProvider', function($stateProvider) {
-            $stateProvider
-               
-                .state('signoffpage', {
-                    url: '/signoff',
-                    templateUrl: 'app/people/signoff.html',
-                    controller: 'signoffCtrl',
-                    controllerAs: 'vm',
-                    cache: false,
-                    
-                })
-        }])
-
-
-}())
-=======
 (function() {
     'use strict';
 
@@ -48,4 +27,3 @@
 
 
 }())
->>>>>>> 7a559af5b185d2df101df4afb5706d26a15085c8

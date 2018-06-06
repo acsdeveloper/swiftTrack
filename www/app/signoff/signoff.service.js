@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-(function() {
-    function ModuleService(Pouchfactory,Request, Constants, $q) {
-        var vm = this;
-        vm.data = {};
-   
-   
-    }
-
-    angular.module('swiftTrack.signoffpage')
-        .service('ModuleService', ModuleService)
-    ModuleService.$inject = ['Pouchfactory','Request', 'Constants', '$q'];
-}())
-=======
 (function() {
     function signoffservice(Pouchfactory,Request, Constants, $q) {
         var vm = this;
@@ -94,4 +80,3 @@
         .service('SignoffService', signoffservice)
         signoffservice.$inject = ['Pouchfactory','Request', 'Constants', '$q'];
 }())
->>>>>>> 7a559af5b185d2df101df4afb5706d26a15085c8

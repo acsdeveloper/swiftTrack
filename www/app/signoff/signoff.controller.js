@@ -1,19 +1,3 @@
-<<<<<<< HEAD
-(function() {
-    // 'use strict';
-
-    function signoffCtrl($state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, reportService,$filter) {
-        console.log('signoff controller')
-        var vm = this;
-    }
-
-    angular.module('swiftTrack.signoffpage')
-        .controller('signoffCtrl', signoffCtrl);
-    peopleCtrl.$inject = ['$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'reportService', '$filter'];
-
-    
-
-=======
 (function() {
     // 'use strict';
 
@@ -143,5 +127,4 @@
 
     
 
->>>>>>> 7a559af5b185d2df101df4afb5706d26a15085c8
  }());

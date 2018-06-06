@@ -3,6 +3,7 @@
     function assessmentCtrl($ionicPopup,NetworkInformation,Constants,pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService,$filter) {
         //console.log("after ctrl");
         var vm = this;
+        vm.localfilemediaarray =[];
         vm.localDB = new PouchDB("Swifttrack", {
             revs_limit: 2
         });
@@ -219,13 +220,41 @@
             })
 
         }
+        vm.saveuploadpouch = function(data,doc_name){
+            return new Promise(function(resolve, reject) {
+                // Do async job
+                function detailedDocfunc(doc) {
+                    if(doc.val){
+                        data.map(function(v){
+                                doc.val.push(v)
+                        })
+                    }else{
+                        doc.value = data;
+                    }
+                    return doc;
+                }
+
+                vm.localDB.upsert(doc_name, detailedDocfunc).then(function() {
+                    resolve('success')
+                }).catch(function(err) {
+                    reject(err)
+                });
+            })
+
+        }
+
         vm.confirm_savesession = function(){
             vm.savefunction().then(function(){
                 console.log("asssessment ends");
                 console.log(NetworkInformation.isOnline(),"isonline")
+                vm.saveuploadpouch(vm.localfilemediaarray,'saveuploadfiles').then(function() {   
                 if(NetworkInformation.isOnline()==true){
                     ModuleService.saveAPIOnline().then(function(res){
-                        console.log(res,'response dasta from assesmemr');
+                        console.log("confirm save vm.localfilemediaarray",vm.localfilemediaarray);
+                        vm.localfilemediaarray.map((a)=>{
+                           vm.filetoserver(a);
+                        })
+                        console.log(res,'response data from assesmemr');
                         // ModuleService.fetchfulldata().then(function())
                         $state.go('dashboard');
                     })
@@ -239,6 +268,7 @@
                     });
                    
                 }
+            })
                 
                 
             })
@@ -532,6 +562,8 @@
            vm.finalarrpdfAuth=finalarrpdfAuth;
            vm.finalarrnotesAuth=finalarrnotesAuth;
            vm.finalarrquestionAuth=finalarrquestionAuth;
+
+           console.log(" vm.gallerycamArr", vm.gallerycamArr);
            
             
         //console.log(" vm.datapath", vm.datapath);
@@ -657,10 +689,15 @@
         }
 
 
-        vm.filetoserver = function()
+        vm.filetoserver = function(a)
         {
-            
-    
+            console.log(a);
+            var sourcepath = a;
+            var fname = sourcepath.substring(sourcepath.lastIndexOf('/')+1);
+            var ftypedum = fname.substring(fname.lastIndexOf('.')+1);
+            var ftype = ftypedum == 'mp4' ? 'video/mp4': ftypedum == 'jpeg' || ftypedum == 'jpg' ? 'image/jpeg' : ftypedum == 'pdf' ? "application/pdf":'' ;
+           
+            console.log("file type",ftypedum);
             var win = function (r) {
                 console.log("*****win function r",r);
                 //console.log("Code = " + r.responseCode);
@@ -676,11 +713,10 @@
             }
 
             var options = new FileUploadOptions();
-            options.fileKey = "file";
-            options.fileName =name; 
+            options.fileKey = fname;
+            options.fileName =fname; 
             options.mimeType = ftype;
-            //console.log("option obj",options);
-            //console.log("targetPath",targetPath);
+            
             var params = {};
             params.value1 = "test";
             params.value2 = "param";
@@ -690,7 +726,7 @@
                 var encodeuri="https://swifttrack-agilexcyber.c9users.io/swiftMobile/api/uploadFiles.php";
                 //console.log("encodeuri",encodeuri);
                 var ft = new FileTransfer();
-                ft.upload(targetPath, encodeURI(encodeuri),win,fail,options);
+                ft.upload(sourcepath, encodeURI(encodeuri),win,fail,options);
       
         }
 
@@ -701,6 +737,7 @@
                 function fcSuccess(file){
                     vm.filename=file.name;
                     vm.movefile(file.uri,file.name,file.mime_type,datatype);
+                    console.log(" from filechooser",file.mime_type);
                     },
                   function fcError(e){console.log(e);}
            );   
@@ -708,6 +745,9 @@
             }
             vm.movefile=function(uri,name,ftype,datatype){
                 var filename;
+                
+                console.log("movefile uri",uri);
+                console.log("movefile name",name);
                 
                 var type=name.split('.')[name.split('.').length-1];
                 //console.log(datatype,type,name)
@@ -725,27 +765,41 @@
                 var ft = new FileTransfer();
                 var time = new Date();
                 var newfilename=name.split('.')[name.split('.').length-1]+'_'+time.getTime()+'.'+name.split('.')[name.split('.').length-1]
+
+                console.log("newfilename ",newfilename);
                 var targetPath = cordova.file.externalApplicationStorageDirectory +"files/" + newfilename;
                 vm.videolocallocation = targetPath;
+                console.log("file download success uri",uri);
+                console.log("file download success targetPath",targetPath);
                 ft.download(uri,targetPath,downloadsuccess,downloadfailed)
                     function downloadsuccess(entry) {
 
+
+
+                       
+                        vm.localfilemediaarray.push(targetPath);
+                        // console.log("file download success uri",uri);
+                        // console.log("file download success targetPath",targetPath);
+                        console.log(" vm.localfilearray check array", vm.localfilearray);
+                        
+                        
+                        
                         var evidence=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value;
 
-                        angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value=evidence==''?name:evidence+','+name;
+                        angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value=evidence==''?newfilename:evidence+','+newfilename;
                         
                         var evidenceid=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev-ids'].value;
                         angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev-ids'].value=evidenceid==''?'new':evidenceid+',new';
                         // angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-auth'].value+=','+vm.currentUser;
                        if(datatype =='cam'){
-                        vm.gallerycamArr.push(name);
+                        vm.gallerycamArr.push(newfilename);
                         vm.finalarrcamEv_id.push('new')
                         angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'').removeClass("hidden");
                        }
                        else{
                            console.log("$$$$$$pdf");
                         vm.finalarrpdfAuth.push(vm.currentUser);
-                        vm.gallerypdfArr.push(name);
+                        vm.gallerypdfArr.push(newfilename);
                         vm.finalarrpdfEv_id.push('new')
                         angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'').removeClass("hidden");
                        }
@@ -764,7 +818,7 @@
                 
                     }
                     function downloadfailed(error){
-                        //console.log(error,error.code)
+                        console.log(error,error.code)
                     }
                 // ##########################################
                     // file upload to server 
@@ -813,6 +867,7 @@
 
         vm.assessvideoplay = function(filetype,value)
         {
+            console.log(" assessvideoplay function value ",value);
             angular.element('.del-media').addClass('ng-hide');
             vm.videolocallocation = value;
             //console.log("assess video function");
@@ -852,16 +907,27 @@
             console.log("deletemedia angular element", angular.element($event.target).parent().children('.del-media'));
             console.log(" angular.element($event.target).parent().children('.del-media').removeClass('ng-hide')");
             angular.element($event.target).parent().children('.del-media').removeClass('ng-hide');
+           
+            
             console.log("question remove media");
-            //console.log("media remove function i",i);
-            //console.log("media remove function value",value);
+            console.log("media remove function i",i);
+            console.log("media remove function value",value);
             console.log("media remove function event",$event);
         
         }
         vm.deleteconf = function(type,i,value,$event)
         {
-            //console.log(type,i,value,$event,"type-----");
+            console.log(type,i,value,$event,"type-----");
             //console.log("vm.gallerynotesArr",vm.gallerynotesArr);
+             vm.localfilemediaarray.map(function(a){
+             var fileurl = cordova.file.externalApplicationStorageDirectory +"files/"+value; 
+            if(a == fileurl){
+                vm.localfilemediaarray.splice(fileurl,1);
+                console.log(" deleted fileurl ",fileurl);
+                console.log(" array ",vm.localfilemediaarray);
+            }
+        })
+
             angular.element('.del-media').addClass('ng-hide');
 
             if(type == 'cam'){
