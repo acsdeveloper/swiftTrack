@@ -9,6 +9,7 @@
             userId = null,
             signoffdata=null,
             changesinsignoff=null,
+            changesBoolean=null,
             dashboarddetailsresponse = null;
 
 
@@ -68,6 +69,12 @@
             },
             setchangessignoff:function(data){
                 changesinsignoff=data
+            },
+            getChangesBoolean:function(){
+                return changesBoolean;
+            },
+            setChangesBoolean:function(data){
+                changesBoolean=data;
             },
             clearAllStorage: function() {
                 loginValue = null;

@@ -1,5 +1,5 @@
 (function() {
-    function ModuleService(Pouchfactory,Request, Constants, $q,$cookieStore) {
+    function SyncService(Pouchfactory,Request, Constants, $q,$cookieStore) {
         var vm = this;
         vm.data = {};
 
@@ -20,7 +20,7 @@
                 return vm.localDB.get('post_jsonobject').then(function(resp2){//--gettting pouch config data
                     console.log(resp2);
                     resp2.indicators=resp1.indicators;
-                    resp2.sessionkey=$cookieStore.get('sessionkey')
+                    resp2.sessionkey=$cookieStore.get('sessionkey');
                     return Request.post(vm.saveassessAPIurl, resp2).then(function(resp) {   //--sending assessment save data to server
                         SignoffService.sendsignoffdata().then(function(){           //sending signoff data
                             SignoffService.fetchfulldata().then(function(val){      //--fetching swifttrack full data
@@ -38,10 +38,56 @@
             })
             
         };
+        vm.logout=function(){
+            if (Constants.productionServer) {
+                vm.logoutUrl = Constants.baseUrl + '/swiftMobile/api/logout.php';
+            }
+            else {
+                console.log('api call json');
+                vm.url = 'json/job.json';
+            }
+           
+            return vm.localDB.get('post_jsonobject').then(function(postobj){
+                return vm.localDB.get('localdata').then(function(localobj){
+                    postobj['id']=localobj.id;
+                    postobj['sessionkey']=localobj.sessionkey;
+                    return Request.post(vm.logoutUrl, postobj).then(function(resp) {   //--sending assessment save data to server
+                        $cookieStore.remove('sessionkey');
+                        if(resp.status=='success'){
+                            vm.localDB.allDocs().then(function (result) {
+                                console.log(result)
+                                // Promise isn't supported by all browsers; you may want to use bluebird
+                                return Promise.all(result.rows.map(function (row) {
+                                  return vm.localDB.remove(row.id, row.value.rev);
+                                }));
+                              }).then(function () {
+                                  console.log('done')
+                                // done!
+                              }).catch(function (err) {
+                                  console.log(err)
+                                // error!
+                              });
+                            // vm.localDB.destroy().then(function (response) {
+                            //     console.log(response)
+                            //     // database destroyed
+                            //   }).catch(function (err) {
+                            //       console.log(err)
+                            //     // error occurred
+                            //   })
+                        }
+                        console.log(resp,"response from assessment service")
+                        vm.defered = $q.defer();
+                        vm.defered.resolve(resp);
+                        return vm.defered.promise;
+                    });
+                })
+                });
+    
+        }
        
     }
 
-    angular.module('swiftTrack.assessment')
-        .service('ModuleService', ModuleService)
-    ModuleService.$inject = ['Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
+    angular.module('swiftTrack.controllers')
+        .service('SyncService', SyncService)
+        SyncService.$inject = ['Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
 }())

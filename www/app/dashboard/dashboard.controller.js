@@ -1,7 +1,7 @@
 (function() {
     // 'use strict';
 
-    function statusCtrl(Loader, $timeout, $state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, dashboardService, $ionicPlatform) {
+    function statusCtrl(SyncService,Loader, $timeout, $state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, dashboardService, $ionicPlatform) {
 
         var vm = this;
         vm.init = function() {
@@ -171,6 +171,9 @@
         }
        
         vm.confirmlogout = function(event) {
+            SyncService.logout().then(function(){
+                $state.go('login')
+            })
             storageFactory.clearAllStorage()
             event.preventDefault();
             event.stopPropagation();
@@ -181,7 +184,7 @@
             // localStorage.removeItem("first_name");
             // localStorage.removeItem("images");
             vm.logoutpopup = false;
-            $state.go('login')
+           
         }
 
     }
@@ -192,5 +195,5 @@
 
     angular.module('swiftTrack.dashboard')
         .controller('dashboardCtrl', statusCtrl);
-    statusCtrl.$inject = ['Loader', '$timeout', '$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'dashboardService', '$ionicPlatform'];
+    statusCtrl.$inject = ['SyncService','Loader', '$timeout', '$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'dashboardService', '$ionicPlatform'];
 }());

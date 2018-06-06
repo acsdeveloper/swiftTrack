@@ -1,5 +1,5 @@
 (function() {
-    function signoffservice(Pouchfactory,Request, Constants, $q,$cookieStore) {
+    function signoffservice(downloadfileService,Pouchfactory,Request, Constants, $q,$cookieStore) {
         var vm = this;
         vm.localDB = new PouchDB("Swifttrack", {
             revs_limit: 2
@@ -16,6 +16,9 @@
             });
         }
         vm.sendsignoffdata=function(){
+            vm.localDB = new PouchDB("Swifttrack", {
+                revs_limit: 2
+            });
             if (Constants.productionServer) {
                 vm.url = Constants.baseUrl + '/swiftMobile/api/signOff.php';
             }
@@ -36,6 +39,9 @@
 
         vm.putDataPouch = function(data){
             return new Promise(function(resolve, reject) {
+                vm.localDB = new PouchDB("Swifttrack", {
+                    revs_limit: 2
+                });
                 // Do async job
                 function detailedDocfunc(doc) {
                     doc = data;
@@ -67,6 +73,7 @@
                  console.log(data);
                  data.sessionkey=$cookieStore.get('sessionkey');
                 return Request.post(vm.url,data).then(function(resp) {
+                    downloadfileService.assessmentmediadownload(resp)
                     console.log(resp)
                     vm.defered = $q.defer();
                     vm.defered.resolve(resp);
@@ -80,5 +87,5 @@
 
     angular.module('swiftTrack.signoff')
         .service('SignoffService', signoffservice)
-        signoffservice.$inject = ['Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
+        signoffservice.$inject = ['downloadfileService','Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
 }())

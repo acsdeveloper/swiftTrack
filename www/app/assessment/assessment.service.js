@@ -1,5 +1,5 @@
 (function() {
-    function ModuleService(Pouchfactory,Request, Constants, $q,$cookieStore) {
+    function ModuleService(downloadfileService,Pouchfactory,Request, Constants, $q,$cookieStore) {
         var vm = this;
         vm.data = {};
 
@@ -7,7 +7,9 @@
             revs_limit: 2
         });
         vm.saveAPIOnline = function() {
-
+            vm.localDB = new PouchDB("Swifttrack", {
+                revs_limit: 2
+            });
             if (Constants.productionServer) {
                 vm.url = Constants.baseUrl + '/swiftMobile/api/save-session-data.php';
             }
@@ -30,6 +32,31 @@
                 });
             })
             
+        };
+        vm.fetchfulldata = function() {
+            if (Constants.productionServer) {
+                vm.url = Constants.baseUrl + '/swiftMobile/api/swiftTrackAll.php';
+            }
+            else {
+                console.log('api call json');
+                vm.url = 'json/job.json';
+            }
+            vm.docname ='post_jsonobject';
+            vm.data=''
+            // vm.object=obj;
+
+             return Pouchfactory.get(vm.docname,vm.data).then(function(data) {
+                 console.log(data);
+                 data.sessionkey=$cookieStore.get('sessionkey');
+                return Request.post(vm.url,data).then(function(resp) {
+                    downloadfileService.assessmentmediadownload(resp);
+                    console.log(resp)
+                    vm.defered = $q.defer();
+                    vm.defered.resolve(resp);
+                    return vm.defered.promise;
+                });
+
+            });
         };
         vm.ModuledetailsPouch = function(obj) {
             if (Constants.productionServer) {
@@ -97,5 +124,5 @@
 
     angular.module('swiftTrack.assessment')
         .service('ModuleService', ModuleService)
-    ModuleService.$inject = ['Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
+    ModuleService.$inject = ['downloadfileService','Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
 }())
