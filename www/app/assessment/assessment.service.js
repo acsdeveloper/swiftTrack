@@ -1,5 +1,5 @@
 (function() {
-    function ModuleService(downloadfileService,Pouchfactory,Request, Constants, $q,$cookieStore) {
+    function ModuleService(Loader,downloadfileService,Pouchfactory,Request, Constants, $q,$cookieStore) {
         var vm = this;
         vm.data = {};
 
@@ -23,7 +23,9 @@
                     console.log(resp2);
                     resp2.indicators=resp1.indicators;
                     resp2.sessionkey=$cookieStore.get('sessionkey')
+                    Loader.startLoading();
                     return Request.post(vm.url, resp2).then(function(resp) {
+                        Loader.stopLoading();
                         console.log(resp,"response from assessment service")
                         vm.defered = $q.defer();
                         vm.defered.resolve(resp);
@@ -34,6 +36,7 @@
             
         };
         vm.fetchfulldata = function() {
+            
             if (Constants.productionServer) {
                 vm.url = Constants.baseUrl + '/swiftMobile/api/swiftTrackAll.php';
             }
@@ -48,7 +51,9 @@
              return Pouchfactory.get(vm.docname,vm.data).then(function(data) {
                  console.log(data);
                  data.sessionkey=$cookieStore.get('sessionkey');
+                 Loader.startLoading();
                 return Request.post(vm.url,data).then(function(resp) {
+                    Loader.stopLoading();
                     downloadfileService.assessmentmediadownload(resp);
                     console.log(resp)
                     vm.defered = $q.defer();
@@ -124,5 +129,5 @@
 
     angular.module('swiftTrack.assessment')
         .service('ModuleService', ModuleService)
-    ModuleService.$inject = ['downloadfileService','Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
+    ModuleService.$inject = ['Loader','downloadfileService','Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
 }())

@@ -24,7 +24,7 @@
 
         ])
 
-        .run(function($cookieStore,SyncService,storageFactory,SignoffService,$ionicPlatform, $ionicHistory, $rootScope, $state, $ionicNavBarDelegate,$cordovaNetwork) {
+        .run(function(Loader,$interval,$cookieStore,SyncService,storageFactory,SignoffService,$ionicPlatform, $ionicHistory, $rootScope, $state, $ionicNavBarDelegate,$cordovaNetwork) {
             $ionicPlatform.ready(function() {
 
 
@@ -76,7 +76,9 @@
                     // storageFactory.setdeviceOnline(true);
                     // $cookieStore.put("ChangesBoolean", true);
                     if($cookieStore.get('ChangesBoolean') && $cookieStore.get('sessionkey')){
+                        // Loader.startLoading();
                         SyncService.saveAPIOnline().then(function(){
+                            Loader.stopLoading();
                             $cookieStore.put("ChangesBoolean", false);
                         })
 
@@ -91,9 +93,14 @@
                     // Handle the online event
                 }
                 //sync code end
+                $interval(function () {
+                    onOnline();
+                }, 300000);
                 if($cordovaNetwork.isOnline()){
+                    Loader.startLoading();
                     onOnline();
                 }
+                //300000
                 console.log(navigator.connection.type)
                 // if (window.cordova && cordovaPlugin.Keyboard) {
                 //     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -117,7 +124,7 @@
                         ionic.Platform.exitApp();
                     }
                     else if ("app.assessment" === $ionicHistory.currentStateName() || "app.progressreport" === $ionicHistory.currentStateName()) {
-                        console.log('get asses')
+                        // console.log('get asses')
                         $ionicNavBarDelegate.showBackButton(true);
                         $ionicHistory.nextViewOptions({
                             disableBack: true
@@ -127,8 +134,9 @@
                         $ionicHistory.clearCache();
                     }
                     else if("signoff"==$ionicHistory.currentStateName()){
-                        console.log($cordovaNetwork.isOnline(),"locatopnmj")
+                        // console.log($cordovaNetwork.isOnline(),"locatopnmj")
                         if($cordovaNetwork.isOnline()==true && storageFactory.getchangessignoff()){
+
                             SignoffService.fetchfulldata().then(function(val){
                                     $ionicHistory.goBack();
                                 SignoffService.putDataPouch(val).then(function(){
@@ -147,7 +155,7 @@
                 };
                 $ionicPlatform.registerBackButtonAction(handleBackButton, 999);
                 $rootScope.$ionicGoBack = function() {
-                    console.log('back ionic')
+                    // console.log('back ionic')
                     handleBackButton();
                 };
             });
@@ -172,7 +180,7 @@
                 link: function(scope, element, attrs) {
                     var model = $parse(attrs.focusMe);
                     scope.$watch(model, function(value) {
-                        console.log('value=', value);
+                        // console.log('value=', value);
                         $timeout(function() {
                             element[0].focus();
                         });
@@ -193,14 +201,14 @@
 
         .filter('trusted', ['$sce', function ($sce) {
             return function(url) {
-                console.log("filterrrrrrr",url);
+                // console.log("filterrrrrrr",url);
                return $sce.trustAsResourceUrl(url);
             };
         }])
 
         .filter('filefilter', function($filter) {
             return function (item) {
-                console.log(item)
+                // console.log(item)
                 if(item && item!=undefined){
                     var targetPath = cordova.file.externalApplicationStorageDirectory +"files/";
                     var filename = item.substring(item.lastIndexOf('/')+1);
@@ -212,7 +220,7 @@
 
         .filter('prof_imag_filter', function($filter) {
             return function (item) {
-                console.log(item)
+                // console.log(item)
                 if(item && item!=undefined){
                     var targetPath = cordova.file.externalApplicationStorageDirectory +"files/";
                     var filename = item.substring(item.lastIndexOf('/')+1);

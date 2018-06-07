@@ -1,15 +1,17 @@
 (function() {
-    function downloadfileService(Pouchfactory, Request, Constants, $q, $cookieStore,storageFactory) {
+    function downloadfileService(storageFactory,Pouchfactory, Request, Constants, $q, $cookieStore) {
         var vm = this;
 
         vm.assessmentmediadownload = function(response) {
             var furl = storageFactory.getuserdetails().images;
+
             var fn = furl.substring(furl.lastIndexOf('/')+1);
             var encodurl = encodeURI(furl); 
+            //console.log(furl,fn)
             vm.downloadImage( furl,fn);
                 var reportpage = response.report;
                 Object.keys(reportpage).map(function(key, index) {
-                    console.log(reportpage[key].image);
+                    //console.log(reportpage[key].image);
                     var mediafullurl = reportpage[key].image;
                     var filename = mediafullurl.substring(mediafullurl.lastIndexOf('/')+1);
                     var encodedmediaurl = encodeURI(mediafullurl); 
@@ -53,7 +55,8 @@
             })
         }
         vm.mediares = function(a) {
-            var comfileurl = "https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r" + a;
+            var name=a.split('/')[a.split('/').length-1];
+            var comfileurl = "https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/" + name;
             var encodedmediaurl = encodeURI(comfileurl);
             var filename = comfileurl.substring(comfileurl.lastIndexOf('/') + 1);
             vm.downloadImage(encodedmediaurl, filename);
@@ -68,21 +71,21 @@
             window.resolveLocalFileSystemURL(path + filename, onSuccess, onFail);
 
             function onSuccess() {
-                console.log(" This file exists");
+                //console.log(" This file exists");
             }
 
             function onFail() {
                 ft.download(uri, targetPath, function(entry) {
-                        console.log(entry);
-                        console.log("download complete: " + entry.fullPath);
+                        //console.log(entry);
+                        //console.log("download complete: " + entry.fullPath);
                     },
                     function(error) {
-                        console.log("error");
-                        console.log(error);
-                        console.log("download error" + error.code);
+                        //console.log("error");
+                        //console.log(error);
+                        //console.log("download error" + error.code);
                     }
                 );
-                console.log('----------Sorry! File not Found');
+                //console.log('----------Sorry! File not Found');
             }
 
         }
@@ -90,5 +93,5 @@
 
     angular.module('swiftTrack.controllers')
         .service('downloadfileService', downloadfileService)
-        downloadfileService.$inject = ['Pouchfactory', 'Request', 'Constants', '$q', '$cookieStore',"storageFactory"];
+        downloadfileService.$inject = ['storageFactory','Pouchfactory', 'Request', 'Constants', '$q', '$cookieStore'];
 }())

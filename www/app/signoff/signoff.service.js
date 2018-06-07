@@ -1,5 +1,5 @@
 (function() {
-    function signoffservice(downloadfileService,Pouchfactory,Request, Constants, $q,$cookieStore) {
+    function signoffservice(Loader,downloadfileService,Pouchfactory,Request, Constants, $q,$cookieStore) {
         var vm = this;
         vm.localDB = new PouchDB("Swifttrack", {
             revs_limit: 2
@@ -23,13 +23,14 @@
                 vm.url = Constants.baseUrl + '/swiftMobile/api/signOff.php';
             }
             else {
-                console.log('api call json');
+                //console.log('api call json');
                 vm.url = 'json/job.json';
             }
-
+            Loader.startLoading();
             return vm.localDB.get('signoffdata').then(function(data){
                 data.sessionkey=$cookieStore.get('sessionkey')
                 return Request.post(vm.url, data).then(function(resp) {
+                    Loader.stopLoading();
                     vm.defered = $q.defer();
                     vm.defered.resolve(resp);
                     return vm.defered.promise;
@@ -62,19 +63,22 @@
                 vm.url = Constants.baseUrl + '/swiftMobile/api/swiftTrackAll.php';
             }
             else {
-                console.log('api call json');
+                //console.log('api call json');
                 vm.url = 'json/job.json';
             }
             vm.docname ='post_jsonobject';
             vm.data=''
             // vm.object=obj;
-
+           
              return Pouchfactory.get(vm.docname,vm.data).then(function(data) {
-                 console.log(data);
+                 //console.log(data);
                  data.sessionkey=$cookieStore.get('sessionkey');
+                 Loader.startLoading();
                 return Request.post(vm.url,data).then(function(resp) {
-                    downloadfileService.assessmentmediadownload(resp)
                     console.log(resp)
+                    Loader.stopLoading();
+                    downloadfileService.assessmentmediadownload(resp)
+                    //console.log(resp)
                     vm.defered = $q.defer();
                     vm.defered.resolve(resp);
                     return vm.defered.promise;
@@ -87,5 +91,5 @@
 
     angular.module('swiftTrack.signoff')
         .service('SignoffService', signoffservice)
-        signoffservice.$inject = ['downloadfileService','Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
+        signoffservice.$inject = ['Loader','downloadfileService','Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
 }())
