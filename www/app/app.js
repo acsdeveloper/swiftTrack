@@ -24,41 +24,53 @@
 
         ])
 
-        .run(function(Loader,$interval,$cookieStore,SyncService,storageFactory,SignoffService,$ionicPlatform, $ionicHistory, $rootScope, $state, $ionicNavBarDelegate,$cordovaNetwork) {
+        .run(function($ionicPopup,Loader,$interval,$cookieStore,SyncService,storageFactory,SignoffService,$ionicPlatform, $ionicHistory, $rootScope, $state, $ionicNavBarDelegate,$cordovaNetwork) {
             $ionicPlatform.ready(function() {
-
-
-                $rootScope.checkPermission = function() {
-                    setLocationPermission = function() {
-                      cordova.plugins.diagnostic.requestLocationAuthorization(function(status) {
-                        switch (status) {
-                          case cordova.plugins.diagnostic.permissionStatus.NOT_REQUESTED:
-                            break;
-                          case cordova.plugins.diagnostic.permissionStatus.DENIED:
-                            break;
-                          case cordova.plugins.diagnostic.permissionStatus.GRANTED:
-                            break;
-                          case cordova.plugins.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
-                            break;
-                        }
-                      }, function(error) {}, cordova.plugins.diagnostic.locationAuthorizationMode.ALWAYS);
-                    };
-                    cordova.plugins.diagnostic.getPermissionAuthorizationStatus(function(status) {
-                      switch (status) {
-                        case cordova.plugins.diagnostic.runtimePermissionStatus.GRANTED:
-                          break;
-                        case cordova.plugins.diagnostic.runtimePermissionStatus.NOT_REQUESTED:
-                          setLocationPermission();
-                          break;
-                        case cordova.plugins.diagnostic.runtimePermissionStatus.DENIED:
-                          setLocationPermission();
-                          break;
-                        case cordova.plugins.diagnostic.runtimePermissionStatus.DENIED_ALWAYS:
-                          setLocationPermission();
-                          break;
-                      }
-                    }, function(error) {}, cordova.plugins.diagnostic.runtimePermission.ACCESS_COARSE_LOCATION);
-                  };
+                cordova.exec(win, fail, "File", "getFreeDiskSpace", []);
+                function win(freeSpace){
+                     if(freeSpace<1000000){
+                        $ionicPopup.alert({
+                            title: 'Low space',
+                            template: 'Please Free up some space and come back'
+                        }).then(function(res) {
+                            ionic.Platform.exitApp();
+                        });
+                    }
+                }
+                function fail(err){
+                    console.log(err)
+                }
+                // $rootScope.checkPermission = function() {
+                //     setLocationPermission = function() {
+                //       cordova.plugins.diagnostic.requestLocationAuthorization(function(status) {
+                //         switch (status) {
+                //           case cordova.plugins.diagnostic.permissionStatus.NOT_REQUESTED:
+                //             break;
+                //           case cordova.plugins.diagnostic.permissionStatus.DENIED:
+                //             break;
+                //           case cordova.plugins.diagnostic.permissionStatus.GRANTED:
+                //             break;
+                //           case cordova.plugins.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+                //             break;
+                //         }
+                //       }, function(error) {}, cordova.plugins.diagnostic.locationAuthorizationMode.ALWAYS);
+                //     };
+                //     cordova.plugins.diagnostic.getPermissionAuthorizationStatus(function(status) {
+                //       switch (status) {
+                //         case cordova.plugins.diagnostic.runtimePermissionStatus.GRANTED:
+                //           break;
+                //         case cordova.plugins.diagnostic.runtimePermissionStatus.NOT_REQUESTED:
+                //           setLocationPermission();
+                //           break;
+                //         case cordova.plugins.diagnostic.runtimePermissionStatus.DENIED:
+                //           setLocationPermission();
+                //           break;
+                //         case cordova.plugins.diagnostic.runtimePermissionStatus.DENIED_ALWAYS:
+                //           setLocationPermission();
+                //           break;
+                //       }
+                //     }, function(error) {}, cordova.plugins.diagnostic.runtimePermission.ACCESS_COARSE_LOCATION);
+                //   };
 
                 //sync code start 
                 document.addEventListener("offline", onOffline, false);
@@ -83,9 +95,11 @@
                         })
 
                     }else{
+                        console.log("5mins sync")
+                        Loader.stopLoading();
                         SignoffService.fetchfulldata().then(function(val){      //--fetching swifttrack full data
                             SignoffService.putDataPouch(val).then(function(){   //--saving full data in detailed document in pouch
-                                Loader.stopLoading();
+                                
                             })
                         })
                     }
@@ -95,7 +109,7 @@
                 //sync code end
                 $interval(function () {
                     onOnline();
-                }, 300000);
+                }, 60000);
                 if($cordovaNetwork.isOnline()){
                     Loader.startLoading();
                     onOnline();

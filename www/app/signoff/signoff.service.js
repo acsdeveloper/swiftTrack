@@ -1,5 +1,5 @@
 (function() {
-    function signoffservice(Loader,downloadfileService,Pouchfactory,Request, Constants, $q,$cookieStore) {
+    function signoffservice(LoginService,Loader,downloadfileService,Pouchfactory,Request, Constants, $q,$cookieStore) {
         var vm = this;
         vm.localDB = new PouchDB("Swifttrack", {
             revs_limit: 2
@@ -73,15 +73,18 @@
              return Pouchfactory.get(vm.docname,vm.data).then(function(data) {
                  //console.log(data);
                  data.sessionkey=$cookieStore.get('sessionkey');
-                 Loader.startLoading();
+                //  Loader.startLoading();
                 return Request.post(vm.url,data).then(function(resp) {
-                    console.log(resp)
-                    Loader.stopLoading();
-                    downloadfileService.assessmentmediadownload(resp)
-                    //console.log(resp)
-                    vm.defered = $q.defer();
-                    vm.defered.resolve(resp);
-                    return vm.defered.promise;
+                    return LoginService.putDataPouch(resp,'detailed_document').then(function(){
+                        console.log(resp)
+                        // Loader.stopLoading();
+                        downloadfileService.assessmentmediadownload(resp)
+                        //console.log(resp)
+                        vm.defered = $q.defer();
+                        vm.defered.resolve(resp);
+                        return vm.defered.promise;
+                    })
+ 
                 });
 
             });
@@ -91,5 +94,5 @@
 
     angular.module('swiftTrack.signoff')
         .service('SignoffService', signoffservice)
-        signoffservice.$inject = ['Loader','downloadfileService','Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
+        signoffservice.$inject = ['LoginService','Loader','downloadfileService','Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
 }())

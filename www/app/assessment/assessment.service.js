@@ -1,5 +1,5 @@
 (function() {
-    function ModuleService(Loader,downloadfileService,Pouchfactory,Request, Constants, $q,$cookieStore) {
+    function ModuleService(LoginService,Loader,downloadfileService,Pouchfactory,Request, Constants, $q,$cookieStore) {
         var vm = this;
         vm.data = {};
 
@@ -53,12 +53,15 @@
                  data.sessionkey=$cookieStore.get('sessionkey');
                  Loader.startLoading();
                 return Request.post(vm.url,data).then(function(resp) {
+                    return LoginService.putDataPouch(resp,'detailed_document').then(function(){
                     Loader.stopLoading();
                     downloadfileService.assessmentmediadownload(resp);
                     console.log(resp)
                     vm.defered = $q.defer();
                     vm.defered.resolve(resp);
                     return vm.defered.promise;
+
+                    });
                 });
 
             });
@@ -129,5 +132,5 @@
 
     angular.module('swiftTrack.assessment')
         .service('ModuleService', ModuleService)
-    ModuleService.$inject = ['Loader','downloadfileService','Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
+    ModuleService.$inject = ['LoginService','Loader','downloadfileService','Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
 }())

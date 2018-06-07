@@ -19,6 +19,7 @@
             ModuleService.LocaldatadetailsPouch().then(function(response){
                 vm.localdatadetails=response;
                 vm.jobroleandmod = storageFactory.getJobAndMod();
+                console.log(vm.jobroleandmod,"job role and comp id");
             vm.currentUser=vm.localdatadetails.username;
             ModuleService.ModuledetailsPouch(vm.jobroleandmod).then(function(resp) {
                 //console.log(resp,"assessment controller response");
