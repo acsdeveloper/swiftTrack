@@ -100,6 +100,8 @@
                     Loader.startLoading();
                     onOnline();
                 }
+
+                //test ad
                 //300000
                 console.log(navigator.connection.type)
                 // if (window.cordova && cordovaPlugin.Keyboard) {
