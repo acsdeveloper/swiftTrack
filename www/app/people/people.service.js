@@ -1,5 +1,5 @@
 (function() {
-    function reportService(Pouchfactory,Request, Constants, $q) {
+    function reportService(Loader,Pouchfactory,Request, Constants, $q) {
         var vm = this;
         vm.data = {};
 
@@ -13,8 +13,9 @@
                 vm.url = 'json/job.json';
             }
             vm.object = obj;
-
+            Loader.startLoading();
             return Request.post(vm.url, vm.object).then(function(resp) {
+                Loader.stopLoading();
                 vm.defered = $q.defer();
                 vm.defered.resolve(resp);
                 return vm.defered.promise;
@@ -62,5 +63,5 @@
 
     angular.module('swiftTrack.progressreport')
         .service('reportService', reportService)
-    reportService.$inject = ['Pouchfactory','Request', 'Constants', '$q'];
+    reportService.$inject = ['Loader','Pouchfactory','Request', 'Constants', '$q'];
 }())

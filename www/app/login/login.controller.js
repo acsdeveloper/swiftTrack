@@ -10,7 +10,7 @@
         });
         if (storageFactory.islogin()) {
             // vm.localDB.get('detailed_document').then(function (doc) {
-            //     console.log("pouchdb document",doc);
+            //     //console.log("pouchdb document",doc);
             // });
             $state.go('dashboard')
             return;
@@ -34,20 +34,20 @@
                 vm.object["org"] = vm.organisation;
                 vm.object["username"] = vm.username;
                 vm.object["password"] = vm.password;
-                console.log(vm.object, "ref length");
+                //console.log(vm.object, "ref length");
                 // vm.showloader = true;
                 vm.localDB = new PouchDB("Swifttrack", {
                     revs_limit: 2
                 });
                 LoginService.loginAjax(vm.object).then(function(resp) {
 
-                    console.log(resp)
-                    // console.log("ttrr", resp, typeof resp, resp.length, Array.isArray(resp))
+                    //console.log(resp)
+                    // //console.log("ttrr", resp, typeof resp, resp.length, Array.isArray(resp))
                     if (resp.status == "success") {
                         // storageFactory.putService(resp);
                         storageFactory.login(true)
                         storageFactory.setuserdetails(resp.result[Object.keys(resp.result)]);
-                        console.log(storageFactory.getuserdetails())
+                        //console.log(storageFactory.getuserdetails())
                         $cookieStore.put('loginAuth', true);
                         $cookieStore.put('sessionkey', resp.result[Object.keys(resp.result)].sessionkey);
                         localStorage.setItem("loginAuth", true);
@@ -73,14 +73,14 @@
             }
         }
         vm.fetchfulldataAPI = function(resp) {
-            console.log(resp, "resp")
+            //console.log(resp, "resp")
             vm.obj = {};
             vm.obj.org_usr = vm.object["org"];
             vm.obj.login_user = resp.result[Object.keys(resp.result)].username;
             vm.obj.login_type = Object.keys(resp.result)[0];
             vm.putDataPouch(vm.obj, 'post_jsonobject').then(function() {
                 LoginService.fetchfulldata(vm.obj).then(function(resp) {
-                    console.log("*********full response",resp);
+                    //console.log("*********full response",resp);
                     downloadfileService.assessmentmediadownload(resp)
                     vm.putDataPouch(resp, 'detailed_document').then(function() {
                         $state.go('dashboard')
@@ -89,32 +89,32 @@
             })
         }
     //     vm.assessmentmediadownload = function(response) {
-    //         console.log("*********** assess userImageUrl",storageFactory.getuserdetails());
-    //         console.log("*********** assess userImageUrl",storageFactory.getuserdetails().images);
+    //         //console.log("*********** assess userImageUrl",storageFactory.getuserdetails());
+    //         //console.log("*********** assess userImageUrl",storageFactory.getuserdetails().images);
     //         var furl = storageFactory.getuserdetails().images;
     //         var fn = furl.substring(furl.lastIndexOf('/')+1);
     //         var encodurl = encodeURI(furl); 
     //         vm.downloadImage( furl,fn);
     //             var reportpage = response.report;
     //             Object.keys(reportpage).map(function(key, index) {
-    //                 console.log(reportpage[key].image);
+    //                 //console.log(reportpage[key].image);
     //                 var mediafullurl = reportpage[key].image;
     //                 var filename = mediafullurl.substring(mediafullurl.lastIndexOf('/')+1);
     //                 var encodedmediaurl = encodeURI(mediafullurl); 
     //                 vm.downloadImage(encodedmediaurl,filename);
     //             })
-    //             console.log("assessment media reportpage respo",reportpage);
+    //             //console.log("assessment media reportpage respo",reportpage);
     //             var resourcesection = response.assessment[Object.keys(response.assessment)[0]][Object.keys(response.assessment[Object.keys(response.assessment)[0]])[0]].resources;
     //             Object.keys(resourcesection).map(function(key, index) {
     //             Object.keys(resourcesection[key].resource_sections).map(function(key1, index1) {
     //             var mediafullurl = resourcesection[key].resource_sections[key1].item_media;
     //             var filename = mediafullurl.substring(mediafullurl.lastIndexOf('/')+1);
     //             vm.downloadImage(mediafullurl,filename)
-    //             // console.log("filename testing",filename);
+    //             // //console.log("filename testing",filename);
     //         })
     //             })
             
-    //         // console.log("myresources section for loop",resourcesection);
+    //         // //console.log("myresources section for loop",resourcesection);
     //             Object.keys(response.assessment).map(function(key, index) {
     //             Object.keys(response.assessment[key]).map(function(key1, index1) {
     //             Object.keys(response.assessment[key][key1]).map(function(key2, index2) {
@@ -156,7 +156,7 @@
 
     //  vm.mediares = function(a)
     //     {
-    //         console.log("mediapeople------------",a);
+    //         //console.log("mediapeople------------",a);
     //         var comfileurl = "https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r"+a;
     //         var encodedmediaurl = encodeURI(comfileurl); 
     //         var filename = comfileurl.substring(comfileurl.lastIndexOf('/')+1);
@@ -174,20 +174,20 @@
     //         var filename = name;
     //         window.resolveLocalFileSystemURL(path + filename, onSuccess, onFail);
     //         function onSuccess() {
-    //             console.log("------------Great! This file exists");
+    //             //console.log("------------Great! This file exists");
     //                             }
     //         function onFail() {
     //                 ft.download(uri,targetPath,function(entry) {
-    //                     console.log(entry);
-    //                     console.log("download complete: " + entry.fullPath);
+    //                     //console.log(entry);
+    //                     //console.log("download complete: " + entry.fullPath);
     //                 },
     //                 function(error) {
-    //                     console.log("error");
-    //                     console.log(error);
-    //                     console.log("download error" + error.code);
+    //                     //console.log("error");
+    //                     //console.log(error);
+    //                     //console.log("download error" + error.code);
     //                 }
     //             );
-    //                 console.log('----------Sorry! File not Found');
+    //                 //console.log('----------Sorry! File not Found');
     //             }    
 
     //     }

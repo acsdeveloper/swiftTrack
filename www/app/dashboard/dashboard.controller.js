@@ -4,8 +4,10 @@
     function statusCtrl(SyncService,Loader, $timeout, $state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, dashboardService, $ionicPlatform) {
 
         var vm = this;
+        Loader.startLoading();
         vm.init = function() {
             dashboardService.LocaldatadetailsPouch().then(function(resp){
+                // Loader.stopLoading();
                 vm.localdatadetails=resp;
             })
 
@@ -13,7 +15,7 @@
                 $state.go('login')
                 return;
             }
-            Loader.startLoading();
+           
 
             vm.usrNotBar = true;
             vm.logoutpopup = false;
@@ -23,7 +25,7 @@
         vm.init();
 
         vm.goSignofPage = function(data){
-            console.log(data)
+            // console.log(data)
             storageFactory.setSignoffData(data);
             $state.go('signoff')
         }
@@ -71,7 +73,7 @@
             // vm.login_type = localStorage.getItem('login_type');
             dashboardService.DashboarddetailsPouch().then(function(resp) {
                 storageFactory.setdashboarddetailsresponse(resp);
-                console.log(resp)
+                // console.log(resp)
                 vm.fullresponseData = resp;
                 vm.signoffstatus = resp.signoffstatus.comps_count;
                
@@ -86,7 +88,7 @@
             });
         }
         vm.getlength = function(mt) {
-            console.log(mt)
+            // console.log(mt)
             return Object.keys(mt).length;
         }
 
@@ -126,12 +128,12 @@
                 storageFactory.setuserdetails(resp);
                 // console.log("ck test ",resp);
                 vm.login_type = vm.localdatadetails.login_type;
-                console.log(vm.login_type,"login type test")
+                // console.log(vm.login_type,"login type test")
                 $timeout(function() {
                     vm.dashboardAPIcall();
                 }, 300);
             })
-            console.log(storageFactory.getdashboarddetailsresponse(), "null")
+            // console.log(storageFactory.getdashboarddetailsresponse(), "null")
             // if (storageFactory.getdashboarddetailsresponse() == null) {
                
             // }
@@ -146,7 +148,7 @@
         vm.headerimagefunction = function() {
             if (vm.userdetails !== undefined && vm.userdetails !== null) {
                 vm.userImageUrl = vm.userdetails.images; 
-                console.log(vm.userImageUrl);
+                // console.log(vm.userImageUrl);
                 vm.userFirstName = vm.userdetails.first_name;
             }
             else{

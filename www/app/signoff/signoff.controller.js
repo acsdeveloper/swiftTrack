@@ -2,7 +2,7 @@
     // 'use strict';
 
     function signoffCtrl(SyncService,NetworkInformation,SignoffService,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, $filter) {
-        console.log('signoff controller')
+        //console.log('signoff controller')
         var vm = this;
 
 //page functionality
@@ -93,7 +93,7 @@
         vm.headerimagefunction = function() {
             if (vm.userdetails !== undefined && vm.userdetails !== null) {
                 vm.userImageUrl = vm.userdetails.images;
-                console.log(vm.userImageUrl);
+                //console.log(vm.userImageUrl);
                 vm.userFirstName = vm.userdetails.first_name;
             }
         }

@@ -2,7 +2,7 @@
     // 'use strict';
 
     function peopleCtrl(SyncService,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, reportService,$filter) {
-        console.log('people coi=ntroller')
+        //console.log('people coi=ntroller')
         var vm = this;
 
         vm.setProgressBarColor = function(percentage) {
@@ -21,9 +21,9 @@
                 vm.reportobj = storageFactory.getuserreportid();
                 cordova.file.externalApplicationStorageDirectory +'files/'
                 // vm.targetPath = cordova.file.externalRootDirectory +"Uploadfolder";
-                console.log(vm.reportobj)
+                //console.log(vm.reportobj)
                 reportService.ReportdetailsPouch(vm.reportobj).then(function(resp) {
-                    console.log("assessrepes", resp);
+                    //console.log("assessrepes", resp);
                     vm.report_response = resp;
     
                 });
@@ -38,7 +38,7 @@
         vm.headerimagefunction = function() {
             if (vm.userdetails !== undefined && vm.userdetails !== null) {
                 vm.userImageUrl = vm.userdetails.images;
-                console.log(vm.userImageUrl);
+                //console.log(vm.userImageUrl);
                 vm.userFirstName = vm.userdetails.first_name;
             }
             // else {
@@ -77,12 +77,12 @@
         
         vm.reportvideoimagepdf = function(datatype,url)
         {
-            console.log("datatype",datatype,"url",url);
+            //console.log("datatype",datatype,"url",url);
             vm.reportvideoimagepdfpopup = true;
             vm.data_type = datatype;
             // cordova.file.externalApplicationStorageDirectory +'files/'
             vm.targetPath = cordova.file.externalApplicationStorageDirectory +"files/"+url.substring(url.lastIndexOf('/')+1)
-            // console.log(vm.targetPath,"88888tagettt");
+            // //console.log(vm.targetPath,"88888tagettt");
         }
         vm.reportmediaclose = function(path,$event)
         {
@@ -92,10 +92,10 @@
                 video = angular.element(srcelement);
                 video[0].pause();
             }
-            console.log("%%%%%%%%%%%%%%path",path);
-            console.log("report media event",event);
-            console.log("%%%%%%%%%%%%%%srcelement",srcelement);
-            // console.log("report media event",event.substring(event.lastIndexOf('.')+1));
+            //console.log("%%%%%%%%%%%%%%path",path);
+            //console.log("report media event",event);
+            //console.log("%%%%%%%%%%%%%%srcelement",srcelement);
+            // //console.log("report media event",event.substring(event.lastIndexOf('.')+1));
         }
    
     

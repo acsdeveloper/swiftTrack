@@ -263,16 +263,17 @@
                 console.log(NetworkInformation.isOnline(),"isonline")
                 vm.saveuploadpouch(vm.localfilemediaarray,'saveuploadfiles').then(function() {   
                 if(NetworkInformation.isOnline()==true){
+                    // Loader.startLoading();
                     ModuleService.saveAPIOnline().then(function(res){
+                        // Loader.stopLoading();
                         console.log("confirm save vm.localfilemediaarray",vm.localfilemediaarray);
                         vm.localfilemediaarray.map(function(a){
                            vm.filetoserver(a);
                         });
                         console.log(res,'response data from assesmemr');
-                        // ModuleService.fetchfulldata().then(function(){
-                           
-                        // })
-                        $state.go('dashboard');
+                        ModuleService.fetchfulldata().then(function(){
+                            $state.go('dashboard');
+                        })
                     })
                 }
                 else{
@@ -857,7 +858,7 @@
                
                 var ft = new FileTransfer();
                 var time = new Date();
-                var newfilename=name.split('.')[name.split('.').length-1]+'_'+time.getTime()+'.'+name.split('.')[name.split('.').length-1]
+                var newfilename=name.split('.')[0]+'_'+time.getTime()+'.'+name.split('.')[name.split('.').length-1]
 
                 console.log("newfilename ",newfilename);
                 var targetPath = cordova.file.externalApplicationStorageDirectory +"files/" + newfilename;
