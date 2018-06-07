@@ -78,7 +78,7 @@
             <div class="panel-rows">
                <div  ng-repeat="(personid,indicatorsvalue) in assessvalue.indicators track by $index"  class="panel-row" data-id="{{personid}}" data-attribute-value="person_{{assesskey}}_{{personid}}" data-q="0" data-level-set="{{vm.setlevel(indicatorsvalue)}}">
                   <div class="ind" ng-click="assessvalue.training_signed_off? '' : vm.assess_popupfun(indicatorsvalue,assessvalue,$event)">
-                     <span class="ind-content" ng-bind-html="indicatorsvalue.final_content"></span>
+                     <span class="ind-content" ng-bind-html="indicatorsvalue.final_content" ></span>
                      <br>
                     
                      <span>
@@ -443,8 +443,8 @@
                   <span>{{vm.currentPage}}/{{vm.totalPages}}</span>
                   <br>
                   <pdfviewer ng-src="{{vm.targetPath}}" on-page-load='vm.pageLoaded(page,total)' id="viewer"></pdfviewer>
-                  <button ng-click="vm.prevPage()">Previous Page</button>
-                  <button style="float: right;" ng-click="vm.nextPage()">Next page</button>
+                  <button ng-show="vm.prevpage" ng-click="vm.prevPage()">Previous Page</button>
+                  <button ng-show="vm.nextpage" style="float: right;" ng-click="vm.nextPage()">Next page</button>
                         <!-- <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url=http://www.africau.edu/images/default/sample.pdf" width="500" height="375">      <iframe src="http://www.africau.edu/images/default/sample.pdf" style="min-height: 400px; height: 133px;"></iframe> -->
                   <!-- <pdfviewer src="http://www.africau.edu/images/default/sample.pdf" style="min-height: 400px; height: 133px;" ></pdfviewer> -->
             </div>

@@ -1,5 +1,5 @@
 (function() {
-    function downloadfileService(Pouchfactory, Request, Constants, $q, $cookieStore) {
+    function downloadfileService(Pouchfactory, Request, Constants, $q, $cookieStore,storageFactory) {
         var vm = this;
 
         vm.assessmentmediadownload = function(response) {
@@ -90,5 +90,5 @@
 
     angular.module('swiftTrack.controllers')
         .service('downloadfileService', downloadfileService)
-        downloadfileService.$inject = ['Pouchfactory', 'Request', 'Constants', '$q', '$cookieStore'];
+        downloadfileService.$inject = ['Pouchfactory', 'Request', 'Constants', '$q', '$cookieStore',"storageFactory"];
 }())
