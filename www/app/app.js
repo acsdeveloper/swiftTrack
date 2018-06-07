@@ -85,7 +85,7 @@
                     }else{
                         SignoffService.fetchfulldata().then(function(val){      //--fetching swifttrack full data
                             SignoffService.putDataPouch(val).then(function(){   //--saving full data in detailed document in pouch
-                                
+                                Loader.stopLoading();
                             })
                         })
                     }
