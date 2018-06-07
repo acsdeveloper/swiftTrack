@@ -21,7 +21,7 @@
                 vm.jobroleandmod = storageFactory.getJobAndMod();
             vm.currentUser=vm.localdatadetails.username;
             ModuleService.ModuledetailsPouch(vm.jobroleandmod).then(function(resp) {
-                //console.log(resp,"assessment controller response");
+                console.log(resp,"assessment controller response");
                 vm.assessmentdetail_response = resp;
                 ModuleService.ReportdetailsPouch(vm.jobroleandmod).then(function(resp1) {
                     console.log(resp1,"assessment controller response");
@@ -567,6 +567,11 @@
 
 
         vm.assess_popupfun = function(key,assessdetails,$event) {
+           if(key.ind_is_q == true ){
+               vm.assquestion = key.orgcontent;
+             
+
+           }
             vm.popupdata = key;
             if (key.ind_is_q) {
                     vm.questpanelicon=true;
@@ -591,12 +596,9 @@
             //console.log(angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value)
             var datapath=angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value;
             vm.datapath=datapath;
-            //console.log("***********datapath",datapath);
             var datacam=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-ev'].value;
-            //console.log("datacam---");
             var datapdf=angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-ev'].value
             var datanotes=angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev'].value
-            //console.log(datanotes,"notes test error")
             var dataques=angular.element('[data-attribute-value="'+datapath+'"] .ev-question')[0].attributes['data-ev'].value
             
             var datacamAuth=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-auth'].value
@@ -757,7 +759,8 @@
             // angular.element('.del-media').addClass('ng-hide');
 
         }
-        vm.assessquest = function() {
+        vm.assessquest = function(value) {
+            console.log("question value ",value);
             vm.bdycampanel = false;
             vm.bdypdfpanel = false;
             vm.bdynotespanel = false;
@@ -1191,16 +1194,32 @@
     vm.viewer = pdf.Instance("viewer");
 
 	vm.nextPage = function() {
-		vm.viewer.nextPage();
+        // console.log("vm.currentPage",vm.currentPage);
+        // console.log("vm.totalPages",vm.totalPages);
+     vm.viewer.nextPage();
+    if(vm.currentPage > 1){ vm.prevpage = true; }
+      
 	};
 
 	vm.prevPage = function() {
-		vm.viewer.prevPage();
+        // console.log("vm.currentPage",vm.currentPage);
+        // console.log("vm.totalPages",vm.totalPages);
+        
+        vm.viewer.prevPage();
+       
+        
 	};
 
 	vm.pageLoaded = function(curPage, totalPages) {
+        // console.log("current page",curPage,"total pages",totalPages);
+        vm.nextpage = true;
+        vm.prevpage = true;
 		vm.currentPage = curPage;
-		vm.totalPages = totalPages;
+        vm.totalPages = totalPages;
+       if(vm.currentPage == 1 ){vm.prevpage = false;}
+       else if(totalPages == curPage  ){ vm.nextpage = false;}
+
+    
     };
 
 

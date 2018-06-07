@@ -109,7 +109,7 @@
 		height: auto !important;
 	}
 	.bdy-question .ev-title {
-		display: none;
+		/* display: none; */
 	}
 
 	.q-question-hdr {
