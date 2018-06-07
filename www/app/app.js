@@ -23,8 +23,53 @@
 
         ])
 
-        .run(function(storageFactory,SignoffService,$ionicPlatform, $ionicHistory, $rootScope, $state, $ionicNavBarDelegate,$cordovaNetwork) {
+        .run(function($ionicPopup,Loader,$interval,$cookieStore,SyncService,storageFactory,SignoffService,$ionicPlatform, $ionicHistory, $rootScope, $state, $ionicNavBarDelegate,$cordovaNetwork) {
             $ionicPlatform.ready(function() {
+                cordova.exec(win, fail, "File", "getFreeDiskSpace", []);
+                function win(freeSpace){
+                     if(freeSpace<1000000){
+                        $ionicPopup.alert({
+                            title: 'Low space',
+                            template: 'Please Free up some space and come back'
+                        }).then(function(res) {
+                            ionic.Platform.exitApp();
+                        });
+                    }
+                }
+                function fail(err){
+                    console.log(err)
+                }
+                // $rootScope.checkPermission = function() {
+                //     setLocationPermission = function() {
+                //       cordova.plugins.diagnostic.requestLocationAuthorization(function(status) {
+                //         switch (status) {
+                //           case cordova.plugins.diagnostic.permissionStatus.NOT_REQUESTED:
+                //             break;
+                //           case cordova.plugins.diagnostic.permissionStatus.DENIED:
+                //             break;
+                //           case cordova.plugins.diagnostic.permissionStatus.GRANTED:
+                //             break;
+                //           case cordova.plugins.diagnostic.permissionStatus.GRANTED_WHEN_IN_USE:
+                //             break;
+                //         }
+                //       }, function(error) {}, cordova.plugins.diagnostic.locationAuthorizationMode.ALWAYS);
+                //     };
+                //     cordova.plugins.diagnostic.getPermissionAuthorizationStatus(function(status) {
+                //       switch (status) {
+                //         case cordova.plugins.diagnostic.runtimePermissionStatus.GRANTED:
+                //           break;
+                //         case cordova.plugins.diagnostic.runtimePermissionStatus.NOT_REQUESTED:
+                //           setLocationPermission();
+                //           break;
+                //         case cordova.plugins.diagnostic.runtimePermissionStatus.DENIED:
+                //           setLocationPermission();
+                //           break;
+                //         case cordova.plugins.diagnostic.runtimePermissionStatus.DENIED_ALWAYS:
+                //           setLocationPermission();
+                //           break;
+                //       }
+                //     }, function(error) {}, cordova.plugins.diagnostic.runtimePermission.ACCESS_COARSE_LOCATION);
+                //   };
 
                 //sync code start 
                 document.addEventListener("offline", onOffline, false);
@@ -39,10 +84,35 @@
         
                 function onOnline() {
                     console.log('Online detected');
-                    storageFactory.setdeviceOnline(true);
+                    // storageFactory.setdeviceOnline(true);
+                    // $cookieStore.put("ChangesBoolean", true);
+                    if($cookieStore.get('ChangesBoolean') && $cookieStore.get('sessionkey')){
+                        // Loader.startLoading();
+                        SyncService.saveAPIOnline().then(function(){
+                            Loader.stopLoading();
+                            $cookieStore.put("ChangesBoolean", false);
+                        })
+
+                    }else{
+                        console.log("5mins sync")
+                        Loader.stopLoading();
+                        SignoffService.fetchfulldata().then(function(val){      //--fetching swifttrack full data
+                            SignoffService.putDataPouch(val).then(function(){   //--saving full data in detailed document in pouch
+                                
+                            })
+                        })
+                    }
+
                     // Handle the online event
                 }
                 //sync code end
+                $interval(function () {
+                    onOnline();
+                }, 60000);
+                if($cordovaNetwork.isOnline()){
+                    Loader.startLoading();
+                    onOnline();
+                }
 
                 console.log(navigator.connection.type)
                 // if (window.cordova && cordovaPlugin.Keyboard) {

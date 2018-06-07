@@ -1,7 +1,7 @@
 (function() {
     // 'use strict';
 
-    function statusCtrl(SyncService,Loader, $timeout, $state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, dashboardService, $ionicPlatform) {
+    function statusCtrl($interval,SyncService,Loader, $timeout, $state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, dashboardService, $ionicPlatform) {
 
         var vm = this;
         Loader.startLoading();
@@ -23,6 +23,16 @@
             vm.peoplepane = false;
         }
         vm.init();
+
+        vm.continuousfunction=function(){
+            dashboardService.LocaldatadetailsPouch().then(function(resp){
+                // Loader.stopLoading();
+                vm.localdatadetails=resp;
+            })
+        }
+        $interval(function () {
+            vm.dashboardAPIcall();
+        }, 60000);
 
         vm.goSignofPage = function(data){
             // console.log(data)
@@ -61,6 +71,7 @@
             vm.object['jr_id'] = jobrole;
             vm.object['departmentid'] = departmentid;
             vm.object['subDepartmentId'] = subDepartmentId;
+            console.log(comp_id,"comp id");
             vm.object['comp_id']=comp_id;
             storageFactory.setJobAndMod(vm.object);
             $state.go('assessment');
@@ -197,5 +208,5 @@
 
     angular.module('swiftTrack.dashboard')
         .controller('dashboardCtrl', statusCtrl);
-    statusCtrl.$inject = ['SyncService','Loader', '$timeout', '$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'dashboardService', '$ionicPlatform'];
+    statusCtrl.$inject = ['$interval','SyncService','Loader', '$timeout', '$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'dashboardService', '$ionicPlatform'];
 }());

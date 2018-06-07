@@ -39,8 +39,27 @@
                 return vm.defered.promise;
             });
         };
-
+        vm.putDataPouch = function(data,doc_name){
+            return new Promise(function(resolve, reject) {
+                vm.localDB = new PouchDB("Swifttrack", {
+                    revs_limit: 2
+                });
+                // Do async job
+                function detailedDocfunc(doc) {
+                    doc = data;
+                    return doc;
+                }
+    
+                vm.localDB.upsert(doc_name, detailedDocfunc).then(function() {
+                    resolve('success')
+                }).catch(function(err) {
+                    reject(err)
+                });
+            })
+    
+        }
     }
+
 
     angular.module('swiftTrack.login')
         .service('LoginService', LoginService)

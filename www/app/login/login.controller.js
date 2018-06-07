@@ -60,7 +60,7 @@
                         // localStorage.setItem("fullname", resp.result[Object.keys(resp.result)].username);
                         // localStorage.setItem("signoff_level", resp.result[Object.keys(resp.result)].signoff_level);
                         //call user details api and put storage factory service 
-                        vm.putDataPouch(resp.result[Object.keys(resp.result)], 'localdata').then(function() {
+                        LoginService.putDataPouch(resp.result[Object.keys(resp.result)], 'localdata').then(function() {
                             vm.fetchfulldataAPI(resp);
                         })
                     } else {
@@ -78,11 +78,11 @@
             vm.obj.org_usr = vm.object["org"];
             vm.obj.login_user = resp.result[Object.keys(resp.result)].username;
             vm.obj.login_type = Object.keys(resp.result)[0];
-            vm.putDataPouch(vm.obj, 'post_jsonobject').then(function() {
+            LoginService.putDataPouch(vm.obj, 'post_jsonobject').then(function() {
                 LoginService.fetchfulldata(vm.obj).then(function(resp) {
                     //console.log("*********full response",resp);
                     downloadfileService.assessmentmediadownload(resp)
-                    vm.putDataPouch(resp, 'detailed_document').then(function() {
+                    LoginService.putDataPouch(resp, 'detailed_document').then(function() {
                         $state.go('dashboard')
                     })
                 });
@@ -194,25 +194,7 @@
 
        
 
-        vm.putDataPouch = function(data,doc_name){
-            return new Promise(function(resolve, reject) {
-                vm.localDB = new PouchDB("Swifttrack", {
-                    revs_limit: 2
-                });
-                // Do async job
-                function detailedDocfunc(doc) {
-                    doc = data;
-                    return doc;
-                }
 
-                vm.localDB.upsert(doc_name, detailedDocfunc).then(function() {
-                    resolve('success')
-                }).catch(function(err) {
-                    reject(err)
-                });
-            })
-
-        }
         vm.myFunct = function(event) {
             var keycode = (event.keyCode ? event.keyCode : event.which);
             if (keycode == '13') {

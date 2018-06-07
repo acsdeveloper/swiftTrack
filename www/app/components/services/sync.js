@@ -21,11 +21,12 @@
                     //console.log(resp2);
                     resp2.indicators=resp1.indicators;
                     resp2.sessionkey=$cookieStore.get('sessionkey');
-                    // Loader.startLoading();
+                    Loader.startLoading();
                     return Request.post(vm.saveassessAPIurl, resp2).then(function(resp) {   //--sending assessment save data to server
-                        // Loader.stopLoading();
+                        
                         SignoffService.sendsignoffdata().then(function(){           //sending signoff data
                             SignoffService.fetchfulldata().then(function(val){      //--fetching swifttrack full data
+                                Loader.stopLoading();
                                 SignoffService.putDataPouch(val).then(function(){   //--saving full data in detailed document in pouch
                                     
                                 })
