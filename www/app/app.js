@@ -106,13 +106,13 @@
                     // Handle the online event
                 }
                 //sync code end
-                $interval(function () {
-                    onOnline();
-                }, 60000);
-                if($cordovaNetwork.isOnline()){
-                    Loader.startLoading();
-                    onOnline();
-                }
+                // $interval(function () {
+                //     onOnline();
+                // }, 60000);
+                // if($cordovaNetwork.isOnline()){
+                //     Loader.startLoading();
+                //     onOnline();
+                // }
 
                 console.log(navigator.connection.type)
                 // if (window.cordova && cordovaPlugin.Keyboard) {

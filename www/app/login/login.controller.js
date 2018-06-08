@@ -64,7 +64,8 @@
                             vm.fetchfulldataAPI(resp);
                         })
                     } else {
-                        vm.errormessage = resp.result;
+                        // vm.errormessage = resp.result;
+                        vm.errormessage = "Wrong Username/Password";
                     }
                     // vm.showloader = false;
 
