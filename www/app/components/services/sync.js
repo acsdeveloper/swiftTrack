@@ -1,5 +1,5 @@
 (function() {
-    function SyncService(Loader,Pouchfactory,Request, Constants, $q,$cookieStore) {
+    function SyncService(SignoffService,Loader,Pouchfactory,Request, Constants, $q,$cookieStore) {
         var vm = this;
         vm.data = {};
 
@@ -22,9 +22,11 @@
                     resp2.indicators=resp1.indicators;
                     resp2.sessionkey=$cookieStore.get('sessionkey');
                     Loader.startLoading();
+                    console.log('track 2')
                     return Request.post(vm.saveassessAPIurl, resp2).then(function(resp) {   //--sending assessment save data to server
                         
                         SignoffService.sendsignoffdata().then(function(){           //sending signoff data
+                            console.log('track4')
                             SignoffService.fetchfulldata().then(function(val){      //--fetching swifttrack full data
                                 Loader.stopLoading();
                                 SignoffService.putDataPouch(val).then(function(){   //--saving full data in detailed document in pouch
@@ -96,5 +98,5 @@
 
     angular.module('swiftTrack.controllers')
         .service('SyncService', SyncService)
-        SyncService.$inject = ['Loader','Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
+        SyncService.$inject = ['SignoffService','Loader','Pouchfactory','Request', 'Constants', '$q','$cookieStore'];
 }())

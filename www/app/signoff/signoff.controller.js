@@ -20,6 +20,7 @@
 
             vm.signoffnow = function(ids_comps,ids_ppl,$event){
                 storageFactory.setchangessignoff(true);
+                $cookieStore.put("ChangesBoolean", true);
                 var templateonline='<span><i class="icon-checkmark"></i> Signed off successfully</span>'
                 var templateoffline='<span><i class="icon-checkmark"></i>You are in offline, Signed off saved in local</span>'
                 var value=angular.element($event.target).parents('.textbox').find('textarea')[0].value;
@@ -36,6 +37,7 @@
 
                             })
                         }else{
+                            vm.putDataPouchDetailedDoc(idObj,'detailed_document');
                             $cookieStore.put("ChangesBoolean", true);
                             angular.element($event.target).parents('.textbox').find('.report').html(templateoffline);
                             angular.element($event.target).hide();
@@ -45,6 +47,56 @@
                 })
 
 
+            }
+            vm.putDataPouchDetailedDoc = function(data,doc_name){
+                return new Promise(function(resolve, reject) {
+                    // Do async job
+                    function detailedDocfunc(doc) {
+                        // console.log(vm.jobroleandmod);
+                        // console.log(doc);
+                        // console.log(data)
+                        var ids_comps=doc['dashboard']['signoffstatus']['ids_comps'].split(',') ;
+                        var ids_ppl=doc['dashboard']['signoffstatus']['ids_ppl'].split(',')
+                        var names_comps=doc['dashboard']['signoffstatus']['names_comps'].split(',')
+                        var names_ppl=doc['dashboard']['signoffstatus']['names_ppl'].split(',');
+
+                        
+                        var index = ids_comps.indexOf(data.comp_id);
+                        var index2 = ids_ppl.indexOf(data.ppl_id);
+                        var indexval;
+                        if(index==index2){
+                            indexval=index;
+                        }
+                        else if(data.comp_id==ids_comps[index2]){
+                            indexval=index2;
+                        }
+                        else{
+                            indexval=index;
+                        }
+                        if (index > -1) {
+                            ids_comps.splice(index, 1);
+                            ids_ppl.splice(index, 1);
+                            names_comps.splice(index, 1);
+                            names_ppl.splice(index, 1);
+
+                        }
+                        var count=ids_comps.length;
+                       console.log(ids_comps,ids_ppl,names_comps,names_ppl,"signoff");
+                       doc['dashboard']['signoffstatus']['ids_comps']=ids_comps.join();
+                       doc['dashboard']['signoffstatus']['ids_ppl']=ids_ppl.join(',')
+                       doc['dashboard']['signoffstatus']['names_comps']=names_comps.join(',');
+                       doc['dashboard']['signoffstatus']['names_ppl']=names_ppl.join(',');
+                       doc['dashboard']['signoffstatus']['comps_count']=count;
+                        return doc;
+                    }
+    
+                    vm.localDB.upsert(doc_name, detailedDocfunc).then(function() {
+                        resolve('success')
+                    }).catch(function(err) {
+                        reject(err)
+                    });
+                })
+    
             }
             vm.isEmpty = function(obj) {
                 for(var key in obj) {

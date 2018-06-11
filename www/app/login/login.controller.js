@@ -1,10 +1,22 @@
 (function() {
     // 'use strict';
 
-    function statusCtrl(downloadfileService,$state, $ionicModal, $scope, $http, $location, $cookieStore, LoginService, storageFactory) {
+    function statusCtrl($ionicPopup,downloadfileService,$state, $ionicModal, $scope, $http, $location, $cookieStore, LoginService, storageFactory) {
 
         var vm = this;
         vm.showloader = false;
+        document.addEventListener("offline", onOffline, false);
+
+        function onOffline() {
+            // Handle the offline event
+            $ionicPopup.alert({
+                title: 'Low space',
+                template: 'Please Free up some space and come back'
+            }).then(function(res) {
+                ionic.Platform.exitApp();
+            });
+            
+        }
         vm.localDB = new PouchDB("Swifttrack", {
             revs_limit: 2
         });
@@ -209,5 +221,5 @@
 
     angular.module('swiftTrack.login')
         .controller('loginCtrl', statusCtrl);
-    statusCtrl.$inject = ['downloadfileService','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'LoginService', 'storageFactory'];
+    statusCtrl.$inject = ['$ionicPopup','downloadfileService','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'LoginService', 'storageFactory'];
 }());

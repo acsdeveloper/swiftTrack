@@ -3,29 +3,40 @@
         var vm = this;
 
         vm.assessmentmediadownload = function(response) {
+
+            //download assessor image
             var furl = storageFactory.getuserdetails().images;
 
             var fn = furl.substring(furl.lastIndexOf('/')+1);
             var encodurl = encodeURI(furl); 
             //console.log(furl,fn)
             vm.downloadImage( furl,fn);
-                var reportpage = response.report;
-                Object.keys(reportpage).map(function(key, index) {
-                    //console.log(reportpage[key].image);
-                    var mediafullurl = reportpage[key].image;
-                    var filename = mediafullurl.substring(mediafullurl.lastIndexOf('/')+1);
-                    var encodedmediaurl = encodeURI(mediafullurl); 
-                    vm.downloadImage(encodedmediaurl,filename);
-                })
+
+
+            //people image from report api
+            var reportpage = response.report;
+            Object.keys(reportpage).map(function(key, index) {
+                //console.log(reportpage[key].image);
+                var mediafullurl = reportpage[key].image;
+                var filename = mediafullurl.substring(mediafullurl.lastIndexOf('/')+1);
+                var encodedmediaurl = encodeURI(mediafullurl); 
+                vm.downloadImage(encodedmediaurl,filename);
+            })
+
+            //resource data from assessment API
             var resourcesection = response.assessment[Object.keys(response.assessment)[0]][Object.keys(response.assessment[Object.keys(response.assessment)[0]])[0]].resources;
             Object.keys(resourcesection).map(function(key, index) {
                 Object.keys(resourcesection[key].resource_sections).map(function(key1, index1) {
-                    var mediafullurl = resourcesection[key].resource_sections[key1].item_media;
+                    var mediafullurl2 = resourcesection[key].resource_sections[key1].item_media;
+                    var mediafullurl1=mediafullurl2.split('/')[mediafullurl2.split('/').length-1]
+                    mediafullurl="https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/resources/"+mediafullurl1
                     var filename = mediafullurl.substring(mediafullurl.lastIndexOf('/') + 1);
+                    console.log(mediafullurl,filename,"testers test")
                     vm.downloadImage(mediafullurl, filename)
                 })
             })
 
+            //media data from assessment API
             Object.keys(response.assessment).map(function(key, index) {
                 Object.keys(response.assessment[key]).map(function(key1, index1) {
                     Object.keys(response.assessment[key][key1]).map(function(key2, index2) {
@@ -39,6 +50,7 @@
                                                     if (key3c == 'media' || key3c == 'pdf') {
                                                         Object.keys(response.assessment[key][key1][key2][key3].indicators[key3a][key3b][key3c]).map(function(key3d, index3d) {
                                                             response.assessment[key][key1][key2][key3].indicators[key3a][key3b][key3c].data_ev.split(',').map(function(a) {
+                                                                console.log(a,"download test url")
                                                                 return vm.mediares(a);
                                                             })
                                                         })
@@ -56,7 +68,8 @@
         }
         vm.mediares = function(a) {
             var name=a.split('/')[a.split('/').length-1];
-            var comfileurl = "https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/" + name;
+
+            var comfileurl = "https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/" + name;
             var encodedmediaurl = encodeURI(comfileurl);
             var filename = comfileurl.substring(comfileurl.lastIndexOf('/') + 1);
             vm.downloadImage(encodedmediaurl, filename);

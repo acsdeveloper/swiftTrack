@@ -1,10 +1,11 @@
 (function() {
     // 'use strict';
 
-    function statusCtrl($interval,SyncService,Loader, $timeout, $state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, dashboardService, $ionicPlatform) {
+    function statusCtrl(SignoffService,$cordovaNetwork,$interval,SyncService,Loader, $timeout, $state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, dashboardService, $ionicPlatform) {
 
         var vm = this;
         Loader.startLoading();
+
         vm.init = function() {
             dashboardService.LocaldatadetailsPouch().then(function(resp){
                 // Loader.stopLoading();
@@ -24,12 +25,12 @@
         }
         vm.init();
 
-        vm.continuousfunction=function(){
-            dashboardService.LocaldatadetailsPouch().then(function(resp){
-                // Loader.stopLoading();
-                vm.localdatadetails=resp;
-            })
-        }
+        // vm.continuousfunction=function(){
+        //     dashboardService.LocaldatadetailsPouch().then(function(resp){
+        //         // Loader.stopLoading();
+        //         vm.localdatadetails=resp;
+        //     })
+        // }
         $interval(function () {
             vm.dashboardAPIcall();
         }, 60000);
@@ -84,7 +85,7 @@
             // vm.login_type = localStorage.getItem('login_type');
             dashboardService.DashboarddetailsPouch().then(function(resp) {
                 storageFactory.setdashboarddetailsresponse(resp);
-                // console.log(resp)
+                console.log(resp)
                 vm.fullresponseData = resp;
                 vm.signoffstatus = resp.signoffstatus.comps_count;
                
@@ -132,8 +133,22 @@
         vm.clearspace = function(key) {
             return key.split(' ').join('')
         }
-
+        $ionicPlatform.ready(function() {
+            if($cordovaNetwork.isOnline()==true && storageFactory.getchangessignoff()){
+                Loader.startLoading();
+                SignoffService.fetchfulldata().then(function(val){
+                    vm.localdatadetails=val;
+                    Loader.stopLoading();
+                    SignoffService.putDataPouch(val).then(function(){
+                        storageFactory.setchangessignoff(false);
+                        vm.dashboardAPIcall();
+    
+                    })
+                })
+               }
+        });
         angular.element(document).ready(function() {
+            
             dashboardService.LocaldatadetailsPouch().then(function(resp){
                 vm.localdatadetails=resp;
                 storageFactory.setuserdetails(resp);
@@ -208,5 +223,5 @@
 
     angular.module('swiftTrack.dashboard')
         .controller('dashboardCtrl', statusCtrl);
-    statusCtrl.$inject = ['$interval','SyncService','Loader', '$timeout', '$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'dashboardService', '$ionicPlatform'];
+    statusCtrl.$inject = ['SignoffService','$cordovaNetwork','$interval','SyncService','Loader', '$timeout', '$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'dashboardService', '$ionicPlatform'];
 }());

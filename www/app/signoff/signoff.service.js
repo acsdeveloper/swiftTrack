@@ -16,6 +16,7 @@
             });
         }
         vm.sendsignoffdata=function(){
+            console.log('track3')
             vm.localDB = new PouchDB("Swifttrack", {
                 revs_limit: 2
             });
@@ -69,7 +70,7 @@
             vm.docname ='post_jsonobject';
             vm.data=''
             // vm.object=obj;
-           
+           console.log('last cahance')
              return Pouchfactory.get(vm.docname,vm.data).then(function(data) {
                  //console.log(data);
                  data.sessionkey=$cookieStore.get('sessionkey');

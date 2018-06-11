@@ -72,11 +72,16 @@
                 //   };
 
                 //sync code start 
-                document.addEventListener("offline", onOffline, false);
+                // document.addEventListener("offline", onOffline, false);
 
                 function onOffline() {
                     console.log('Offline detected');
-                    storageFactory.setdeviceOnline(false);
+                    $ionicPopup.alert({
+                        title: 'No Interent',
+                        template: 'You are in offline'
+                    }).then(function(res) {
+                        ionic.Platform.exitApp();
+                    });
                     // Handle the offline event
                 }
         
@@ -94,7 +99,7 @@
                         })
 
                     }else{
-                        console.log("5mins sync")
+                        console.log("1mins sync")
                         Loader.stopLoading();
                         SignoffService.fetchfulldata().then(function(val){      //--fetching swifttrack full data
                             SignoffService.putDataPouch(val).then(function(){   //--saving full data in detailed document in pouch
@@ -106,8 +111,11 @@
                     // Handle the online event
                 }
                 //sync code end
+
                 $interval(function () {
-                    onOnline();
+                    if($cordovaNetwork.isOnline()){
+                        onOnline();
+                    }
                 }, 60000);
                 if($cordovaNetwork.isOnline()){
                     Loader.startLoading();
@@ -130,34 +138,47 @@
                 }
                 var handleBackButton = function() {
                     console.log($ionicHistory.currentStateName(), "current")
-                    if ("app.dashboard" === $ionicHistory.currentStateName() || "app.login" === $ionicHistory.currentStateName()) {
+                    if ("dashboard" === $ionicHistory.currentStateName() || "login" === $ionicHistory.currentStateName()) {
                         // $ionicHistory.nextViewOptions({
                         //     disableBack: true
                         // });
                         ionic.Platform.exitApp();
                     }
-                    else if ("app.assessment" === $ionicHistory.currentStateName() || "app.progressreport" === $ionicHistory.currentStateName()) {
+                    else if ("progressreport" === $ionicHistory.currentStateName()) {
                         console.log('get asses')
                         $ionicNavBarDelegate.showBackButton(true);
                         $ionicHistory.nextViewOptions({
                             disableBack: true
                         });
                         $ionicHistory.goBack();
-                        $ionicHistory.clearHistory();
-                        $ionicHistory.clearCache();
+
+                    }
+                    else if ("assessment" === $ionicHistory.currentStateName()) {
+                        console.log('get asses');
+                        $ionicPopup.confirm({
+                            title: 'Without saving document',
+                            content: 'Do you want to return to Dashboard?',
+                            okText: 'OK',
+                            cancelText: 'Cancel'
+                        }).then(function (res) {
+                            console.log(res)
+                                // if (res) {
+                                //     $ionicHistory.goBack();
+                                // }
+                                if(res){
+                                    $ionicHistory.goBack();
+                                }
+                        });
+
                     }
                     else if("signoff"==$ionicHistory.currentStateName()){
                         console.log($cordovaNetwork.isOnline(),"locatopnmj")
                         if($cordovaNetwork.isOnline()==true && storageFactory.getchangessignoff()){
-                            SignoffService.fetchfulldata().then(function(val){
-                                    $ionicHistory.goBack();
-                                SignoffService.putDataPouch(val).then(function(){
-                                })
-                            })
+                            $ionicHistory.goBack();
+
                         }else{
                             $ionicHistory.goBack();
-                            $ionicHistory.clearHistory();
-                            $ionicHistory.clearCache();
+
                         }
                     }
 
