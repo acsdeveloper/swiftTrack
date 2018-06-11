@@ -25,7 +25,7 @@
                     resp2.sessionkey=$cookieStore.get('sessionkey')
                     Loader.startLoading();
                     return Request.post(vm.url, resp2).then(function(resp) {
-                        Loader.stopLoading();
+                        // Loader.stopLoading();
                         console.log(resp,"response from assessment service")
                         vm.defered = $q.defer();
                         vm.defered.resolve(resp);
@@ -51,7 +51,7 @@
              return Pouchfactory.get(vm.docname,vm.data).then(function(data) {
                  console.log(data);
                  data.sessionkey=$cookieStore.get('sessionkey');
-                 Loader.startLoading();
+                //  Loader.startLoading();
                 return Request.post(vm.url,data).then(function(resp) {
                     return LoginService.putDataPouch(resp,'detailed_document').then(function(){
                     Loader.stopLoading();
