@@ -212,7 +212,8 @@
 
             <div ng-repeat="resouval in vm.resouobj.resource_sections " class="row sep-box">
 
-               <div class="col-xs-12" ng-if="resouval.type_id == 5">
+               <div  class="col-xs-12" ng-if="resouval.type_id == 5">
+                        <div ng-click="vm.videoclick($event)" style="height: 190px;width:  100%;position: absolute;z-index: 99999999999999999999999999999999999;"></div>
                         <video width="280" height="240" controls>
                               <source src="" dynamic-url dynamic-url-src="{{resouval.item_media | filefilter}}">
                           </video>

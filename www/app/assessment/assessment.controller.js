@@ -1109,17 +1109,32 @@
 
         vm.resourcevideosectionclose = function($event)
         {
-            // //console.log(" resourcevideosectionclose id",id);
-         
-                var srcele = $event.target.parentElement.nextElementSibling.children[1].children[0].children[0];
-            video = angular.element(srcele);
-           //console.log("video function",video,"src",srcele.tagName);
-            if(srcele.tagName == 'VIDEO'){video[0].pause();}
+          
+        var ck=angular.element($event.target).parents('.mdl-full-page').find('video');
+        ck.map((a)=>ck[a].pause());
+        //         var srcele = $event.target.parentElement.nextElementSibling.children[1].children[0].children[0];
+        //     video = angular.element(srcele);
+        //    //console.log("video function",video,"src",srcele.tagName);
+        //     if(srcele.tagName == 'VIDEO'){video[0].pause();}
 
             
             
             vm.assessreport = false;
             vm.assesstray = true;
+
+        }
+
+        vm.videoclick = function($event)
+        {
+            $event.target.nextElementSibling.play()
+            var a =  $event.target.nextElementSibling.currentTime;
+            
+            // if(a ==  $event.target.nextElementSibling.currentTime){
+            //     $event.target.nextElementSibling.pause()
+            //  }
+           
+            
+            console.log("resource video click function $event",$event);
 
         }
         
