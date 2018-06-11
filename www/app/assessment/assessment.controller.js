@@ -1126,8 +1126,13 @@
 
         vm.videoclick = function($event)
         {
-            $event.target.nextElementSibling.play()
-            var a =  $event.target.nextElementSibling.currentTime;
+            if( $event.target.nextElementSibling.paused == true){
+                console.log("condi",$event.target.nextElementSibling.paused)
+                $event.target.nextElementSibling.play()
+            }
+            else { $event.target.nextElementSibling.pause()}
+           
+            // var a =  $event.target.nextElementSibling.currentTime;
             
             // if(a ==  $event.target.nextElementSibling.currentTime){
             //     $event.target.nextElementSibling.pause()
