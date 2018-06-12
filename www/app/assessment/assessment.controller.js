@@ -829,31 +829,45 @@
 
         vm.evidenceupload = function(datatype) {
             // console.log("camera upload ",navigator.camera)
-
-            // navigator.camera.getPicture(
-            //     function cameraSuccess(imageurl){
-            //         console.log("camera imageurl",imageurl);
-            //     },
-            //     function cameraError(message){
-            //         console.log("camera message",message);
-            //     },
-            //     {
-            //     destinationType: Camera.DestinationType.FILE_URI,
-            //     sourceType: Camera.PictureSourceType.CAMERA,
-            //     popoverOptions: new CameraPopoverOptions(300, 300, 100, 100, Camera.PopoverArrowDirection.ARROW_ANY)
-
-            //     }
-            // );  
-           
-           
-            fileChooser.open(
-                function fcSuccess(file){
-                    vm.filename=file.name;
-                    vm.movefile(file.uri,file.name,file.mime_type,datatype);
-                    console.log(" from filechooser",file.mime_type);
+            if(datatype == 'cam'){
+               vm.camcapture = true;
+               
+            }
+            vm.camclick = function()
+            {
+                navigator.camera.getPicture(
+                    function cameraSuccess(imageurl){
+                        console.log("camera imageurl",imageurl);
                     },
-                  function fcError(e){console.log(e);}
-           );   
+                    function cameraError(message){
+                        console.log("camera message",message);
+                    },
+                    {
+                    destinationType: Camera.DestinationType.FILE_URI,
+                    sourceType: Camera.PictureSourceType.CAMERA,
+                    popoverOptions: new CameraPopoverOptions(300, 300, 100, 100, Camera.PopoverArrowDirection.ARROW_ANY)
+    
+                    });  
+                console.log("cam click");
+            }
+            vm.vidclick = function()
+            {
+                console.log("video click");
+            }
+            vm.galclick = function()
+            {
+                console.log("gal click");
+            }
+           
+           
+        //     fileChooser.open(
+        //         function fcSuccess(file){
+        //             vm.filename=file.name;
+        //             vm.movefile(file.uri,file.name,file.mime_type,datatype);
+        //             console.log(" from filechooser",file.mime_type);
+        //             },
+        //           function fcError(e){console.log(e);}
+        //    );   
            
             }
             vm.findfiletype=function(name){

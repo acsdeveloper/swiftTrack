@@ -203,6 +203,14 @@
       <div class="mdl-hdr mh-warning">Ending Session Without Saving</div>
       <div class="mdl-bdy">Are you sure you want to end this session <b>WITHOUT SAVING?</b><br><a ng-click="vm.retdashboard()" class="btn btn-default btn-return m-top-10 w-100"><b>Yes,</b> Return to Dashboard</a><br><a ng-click="vm.contsection()" class="btn btn-cancel btn-continue m-top-10 w-100"><b>No,</b> Continue Session</a></div>
    </div> -->
+   <div ng-show="vm.camcapture" class="popover fade bottom in" id="popover301935" style="z-index: 99999999;border: 1px solid black;opacity: 1;top: 64%;display: block;height: auto;background-color: #a2a2a2;">
+      <h3 class="popover-title">CHOOSE</h3>
+      <div class="popover-content">
+         <a ng-click="vm.camclick()" >cam image</a>
+         <a ng-click="vm.vidclick()">video</a>
+            <a ng-click="vm.galclick()" >gallery</a>
+   </div>
+   </div>
 
 
    <div ng-show="vm.assessreport" class="custom-modal resource-model-overlay" id="resourceModal">
