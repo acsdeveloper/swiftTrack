@@ -7,6 +7,20 @@
         vm.localDB = new PouchDB("Swifttrack", {
             revs_limit: 2
         });
+        vm.init = function()
+        {
+            console.log("init");
+            ModuleService.get_org_config_assess().then(function(resp){
+                console.log("####@@@@ dashboard123 ",resp);
+                vm.logourlassess =   resp.logo;
+                console.log("vm.logourlassess",vm.logourlassess);
+            })
+            ModuleService.get_org_name_access().then(function(res){
+                vm.org_name = res;
+            })
+
+        }
+        vm.init();
         vm.localUrl=cordova.file.externalApplicationStorageDirectory +'files/';
         vm.popupdata = null;
         vm.showupdatbtn=false;
@@ -814,7 +828,24 @@
 
 
         vm.evidenceupload = function(datatype) {
-            
+            // console.log("camera upload ",navigator.camera)
+
+            // navigator.camera.getPicture(
+            //     function cameraSuccess(imageurl){
+            //         console.log("camera imageurl",imageurl);
+            //     },
+            //     function cameraError(message){
+            //         console.log("camera message",message);
+            //     },
+            //     {
+            //     destinationType: Camera.DestinationType.FILE_URI,
+            //     sourceType: Camera.PictureSourceType.CAMERA,
+            //     popoverOptions: new CameraPopoverOptions(300, 300, 100, 100, Camera.PopoverArrowDirection.ARROW_ANY)
+
+            //     }
+            // );  
+           
+           
             fileChooser.open(
                 function fcSuccess(file){
                     vm.filename=file.name;
@@ -1126,8 +1157,15 @@
 
         vm.videoclick = function($event)
         {
-            $event.target.nextElementSibling.play()
-            var a =  $event.target.nextElementSibling.currentTime;
+            if( $event.target.nextElementSibling.paused == true){
+                var ck1=angular.element($event.target).parents('.mdl-full-page').find('video');
+                    ck1.map((a)=>ck1[a].pause());
+                console.log("condi",$event.target.nextElementSibling.paused)
+                $event.target.nextElementSibling.play()
+            }
+            else { $event.target.nextElementSibling.pause()}
+           
+            // var a =  $event.target.nextElementSibling.currentTime;
             
             // if(a ==  $event.target.nextElementSibling.currentTime){
             //     $event.target.nextElementSibling.pause()

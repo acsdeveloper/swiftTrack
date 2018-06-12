@@ -6,7 +6,7 @@
 	<header class="fixed-hdr">
 		<div class="">
 			<div class="">
-				<img class="logo" src="https://app.swifttrack.co.uk/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/settings/nf-logo.jpg" alt="logo">
+				<img class="logo" src="{{vm.logourlreport | filefilter}}" alt="logo">
 			</div>
 		</div>
 		<div class="peopleprogressreport">
@@ -125,7 +125,7 @@
 			</div>
 
 			<div class="pad-15"></div>
-			<footer>&copy; 2018 SwiftTrack V1.1&nbsp;&nbsp;&vellip;&nbsp;&nbsp;Licensed to Food International</footer>
+			<footer>&copy; 2018 SwiftTrack V1.1&nbsp;&nbsp;&vellip;&nbsp;&nbsp;Licensed to {{vm.org_name}}</footer>
 		</div>
 		</div>
 	</ion-content>

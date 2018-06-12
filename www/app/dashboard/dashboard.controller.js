@@ -11,6 +11,23 @@
                 // Loader.stopLoading();
                 vm.localdatadetails=resp;
             })
+            vm.logourl =  storageFactory.getOrgLogo();
+            console.log("$$$$$$$dsshboard",vm.logourl);
+            if(storageFactory.getOrgLogo()==null){
+                dashboardService.get_org_config().then(function(resp){
+                    console.log("####@@@@ dashboard ",resp);
+                    vm.logourl =   resp.logo;
+                })
+            }
+               
+            dashboardService.get_org_name_dashboard().then(function(resp){
+                vm.org_name = resp;
+                console.log("response&&&**",resp);
+            })
+                
+                    // vm.localDB.get('detailed_document').then(function (doc) {
+                    //     console.log("########pouchdb document",doc);
+                    // });
 
             if (!storageFactory.islogin()) {
                 $state.go('login')
@@ -78,6 +95,7 @@
             $state.go('assessment');
 
         }
+
         
         vm.dashboardAPIcall = function() {
             vm.object = {};
@@ -134,11 +152,17 @@
             return key.split(' ').join('')
         }
         $ionicPlatform.ready(function() {
+            $scope.$watch(
+                function($scope) {
+                    vm.userdetails = storageFactory.getuserdetails();
+                    vm.headerimagefunction();
+                });
+    
             if($cordovaNetwork.isOnline()==true && storageFactory.getchangessignoff()){
                 Loader.startLoading();
                 SignoffService.fetchfulldata().then(function(val){
                     vm.localdatadetails=val;
-                    Loader.stopLoading();
+                    Loader.stopLoading();2
                     SignoffService.putDataPouch(val).then(function(){
                         storageFactory.setchangessignoff(false);
                         vm.dashboardAPIcall();
@@ -184,12 +208,7 @@
             //     vm.userImageUrl = vm.localdatadetails.images;
             // }
         }
-        $scope.$watch(
-            function($scope) {
-                vm.userdetails = storageFactory.getuserdetails();
-                vm.headerimagefunction();
-            });
-
+  
         vm.logoutclick = function() {
             vm.logoutpopup = $scope.logoutpopup ? false : true;
         }

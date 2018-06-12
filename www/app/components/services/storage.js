@@ -10,7 +10,9 @@
             signoffdata=null,
             changesinsignoff=null,
             changesBoolean=null,
+            logoURL=null,
             dashboarddetailsresponse = null;
+
 
 
         return {
@@ -75,6 +77,13 @@
             },
             setChangesBoolean:function(data){
                 changesBoolean=data;
+            },
+            getOrgLogo:function(){
+                return logoURL;
+            },
+            setOrgLogo:function(url)
+            {
+                logoURL=url;
             },
             clearAllStorage: function() {
                 loginValue = null;

@@ -2,8 +2,9 @@
    <header class="fixed-hdr">
       <div class="">
          <div class="">
-            <img class="logo" src="https://app.swifttrack.co.uk/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/settings/nf-logo.jpg" alt="logo">
-         </div>
+            <img class="logo" ng-src="{{vm.logourlassess | filefilter}}" alt="logo">
+            <!-- <img class="logo" src="https://app.swifttrack.co.uk/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/settings/nf-logo.jpg" alt="logo"> -->
+      </div>
       </div>
       <div class="">
          <div class="top-r tr-single-btn">
@@ -187,7 +188,7 @@
 
 
 
-         <footer>&copy; 2018 SwiftTrack V1.1&nbsp;&nbsp;&vellip;&nbsp;&nbsp;Licensed to Food International</footer>
+         <footer>&copy; 2018 SwiftTrack V1.1&nbsp;&nbsp;&vellip;&nbsp;&nbsp;Licensed to {{vm.org_name}}</footer>
       </div>
       </div>
 
@@ -221,16 +222,45 @@
                <div class="col-xs-12" ng-if="resouval.type_id == 2">
                   <h1>{{resouval.item_content}}</h1>
                </div>
-               <div col-6 class="col-xs-6" ng-if="resouval.type_id == 3">
-                  <p>{{resouval.item_content}}</p>
-                  <div class="pad-15"></div>
+               <div class="col-xs-12" ng-if="resouval.type_id == 1">
+                        <h1>{{resouval.item_content}}</h1>
+                     </div>
+               
+               <!-- <div col-6 class="col-xs-6" ng-if="resouval.type_id == 3"> -->
+                        <div class="col-xs-12" ng-if="resouval.type_id == 3">
+                     <p>{{resouval.item_content}}</p>
+                  <!-- <div class="pad-15"></div> -->
                </div>
-               <div col-6 class="col-xs-6" ng-if="resouval.type_id == 3"><img class="img-resource" ng-src="{{resouval.item_media | filefilter}}" alt=""></div>
-               <div col-6 class="col-xs-6" ng-if="resouval.type_id == 4"><img class="img-resource" ng-src="{{resouval.item_media | filefilter}}" alt=""></div>
-               <div col-6 class="col-xs-6" ng-if="resouval.type_id == 4">
+               <!-- <div col-6 class="col-xs-6" ng-if="resouval.type_id == 3"><img ng-if="resouval.file_type == 'image'" class="img-resource" ng-src="{{resouval.item_media | filefilter}}" alt=""> -->
+                  <div  class="col-xs-12" ng-if="resouval.type_id == 3"><img ng-if="resouval.file_type == 'image'" class="img-resource" ng-src="{{resouval.item_media | filefilter}}" alt="">
+                  <div ng-if="resouval.file_type == 'movie'">
+                              <div ng-click="vm.videoclick($event)" style="height: 190px;width:  100%;position: absolute;z-index: 99999999999999999999999999999999999;"></div>
+                              <video width="280" height="240" controls>
+                                    <source src="" dynamic-url dynamic-url-src="{{resouval.item_media | filefilter}}">
+                                </video>
+
+                  </div>
+            </div>
+               <!-- <div col-6 class="col-xs-6" ng-if="resouval.type_id == 4"><img ng-if="resouval.file_type == 'image'" class="img-resource" ng-src="{{resouval.item_media | filefilter}}" alt=""> -->
+                  <div  class="col-xs-12" ng-if="resouval.type_id == 4"><img ng-if="resouval.file_type == 'image'" class="img-resource" ng-src="{{resouval.item_media | filefilter}}" alt="">  
+                  <div ng-if="resouval.file_type == 'movie'">
+                              <div ng-click="vm.videoclick($event)" style="height: 190px;width:  100%;position: absolute;z-index: 99999999999999999999999999999999999;"></div>
+                              <video width="280" height="240" controls>
+                                    <source src="" dynamic-url dynamic-url-src="{{resouval.item_media | filefilter}}">
+                                </video>
+
+                  </div>
+            </div>
+               
+               <!-- <div col-6 class="col-xs-6" ng-if="resouval.type_id == 4"> -->
+                  <div class="col-xs-12" ng-if="resouval.type_id == 4">
                   <p>{{resouval.item_content}}</p>
-                  <div class="pad-15"></div>
+                  <!-- <div class="pad-15"></div> -->
                </div>
+               <div class="col-xs-12" ng-if="resouval.type_id == 6">
+                        <p>seperator</p>
+                        <!-- <div class="pad-15"></div> -->
+                     </div>
             </div>
          </div>
       </div>

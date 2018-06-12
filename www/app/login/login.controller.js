@@ -65,7 +65,7 @@
                         $cookieStore.put('loginAuth', true);
                         $cookieStore.put('sessionkey', resp.result[Object.keys(resp.result)].sessionkey);
                         localStorage.setItem("loginAuth", true);
-                        // localStorage.setItem("first_name", resp.result[Object.keys(resp.result)].first_name);
+                       // localStorage.setItem("first_name", resp.result[Object.keys(resp.result)].first_name);
                         // localStorage.setItem("images", resp.result[Object.keys(resp.result)].images);
                         // localStorage.setItem("job_role_ids", resp.result[Object.keys(resp.result)].job_role_ids);
                         // localStorage.setItem("limited_to_people", resp.result[Object.keys(resp.result)].limited_to_people);
@@ -95,7 +95,8 @@
             vm.obj.login_type = Object.keys(resp.result)[0];
             LoginService.putDataPouch(vm.obj, 'post_jsonobject').then(function() {
                 LoginService.fetchfulldata(vm.obj).then(function(resp) {
-                    //console.log("*********full response",resp);
+                    console.log("*********full response",resp);
+                    storageFactory.setOrgLogo(resp.org_config.logo)
                     downloadfileService.assessmentmediadownload(resp)
                     //stop loading here
                     Loader.stopLoading();

@@ -4,6 +4,10 @@
 
         vm.assessmentmediadownload = function(response) {
 
+            var logofulurl = response.org_config.logo;
+            var logfn = logofulurl.substring(logofulurl.lastIndexOf('/')+1);
+            var encodlogourl = encodeURI(logofulurl); 
+            vm.downloadImage( encodlogourl,logfn);
             //download assessor image
             var furl = storageFactory.getuserdetails().images;
 
