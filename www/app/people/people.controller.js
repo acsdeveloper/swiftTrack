@@ -12,6 +12,21 @@
             else if (9 >= percentage && percentage >= 0) { return "progressred"; }
 
         }
+
+        vm.init = function()
+        {
+            reportService.get_org_config_report().then(function(resp){
+                console.log("####@@@@ dashboard123 ",resp);
+                vm.logourlreport =   resp.logo;
+                console.log("vm.logourlassess",vm.logourlassess);
+            })
+
+            reportService.get_org_name_report().then(function(resp){
+                vm.org_name =   resp;
+            })
+
+        }
+        vm.init();
         if (!storageFactory.getuserreportid()) {
             $state.go('dashboard')
         }

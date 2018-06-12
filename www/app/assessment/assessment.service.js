@@ -6,6 +6,43 @@
         vm.localDB = new PouchDB("Swifttrack", {
             revs_limit: 2
         });
+
+        vm.get_org_config_assess = function(obj) {
+            if (Constants.productionServer) {
+                vm.docname ='detailed_document';
+            }
+            else {
+                console.log('api call json');
+                vm.url = 'json/job.json';
+            }
+            vm.docname ='detailed_document';
+            vm.data='org_config'
+            // vm.object=obj;
+
+            return Pouchfactory.get(vm.docname,vm.data).then(function(resp) {
+                vm.defered = $q.defer();
+                vm.defered.resolve(resp);
+                return vm.defered.promise;
+            });
+        };
+        vm.get_org_name_access = function(obj) {
+            if (Constants.productionServer) {
+                vm.docname ='localdata';
+            }
+            else {
+                console.log('api call json');
+                vm.url = 'json/job.json';
+            }
+            vm.docname ='localdata';
+            vm.data='org_name'
+            // vm.object=obj;
+
+            return Pouchfactory.get(vm.docname,vm.data).then(function(resp) {
+                vm.defered = $q.defer();
+                vm.defered.resolve(resp);
+                return vm.defered.promise;
+            });
+        };
         vm.saveAPIOnline = function() {
             vm.localDB = new PouchDB("Swifttrack", {
                 revs_limit: 2
