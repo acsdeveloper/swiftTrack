@@ -13,9 +13,9 @@
             }
 
             vm.data["params"] = object;
-            Loader.startLoading();
+            // Loader.startLoading();
             return Request.post(vm.url, vm.data).then(function(resp) {
-                Loader.stopLoading();
+                // Loader.stopLoading();
                 vm.defered = $q.defer();
                 vm.defered.resolve(resp);
                 return vm.defered.promise;
@@ -31,9 +31,9 @@
             }
             obj.sessionkey=$cookieStore.get('sessionkey');
             vm.object=obj;
-            Loader.startLoading();
+            // Loader.startLoading();
             return Request.post(vm.url,vm.object).then(function(resp) {
-                Loader.stopLoading();
+                // Loader.stopLoading();
                 vm.defered = $q.defer();
                 vm.defered.resolve(resp);
                 return vm.defered.promise;

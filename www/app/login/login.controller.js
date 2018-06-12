@@ -1,22 +1,22 @@
 (function() {
     // 'use strict';
 
-    function statusCtrl($ionicPopup,downloadfileService,$state, $ionicModal, $scope, $http, $location, $cookieStore, LoginService, storageFactory) {
+    function statusCtrl(Loader,$ionicPopup,downloadfileService,$state, $ionicModal, $scope, $http, $location, $cookieStore, LoginService, storageFactory) {
 
         var vm = this;
         vm.showloader = false;
-        document.addEventListener("offline", onOffline, false);
+        // document.addEventListener("offline", onOffline, false);
 
-        function onOffline() {
-            // Handle the offline event
-            $ionicPopup.alert({
-                title: 'Low space',
-                template: 'Please Free up some space and come back'
-            }).then(function(res) {
-                ionic.Platform.exitApp();
-            });
+        // function onOffline() {
+        //     // Handle the offline event
+        //     $ionicPopup.alert({
+        //         title: 'No Internet',
+        //         template: 'You are in offline'
+        //     }).then(function(res) {
+        //         // ionic.Platform.exitApp();
+        //     });
             
-        }
+        // }
         vm.localDB = new PouchDB("Swifttrack", {
             revs_limit: 2
         });
@@ -51,6 +51,8 @@
                 vm.localDB = new PouchDB("Swifttrack", {
                     revs_limit: 2
                 });
+                //start loader here
+                Loader.startLoading();
                 LoginService.loginAjax(vm.object).then(function(resp) {
 
                     //console.log(resp)
@@ -95,6 +97,8 @@
                 LoginService.fetchfulldata(vm.obj).then(function(resp) {
                     //console.log("*********full response",resp);
                     downloadfileService.assessmentmediadownload(resp)
+                    //stop loading here
+                    Loader.stopLoading();
                     LoginService.putDataPouch(resp, 'detailed_document').then(function() {
                         $state.go('dashboard')
                     })
@@ -222,5 +226,5 @@
 
     angular.module('swiftTrack.login')
         .controller('loginCtrl', statusCtrl);
-    statusCtrl.$inject = ['$ionicPopup','downloadfileService','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'LoginService', 'storageFactory'];
+    statusCtrl.$inject = ['Loader','$ionicPopup','downloadfileService','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'LoginService', 'storageFactory'];
 }());
