@@ -77,10 +77,10 @@
                 function onOffline() {
                     console.log('Offline detected');
                     $ionicPopup.alert({
-                        title: 'No Interent',
+                        title: 'No Internet',
                         template: 'You are in offline'
                     }).then(function(res) {
-                        ionic.Platform.exitApp();
+                        // ionic.Platform.exitApp();
                     });
                     // Handle the offline event
                 }
@@ -136,6 +136,7 @@
                 if (window.StatusBar) {
                     StatusBar.styleDefault();
                 }
+                var isbackclick=false;
                 var handleBackButton = function() {
                     console.log($ionicHistory.currentStateName(), "current")
                     if ("dashboard" === $ionicHistory.currentStateName() || "login" === $ionicHistory.currentStateName()) {
@@ -154,21 +155,28 @@
 
                     }
                     else if ("assessment" === $ionicHistory.currentStateName()) {
+
+                        if(isbackclick==false){
+                            isbackclick=true;
+                            $ionicPopup.confirm({
+                                title: 'Without saving document',
+                                content: 'Do you want to return to Dashboard?',
+                                okText: 'OK',
+                                cancelText: 'Cancel'
+                            }).then(function (res) {
+                                console.log(res)
+                                    // if (res) {
+                                    //     $ionicHistory.goBack();
+                                    // }
+                                    if(res){
+                                        isbackclick=false;
+                                        $ionicHistory.goBack();
+
+                                    }
+                            });
+                        }
                         console.log('get asses');
-                        $ionicPopup.confirm({
-                            title: 'Without saving document',
-                            content: 'Do you want to return to Dashboard?',
-                            okText: 'OK',
-                            cancelText: 'Cancel'
-                        }).then(function (res) {
-                            console.log(res)
-                                // if (res) {
-                                //     $ionicHistory.goBack();
-                                // }
-                                if(res){
-                                    $ionicHistory.goBack();
-                                }
-                        });
+                        
 
                     }
                     else if("signoff"==$ionicHistory.currentStateName()){
@@ -250,6 +258,21 @@
                 
             };
         })
+        .directive('compileTemplate', function($compile, $parse){
+            return {
+                link: function(scope, element, attr){
+                    var parsed = $parse(attr.ngBindHtml);
+                    function getStringValue() {
+                        return (parsed(scope) || '').toString();
+                    }
+        
+                    // Recompile if the template changes
+                    scope.$watch(getStringValue, function() {
+                        $compile(element, null, -9999)(scope);  // The -9999 makes it skip directives so that we do not recompile ourselves
+                    });
+                }
+            }
+        });
 
         
 

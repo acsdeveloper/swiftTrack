@@ -35,7 +35,7 @@
                     var mediafullurl1=mediafullurl2.split('/')[mediafullurl2.split('/').length-1]
                     mediafullurl="https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/resources/"+mediafullurl1
                     var filename = mediafullurl.substring(mediafullurl.lastIndexOf('/') + 1);
-                    console.log(mediafullurl,filename,"testers test")
+                    // console.log(mediafullurl,filename,"testers test")
                     vm.downloadImage(mediafullurl, filename)
                 })
             })
@@ -54,7 +54,7 @@
                                                     if (key3c == 'media' || key3c == 'pdf') {
                                                         Object.keys(response.assessment[key][key1][key2][key3].indicators[key3a][key3b][key3c]).map(function(key3d, index3d) {
                                                             response.assessment[key][key1][key2][key3].indicators[key3a][key3b][key3c].data_ev.split(',').map(function(a) {
-                                                                console.log(a,"download test url")
+                                                                // console.log(a,"download test url")
                                                                 return vm.mediares(a);
                                                             })
                                                         })

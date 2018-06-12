@@ -7,14 +7,14 @@
                 </div>
                 <div class="panel-body">
                     <div class="login-row">
-                        <input id="orgName" ng-keypress="vm.myFunct($event)" focus-me="vm.shouldBeOpen" type="text" class="form-control fademe" placeholder="Organisation" ng-model="vm.organisation">
+                        <input id="orgName" autocapitalize="none" ng-keypress="vm.myFunct($event)" focus-me="vm.shouldBeOpen" type="text" class="form-control fademe" placeholder="Organisation" ng-model="vm.organisation">
                     </div>
 
                     <div class="login-row">
-                        <input id="username" ng-keypress="vm.myFunct($event)" type="text" class="form-control fademe" placeholder="Username" ng-model="vm.username">
+                        <input id="username" autocapitalize="none" ng-keypress="vm.myFunct($event)" type="text" class="form-control fademe" placeholder="Username" ng-model="vm.username">
                     </div>
                     <div class="login-row">
-                        <input id="password" ng-keypress="vm.myFunct($event)" type="password" class="form-control fademe" placeholder="Password" ng-model="vm.password">
+                        <input id="password" autocapitalize="none" ng-keypress="vm.myFunct($event)" type="password" class="form-control fademe" placeholder="Password" ng-model="vm.password">
                     </div>
                     <div class="login-row">
                         <div class="form-msg alert alert-warning"></div>

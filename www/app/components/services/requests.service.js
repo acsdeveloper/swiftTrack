@@ -44,7 +44,7 @@
                             template: 'Please check your device internet connection'
                         }).then(function(res) {
                             //console.log(res);
-                            ionic.Platform.exitApp();
+                            // ionic.Platform.exitApp();
                         });
                     }
                     return deferred.promise;
@@ -53,7 +53,7 @@
                     //console.log('post')
                     var deferred = $q.defer();
                     // //console.log(NetworkInformation.isOnline())
-                    // if (NetworkInformation.isOnline()) {
+                    if (NetworkInformation.isOnline()) {
                     // Loader.startLoading();
                     var cb = callback || angular.noop;
                     $http.defaults.headers.post["Content-Type"] = "application/json";
@@ -80,18 +80,18 @@
                         });
                         return cb(err);
                     }.bind(this));
-                    // }
-                    // else {
-                    //     Loader.stopLoading();
-                    //     deferred.reject("No Internet Connection");
-                    //     $ionicPopup.alert({
-                    //         title: 'No Internet',
-                    //         template: 'Please check your device internet connection'
-                    //     }).then(function(res) {
-                    //         //console.log(res);
-                    //         ionic.Platform.exitApp();
-                    //     });
-                    // }
+                    }
+                    else {
+                        Loader.stopLoading();
+                        deferred.reject("No Internet Connection");
+                        $ionicPopup.alert({
+                            title: 'No Internet',
+                            template: 'Please check your device internet connection'
+                        }).then(function(res) {
+                            //console.log(res);
+                            // ionic.Platform.exitApp();
+                        });
+                    }
                     return deferred.promise;
                 },
                 patch: function(url, postData, callback) {
