@@ -335,11 +335,11 @@
                     var indID = $(this).attr('data-id');
                     var levelSet = $(this).attr('data-level-set');
 
-                    var evCamStr = ($(this).find('.ev-cam').attr('data-ev'))
+                    var evCamStr = ($(this).find('.ev-cam').attr('data-ev')).replace(/\,/g, '_*_');
                     var evCamidStr = ($(this).find('.ev-cam').attr('data-ev-ids'))
                     var evCamauthStr = ($(this).find('.ev-cam').attr('data-auth'))
 
-                    var evPDFStr = ($(this).find('.ev-pdf').attr('data-ev'))
+                    var evPDFStr = ($(this).find('.ev-pdf').attr('data-ev')).replace(/\,/g, '_*_');
                     var evPDFidStr = ($(this).find('.ev-pdf').attr('data-ev-ids'))
                     var evPDFauthStr = ($(this).find('.ev-pdf').attr('data-auth'))
 
@@ -828,54 +828,68 @@
 
 
         vm.evidenceupload = function(datatype) {
-            // console.log("camera upload ",navigator.camera)
-            if(datatype == 'cam'){
-               vm.camcapture = true;
-               
+        if(datatype == 'cam'){
+            vm.camcapture = !vm.camcapture;
             }
-            vm.camclick = function()
-            {
-                navigator.camera.getPicture(
-                    function cameraSuccess(imageurl){
-                        console.log("camera imageurl",imageurl);
+            else if(datatype =='pdf'){
+                vm.galclick('pdf');
+            }
+           }
+            vm.camclick = function(datatype){
+                var options = {
+                    limit: 1
+                 };
+                 navigator.device.capture.captureImage(onSuccess, onError, options);
+                function onSuccess(mediaFiles) {
+                    var name, path, size, type;
+                   path = mediaFiles[0].fullPath;
+                    name = mediaFiles[0].name;
+                    size = mediaFiles[0].size;
+                    type = mediaFiles[0].type;
+                    vm.movefile(path,name,type,datatype);
+                    vm.camcapture = false;
+                    }
+              function onError(error) {
+                    console.log(error);
+                    // navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
+                 }
+            }
+            vm.vidclick = function(datatype){
+                var options = {
+                    limit: 1,
+                    duration: 300
+                 };
+                 navigator.device.capture.captureVideo(onSuccess, onError, options);
+                function onSuccess(mediaFiles) {
+                var name, path, size, type;
+                path = mediaFiles[0].fullPath;
+                name = mediaFiles[0].name;
+                size = mediaFiles[0].size;
+                type = mediaFiles[0].type;
+                vm.movefile(path,name,type,datatype);
+                vm.camcapture = false;
+                 }
+                function onError(error) {
+                    console.log(error);
+                    // navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
+                 }
+          }
+            vm.galclick = function(datatype){
+               fileChooser.open(
+                    function fcSuccess(file){
+                    vm.filename=file.name;
+                    vm.camcapture = false;
+                    vm.movefile(file.uri,file.name,file.mime_type,datatype);
+                    console.log(" from filechooser",file.mime_type);
+                    console.log("file chooser data type dum",datatype);
                     },
-                    function cameraError(message){
-                        console.log("camera message",message);
-                    },
-                    {
-                    destinationType: Camera.DestinationType.FILE_URI,
-                    sourceType: Camera.PictureSourceType.CAMERA,
-                    popoverOptions: new CameraPopoverOptions(300, 300, 100, 100, Camera.PopoverArrowDirection.ARROW_ANY)
-    
-                    });  
-                console.log("cam click");
-            }
-            vm.vidclick = function()
-            {
-                console.log("video click");
-            }
-            vm.galclick = function()
-            {
-                console.log("gal click");
+                    function fcError(e){console.log(e);}
+               );   
             }
            
-           
-        //     fileChooser.open(
-        //         function fcSuccess(file){
-        //             vm.filename=file.name;
-        //             vm.movefile(file.uri,file.name,file.mime_type,datatype);
-        //             console.log(" from filechooser",file.mime_type);
-        //             },
-        //           function fcError(e){console.log(e);}
-        //    );   
-           
-            }
             vm.findfiletype=function(name){
-                console.log(name)
                 var filename;
-                
                 var type=name.split('.')[name.split('.').length-1];
-                //console.log(datatype,type,name)
                 if(type=='pdf'){filename='pdf'}
                 else if(type=='jpg' || type=='jpeg' ||type=='png' ||type=='svg'||type=='gif'){
                     filename='image';
@@ -883,29 +897,19 @@
                     filename='movie'
                 }
                 return filename;
-                //console.log(datatype,type,name,filename)
-                
-            }
+               }
             vm.movefile=function(uri,name,ftype,datatype){
                 var filename;
-                
-                console.log("movefile uri",uri);
-                console.log("movefile name",name);
-                
                 var type=name.split('.')[name.split('.').length-1];
-                //console.log(datatype,type,name)
                 if(type=='pdf'){filename='pdf'};
                 if(type=='jpg' || type=='jpeg' || type=='mp4' || type=='avi' || type=='png' ||type=='svg'||type=='gif'||type=='flv' || type=='wmv' || type=='mov' ||type=='mkv'){
                     filename='cam';
                 }
-                //console.log(datatype,type,name,filename)
                 if(filename!=datatype){
-
-                    alert('error file type');
+                alert('error file type');
                     return;
                 }
-               
-                var ft = new FileTransfer();
+               var ft = new FileTransfer();
                 var time = new Date();
                 var newfilename=name.split('.')[0]+'_'+time.getTime()+'.'+name.split('.')[name.split('.').length-1]
 
@@ -916,21 +920,9 @@
                 console.log("file download success targetPath",targetPath);
                 ft.download(uri,targetPath,downloadsuccess,downloadfailed)
                     function downloadsuccess(entry) {
-
-
-
-                       
                         vm.localfilemediaarray.push(targetPath);
-                        // console.log("file download success uri",uri);
-                        // console.log("file download success targetPath",targetPath);
-                        console.log(" vm.localfilearray check array", vm.localfilearray);
-                        
-                        
-                        
-                        var evidence=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value;
-
+                       var evidence=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value;
                         angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value=evidence==''?newfilename:evidence+','+newfilename;
-                        
                         var evidenceid=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev-ids'].value;
                         angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev-ids'].value=evidenceid==''?'new':evidenceid+',new';
                         // angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-auth'].value+=','+vm.currentUser;

@@ -241,3 +241,32 @@ ion-content.assess-top {
     height: 70vh !important;
     width: 85vw !important;
 }
+.assessment-page .fontclass
+{
+    font-size: 40px;
+   
+    color: #80449f;
+
+}
+
+.assessment-page .icon-video-camera:before {
+   
+    content: "\e914";
+  
+  }
+
+  .assessment-page .icon-camera:before {
+   
+    content: "\e90f";
+  }
+
+
+  .assessment-page .icon-folder-open:before {
+    
+    content: "\e930";
+  }
+  .login-page
+  {
+    justify-content: center;
+
+  }
