@@ -1,6 +1,6 @@
 (function() {
     // 'use strict';
-    function assessmentCtrl($ionicPopup,NetworkInformation,Constants,pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService,$filter) {
+    function assessmentCtrl(Loader,$ionicPopup,NetworkInformation,Constants,pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService,$filter) {
         //console.log("after ctrl");
         var vm = this;
         vm.localfilemediaarray =[];
@@ -278,9 +278,11 @@
                 console.log(NetworkInformation.isOnline(),"isonline")
                 vm.saveuploadpouch(vm.localfilemediaarray,'saveuploadfiles').then(function() {   
                 if(NetworkInformation.isOnline()==true){
-                    // Loader.startLoading();
+                    Loader.startLoading();
+                    console.log("start laoder")
                     ModuleService.saveAPIOnline().then(function(res){
-                        // Loader.stopLoading();
+                        // 
+                        // $state.go('dashboard');
                         console.log("confirm save vm.localfilemediaarray",vm.localfilemediaarray);
                         vm.localfilemediaarray.map(function(a){
                            vm.filetoserver(a);
@@ -288,6 +290,10 @@
                         console.log(res,'response data from assesmemr');
                         ModuleService.fetchfulldata().then(function(){
                             $state.go('dashboard');
+                            console.log("stoped laoder")
+                            // Loader.stopLoading();
+                            // window.location.reload(true);
+                           
                         })
                     })
                 }
@@ -295,7 +301,7 @@
                     $cookieStore.put("ChangesBoolean", true);
                     $ionicPopup.alert({
                         title: 'No Internet',
-                        template: 'You are Offline. Your data will sync once you are online'
+                        template: 'You are Offline. Your data will be sync once you are online'
                     }).then(function(res) {
                         $state.go('dashboard');
                     });
@@ -335,11 +341,11 @@
                     var indID = $(this).attr('data-id');
                     var levelSet = $(this).attr('data-level-set');
 
-                    var evCamStr = ($(this).find('.ev-cam').attr('data-ev'))
+                    var evCamStr = ($(this).find('.ev-cam').attr('data-ev')).replace(/\,/g, '_*_');
                     var evCamidStr = ($(this).find('.ev-cam').attr('data-ev-ids'))
                     var evCamauthStr = ($(this).find('.ev-cam').attr('data-auth'))
 
-                    var evPDFStr = ($(this).find('.ev-pdf').attr('data-ev'))
+                    var evPDFStr = ($(this).find('.ev-pdf').attr('data-ev')).replace(/\,/g, '_*_');
                     var evPDFidStr = ($(this).find('.ev-pdf').attr('data-ev-ids'))
                     var evPDFauthStr = ($(this).find('.ev-pdf').attr('data-auth'))
 
@@ -1316,5 +1322,5 @@
 
     angular.module('swiftTrack.assessment')
         .controller('assessmentCtrl', assessmentCtrl);
-    assessmentCtrl.$inject = ['$ionicPopup','NetworkInformation','Constants','PDFViewerService','$sce','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'ModuleService','$filter'];
+    assessmentCtrl.$inject = ['Loader','$ionicPopup','NetworkInformation','Constants','PDFViewerService','$sce','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'ModuleService','$filter'];
 }());

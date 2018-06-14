@@ -4,10 +4,11 @@
     function statusCtrl(SignoffService,$cordovaNetwork,$interval,SyncService,Loader, $timeout, $state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, dashboardService, $ionicPlatform) {
 
         var vm = this;
-        Loader.startLoading();
-
+        // Loader.startLoading();
+        
         vm.init = function() {
             dashboardService.LocaldatadetailsPouch().then(function(resp){
+                // Loader.stopLoading();
                 // Loader.stopLoading();
                 vm.localdatadetails=resp;
             })
@@ -102,6 +103,8 @@
             // vm.object["jobroleids"] = localStorage.getItem('job_role_ids');
             // vm.login_type = localStorage.getItem('login_type');
             dashboardService.DashboarddetailsPouch().then(function(resp) {
+                console.log('loader stoped by dashboard')
+                // Loader.stopLoading();
                 storageFactory.setdashboarddetailsresponse(resp);
                 console.log(resp)
                 vm.fullresponseData = resp;
@@ -158,18 +161,18 @@
                     vm.headerimagefunction();
                 });
     
-            if($cordovaNetwork.isOnline()==true && storageFactory.getchangessignoff()){
-                Loader.startLoading();
-                SignoffService.fetchfulldata().then(function(val){
-                    vm.localdatadetails=val;
-                    Loader.stopLoading();2
-                    SignoffService.putDataPouch(val).then(function(){
-                        storageFactory.setchangessignoff(false);
-                        vm.dashboardAPIcall();
+            // if($cordovaNetwork.isOnline()==true && storageFactory.getchangessignoff()){
+            //     Loader.startLoading();
+            //     SignoffService.fetchfulldata().then(function(val){
+            //         vm.localdatadetails=val;
+            //         Loader.stopLoading();
+            //         SignoffService.putDataPouch(val).then(function(){
+            //             storageFactory.setchangessignoff(false);
+            //             vm.dashboardAPIcall();
     
-                    })
-                })
-               }
+            //         })
+            //     })
+            //    }
         });
         angular.element(document).ready(function() {
             

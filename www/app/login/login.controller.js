@@ -78,8 +78,9 @@
                             vm.fetchfulldataAPI(resp);
                         })
                     } else {
-                        // vm.errormessage = resp.result;
-                        vm.errormessage = "Wrong Username/Password";
+                        Loader.stopLoading();
+                        vm.errormessage = resp.result;
+                        // vm.errormessage = "Wrong Username/Password";
                     }
                     // vm.showloader = false;
 
@@ -99,7 +100,7 @@
                     storageFactory.setOrgLogo(resp.org_config.logo)
                     downloadfileService.assessmentmediadownload(resp)
                     //stop loading here
-                    Loader.stopLoading();
+                    // Loader.stopLoading();
                     LoginService.putDataPouch(resp, 'detailed_document').then(function() {
                         $state.go('dashboard')
                     })

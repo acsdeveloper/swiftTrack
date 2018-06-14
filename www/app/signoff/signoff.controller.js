@@ -121,12 +121,22 @@
                                 "competencies":new Object(),
                                }        
                         }
-
-                        doc.competencies[idObj.comp_id]={
-                            "p_id":idObj.ppl_id,
-                            "c_id":idObj.comp_id,
-                            "msg":idObj.msg
-                            }
+                        if(doc.competencies[idObj.comp_id]){
+                            doc.competencies[idObj.comp_id][idObj.ppl_id]={
+                                "p_id":idObj.ppl_id,
+                                "c_id":idObj.comp_id,
+                                "msg":idObj.msg
+                                }
+                        }else{
+                            doc.competencies[idObj.comp_id]=new Object();
+                            doc.competencies[idObj.comp_id][idObj.ppl_id]={
+                                "p_id":idObj.ppl_id,
+                                "c_id":idObj.comp_id,
+                                "msg":idObj.msg
+                                }
+                        }
+                        
+                       
                         // doc = obj;
                         return doc;
                     }
