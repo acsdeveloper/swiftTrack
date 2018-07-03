@@ -4,25 +4,30 @@
     function statusCtrl(SignoffService,$cordovaNetwork,$interval,SyncService,Loader, $timeout, $state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, dashboardService, $ionicPlatform) {
 
         var vm = this;
-        Loader.startLoading();
-
+        // Loader.startLoading();
+        
         vm.init = function() {
             dashboardService.LocaldatadetailsPouch().then(function(resp){
                 // Loader.stopLoading();
+                // Loader.stopLoading();
                 vm.localdatadetails=resp;
             })
-            vm.logourl =  storageFactory.getOrgLogo();
-            console.log("$$$$$$$dsshboard",vm.logourl);
-            if(storageFactory.getOrgLogo()==null){
-                dashboardService.get_org_config().then(function(resp){
-                    console.log("####@@@@ dashboard ",resp);
-                    vm.logourl =   resp.logo;
-                })
-            }
+            
                
             dashboardService.get_org_name_dashboard().then(function(resp){
                 vm.org_name = resp;
                 console.log("response&&&**",resp);
+                vm.logourl =  storageFactory.getOrgLogo();
+                console.log("$$$$$$$dsshboard",vm.logourl);
+                if(storageFactory.getOrgLogo()==null){
+                    dashboardService.get_org_config().then(function(resp){
+                        console.log("####@@@@ dashboard ",resp);
+                        //$scope.$apply(function() {
+                            vm.logourl =   resp.logo;
+                        // })
+                    
+                    })
+                }
             })
                 
                     // vm.localDB.get('detailed_document').then(function (doc) {
@@ -33,7 +38,7 @@
                 $state.go('login')
                 return;
             }
-           
+            
 
             vm.usrNotBar = true;
             vm.logoutpopup = false;
@@ -49,6 +54,7 @@
         //     })
         // }
         $interval(function () {
+            console.log("Interval call function");
             vm.dashboardAPIcall();
         }, 60000);
 
@@ -102,10 +108,13 @@
             // vm.object["jobroleids"] = localStorage.getItem('job_role_ids');
             // vm.login_type = localStorage.getItem('login_type');
             dashboardService.DashboarddetailsPouch().then(function(resp) {
+                console.log('loader stoped by dashboard')
+                // Loader.stopLoading();
                 storageFactory.setdashboarddetailsresponse(resp);
                 console.log(resp)
                 vm.fullresponseData = resp;
-                vm.signoffstatus = resp.signoffstatus.comps_count;
+
+                vm.signoffstatus = resp.signoffstatus?resp.signoffstatus.comps_count:0;
                
                 if(vm.signoffstatus !== 0)
                 {
@@ -129,6 +138,7 @@
         vm.competencyBtn = function(key) {
             // console.log(key)
             angular.element(document.querySelector("#competencies" + key)).show();
+            angular.element(document.querySelector("#myprogressreport" + key)).hide();
             angular.element(document.querySelector("#people" + key)).hide();
             angular.element(event.target).parents('li').addClass('active');
             angular.element(event.target).parents('li').siblings().removeClass('active')
@@ -158,26 +168,27 @@
                     vm.headerimagefunction();
                 });
     
-            if($cordovaNetwork.isOnline()==true && storageFactory.getchangessignoff()){
-                Loader.startLoading();
-                SignoffService.fetchfulldata().then(function(val){
-                    vm.localdatadetails=val;
-                    Loader.stopLoading();2
-                    SignoffService.putDataPouch(val).then(function(){
-                        storageFactory.setchangessignoff(false);
-                        vm.dashboardAPIcall();
+            // if($cordovaNetwork.isOnline()==true && storageFactory.getchangessignoff()){
+            //     Loader.startLoading();
+            //     SignoffService.fetchfulldata().then(function(val){
+            //         vm.localdatadetails=val;
+            //         Loader.stopLoading();
+            //         SignoffService.putDataPouch(val).then(function(){
+            //             storageFactory.setchangessignoff(false);
+            //             vm.dashboardAPIcall();
     
-                    })
-                })
-               }
+            //         })
+            //     })
+            //    }
         });
         angular.element(document).ready(function() {
-            
+            console.log('document ready ');
             dashboardService.LocaldatadetailsPouch().then(function(resp){
                 vm.localdatadetails=resp;
                 storageFactory.setuserdetails(resp);
                 // console.log("ck test ",resp);
                 vm.login_type = vm.localdatadetails.login_type;
+                vm.getOwnId = vm.localdatadetails.id;
                 // console.log(vm.login_type,"login type test")
                 $timeout(function() {
                     vm.dashboardAPIcall();
@@ -197,7 +208,10 @@
         //header
         vm.headerimagefunction = function() {
             if (vm.userdetails !== undefined && vm.userdetails !== null) {
-                vm.userImageUrl = vm.userdetails.images; 
+                // $scope.$apply(function() {
+                    vm.userImageUrl = vm.userdetails.images==""?"noImg":vm.userdetails.images; 
+                // })
+               
                 // console.log(vm.userImageUrl);
                 vm.userFirstName = vm.userdetails.first_name;
             }

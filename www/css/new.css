@@ -270,3 +270,32 @@ ion-content.assess-top {
     justify-content: center;
 
   }
+
+  .assessment-page .withsavepopup
+  {
+    height: 100vh;
+    z-index: 99999999;
+    background-color: rgba(0, 0, 0, 0.76);
+    width: 100%;  
+  }
+
+  .assessment-page .assmdltxt
+  {
+      text-align: center;
+  }
+  .assessment-page .anshide
+  {
+      display: none !important;
+  }
+
+  .assessment-page .multiplechoice .checkbox
+  {
+  display: block !important;
+      padding: 0 !important;
+  }
+  .assessment-page .multiplechoice .checkbox .big-check label {
+      display: inline-flex;
+  }
+
+  .popup-container .popup-head {background-color: #337ab7 !important;}
+.popup-container .popup-title{color:white !important;}

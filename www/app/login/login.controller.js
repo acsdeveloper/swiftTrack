@@ -5,6 +5,11 @@
 
         var vm = this;
         vm.showloader = false;
+        if($cookieStore.get('org_name')){
+            vm.organisation=$cookieStore.get('org_name');
+        }
+               
+    
         // document.addEventListener("offline", onOffline, false);
 
         // function onOffline() {
@@ -61,7 +66,9 @@
                         // storageFactory.putService(resp);
                         storageFactory.login(true)
                         storageFactory.setuserdetails(resp.result[Object.keys(resp.result)]);
+
                         //console.log(storageFactory.getuserdetails())
+                        $cookieStore.put('org_name', vm.object["org"]);
                         $cookieStore.put('loginAuth', true);
                         $cookieStore.put('sessionkey', resp.result[Object.keys(resp.result)].sessionkey);
                         localStorage.setItem("loginAuth", true);
@@ -78,8 +85,9 @@
                             vm.fetchfulldataAPI(resp);
                         })
                     } else {
-                        // vm.errormessage = resp.result;
-                        vm.errormessage = "Wrong Username/Password";
+                        Loader.stopLoading();
+                        vm.errormessage = resp.result;
+                        // vm.errormessage = "Wrong Username/Password";
                     }
                     // vm.showloader = false;
 
@@ -99,7 +107,7 @@
                     storageFactory.setOrgLogo(resp.org_config.logo)
                     downloadfileService.assessmentmediadownload(resp)
                     //stop loading here
-                    Loader.stopLoading();
+                    // Loader.stopLoading();
                     LoginService.putDataPouch(resp, 'detailed_document').then(function() {
                         $state.go('dashboard')
                     })
@@ -175,7 +183,7 @@
     //  vm.mediares = function(a)
     //     {
     //         //console.log("mediapeople------------",a);
-    //         var comfileurl = "https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r"+a;
+    //         var comfileurl = "https://swifttrack-updated-version-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r"+a;
     //         var encodedmediaurl = encodeURI(comfileurl); 
     //         var filename = comfileurl.substring(comfileurl.lastIndexOf('/')+1);
     //         vm.downloadImage(encodedmediaurl,filename);

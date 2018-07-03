@@ -9,6 +9,7 @@
     "gulp-sass": "^3.1.0"
   },
   "dependencies": {
+    "Html5Video": "git+https://github.com/jaeger25/Html5Video.git",
     "angular-pouchdb": "^5.0.2",
     "bower": "^1.8.4",
     "cordova-android": "7.1.0",
@@ -23,6 +24,7 @@
     "cordova-plugin-media-capture": "^3.0.2",
     "cordova-plugin-network-information": "^2.0.1",
     "cordova-plugin-splashscreen": "^5.0.2",
+    "cordova-plugin-video-capture-plus": "^1.0.0",
     "cordova-plugin-whitelist": "^1.3.3",
     "file": "^0.2.2",
     "git": "^0.1.5",
@@ -46,7 +48,8 @@
       "maurodx-cordova-plugin-file-selector": {},
       "cordova-plugin-document-viewer": {},
       "cordova-plugin-camera": {},
-      "cordova-plugin-media-capture": {}
+      "cordova-plugin-media-capture": {},
+      "jaeger.Html5Video": {}
     },
     "platforms": [
       "android"

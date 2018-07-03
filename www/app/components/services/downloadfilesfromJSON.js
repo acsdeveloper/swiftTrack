@@ -33,7 +33,7 @@
                 Object.keys(resourcesection[key].resource_sections).map(function(key1, index1) {
                     var mediafullurl2 = resourcesection[key].resource_sections[key1].item_media;
                     var mediafullurl1=mediafullurl2.split('/')[mediafullurl2.split('/').length-1]
-                    mediafullurl="https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/resources/"+mediafullurl1
+                    mediafullurl="https://swifttrack-updated-version-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/resources/"+mediafullurl1
                     var filename = mediafullurl.substring(mediafullurl.lastIndexOf('/') + 1);
                     // console.log(mediafullurl,filename,"testers test")
                     vm.downloadImage(mediafullurl, filename)
@@ -73,7 +73,7 @@
         vm.mediares = function(a) {
             var name=a.split('/')[a.split('/').length-1];
 
-            var comfileurl = "https://swifttrack-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/" + name;
+            var comfileurl = "https://swifttrack-updated-version-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/" + name;
             var encodedmediaurl = encodeURI(comfileurl);
             var filename = comfileurl.substring(comfileurl.lastIndexOf('/') + 1);
             vm.downloadImage(encodedmediaurl, filename);

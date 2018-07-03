@@ -86,12 +86,12 @@
 												</div>
 											</div>
 											<div class="tab-pane" ng-if="vm.login_type !== 'person'" id="people{{vm.clearspace(jobrolesKey)}}">
-												<div ng-repeat="(peopleKey,peoples) in jobroles.people" ng-click="document.location='https://swifttrack-agilexcyber.c9users.io/report/{{people.id}}/'" class="person-holder">
+												<div ng-repeat="(peopleKey,peoples) in jobroles.people" ng-click="document.location='https://swifttrack-updated-version-agilexcyber.c9users.io/report/{{people.id}}/'" class="person-holder">
 													<div class="p_perc">{{peoples[0].p_perc}}%</div>
 													<div class="p_name">{{peoples[0].p_name+" "+peoples[0].last_name}}</div>
 													<span class="person-disc" ng-click="vm.goreportpage(peoples[0].p_id)">
 			                                   		<!--<img ng-src="{{peoples[0].p_image}}" alt="">-->
-			                                   		<img ng-src="{{peoples[0].p_image == '' ? 'https://swifttrack-agilexcyber.c9users.io/frontend/img/no-img-person.jpg' : peoples[0].p_image | filefilter  }}" alt="">
+			                                   		<img ng-src="{{peoples[0].p_image == '' ? 'noImg' : peoples[0].p_image | filefilter  }}" alt="">
 			                                    </span>
 												</div>
 											</div>
@@ -101,7 +101,7 @@
 														<h4>See How You're Progressing</h4>
 													</div>
 													<p class="body-text">Your progress report shows you, in a glance, all of your expected module indicators, how you've been marked, any comments made and any evidence gathered to support your assessment.</p>
-													<a class="btn btn-lg btn-primary" ng-click="document.location='https://swifttrack-agilexcyber.c9users.io/report/{{jobrolesKey}}/'">View My Progress Report Now</a>
+													<a class="btn btn-lg btn-primary" ng-click="vm.goreportpage(vm.getOwnId)">View My Progress Report Now</a>
 													<div class="pad-60"></div>
 													<div class="pad-60"></div>
 
@@ -117,7 +117,8 @@
 							<div class="pad-60 pull-left"></div>
 						</div>
 					</section>
-					<footer>&copy; 2018 SwiftTrack V1.1&nbsp;&nbsp;&vellip;&nbsp;&nbsp;Licensed to {{vm.org_name}}</footer>
+					<div ng-include="'./app/footer/footersw.html'"></div>
+					<!-- <footer>&copy; 2018 SwiftTrack V1.1&nbsp;&nbsp;&vellip;&nbsp;&nbsp;Licensed to {{vm.org_name}}</footer> -->
 				</div>
 			</div>
 			<script type="text/javascript" src="../../js/main.js?r=M7WQ1ZRDDU59DY9G"></script>

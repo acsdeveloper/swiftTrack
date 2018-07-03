@@ -96,6 +96,7 @@
                         SyncService.saveAPIOnline().then(function(){
                             Loader.stopLoading();
                             $cookieStore.put("ChangesBoolean", false);
+                            $state.reload()
                         })
 
                     }else{
@@ -103,7 +104,7 @@
                         Loader.stopLoading();
                         SignoffService.fetchfulldata().then(function(val){      //--fetching swifttrack full data
                             SignoffService.putDataPouch(val).then(function(){   //--saving full data in detailed document in pouch
-                                
+                                // $state.reload()
                             })
                         })
                     }
@@ -155,34 +156,41 @@
 
                     }
                     else if ("assessment" === $ionicHistory.currentStateName()) {
+                        $rootScope.$broadcast('ASSESSMENT_BACK_PRESS', {});
+                        // console.log("no:",isbackclick);
+                        // if(isbackclick==false){
+                        //     console.log("isbackclick******",isbackclick);
+                        //     isbackclick=true;
+                        //     $ionicPopup.confirm({
+                        //         title: 'Without saving document',
+                        //         content: 'Do you want to return to Dashboard?',
+                        //         okText: 'OK',
+                        //         cancelText: 'Cancel'
+                        //     }).then(function (res) {
+                        //         console.log(res)
+                        //             // if (res) {
+                        //             //     $ionicHistory.goBack();
+                        //             // }
+                        //             isbackclick=false;
+                        //             if(res){
+                                        
+                        //                 $ionicHistory.goBack();
 
-                        if(isbackclick==false){
-                            isbackclick=true;
-                            $ionicPopup.confirm({
-                                title: 'Without saving document',
-                                content: 'Do you want to return to Dashboard?',
-                                okText: 'OK',
-                                cancelText: 'Cancel'
-                            }).then(function (res) {
-                                console.log(res)
-                                    // if (res) {
-                                    //     $ionicHistory.goBack();
-                                    // }
-                                    if(res){
-                                        isbackclick=false;
-                                        $ionicHistory.goBack();
-
-                                    }
-                            });
-                        }
-                        console.log('get asses');
+                        //             }
+                        //     });
+                        // }
+                        // console.log('get asses');
                         
 
                     }
                     else if("signoff"==$ionicHistory.currentStateName()){
                         console.log($cordovaNetwork.isOnline(),"locatopnmj")
                         if($cordovaNetwork.isOnline()==true && storageFactory.getchangessignoff()){
-                            $ionicHistory.goBack();
+                            SignoffService.fetchfulldata().then(function(val){
+                                $ionicHistory.goBack();
+                            SignoffService.putDataPouch(val).then(function(){
+                            })
+                        })
 
                         }else{
                             $ionicHistory.goBack();
@@ -249,8 +257,12 @@
 
         .filter('filefilter', function($filter) {
             return function (item) {
-                console.log(item)
-                if(item && item!=undefined){
+                console.log(item,"testers test");
+                if(item=="noImg" || item==""){
+                    console.log("return all values here",item)
+                    return './img/no-img-person.jpg';
+                }
+                else if(item && item!=undefined){
                     var targetPath = cordova.file.externalApplicationStorageDirectory +"files/";
                     var filename = item.substring(item.lastIndexOf('/')+1);
                     return targetPath+filename;

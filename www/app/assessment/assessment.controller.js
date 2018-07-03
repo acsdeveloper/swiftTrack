@@ -1,6 +1,6 @@
 (function() {
     // 'use strict';
-    function assessmentCtrl($ionicPopup,NetworkInformation,Constants,pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService,$filter) {
+    function assessmentCtrl(Loader,$ionicPopup,NetworkInformation,Constants,pdf,$sce,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, ModuleService,$filter, $rootScope) {
         //console.log("after ctrl");
         var vm = this;
         vm.localfilemediaarray =[];
@@ -9,11 +9,11 @@
         });
         vm.init = function()
         {
-            console.log("init");
+            // console.log("init");
             ModuleService.get_org_config_assess().then(function(resp){
-                console.log("####@@@@ dashboard123 ",resp);
+                // console.log("####@@@@ dashboard123 ",resp);
                 vm.logourlassess =   resp.logo;
-                console.log("vm.logourlassess",vm.logourlassess);
+                // console.log("vm.logourlassess",vm.logourlassess);
             })
             ModuleService.get_org_name_access().then(function(res){
                 vm.org_name = res;
@@ -33,13 +33,13 @@
             ModuleService.LocaldatadetailsPouch().then(function(response){
                 vm.localdatadetails=response;
                 vm.jobroleandmod = storageFactory.getJobAndMod();
-                console.log(vm.jobroleandmod,"job role and comp id");
+                // console.log(vm.jobroleandmod,"job role and comp id");
             vm.currentUser=vm.localdatadetails.username;
             ModuleService.ModuledetailsPouch(vm.jobroleandmod).then(function(resp) {
-                console.log(resp,"assessment controller response");
+                // console.log(resp,"assessment controller response");
                 vm.assessmentdetail_response = resp;
                 ModuleService.ReportdetailsPouch(vm.jobroleandmod).then(function(resp1) {
-                    console.log(resp1,"assessment controller response");
+                    // console.log(resp1,"assessment controller response");
                     vm.reportdetail_response = resp1;
                 });
             });
@@ -200,22 +200,23 @@
 
         }
         vm.confirm_without_save = function() {
-            // vm.withoutsave = true;
-            // vm.assesscancelsavepopup =false;
-            $state.go('dashboard')
+            vm.withoutsave = true;
+            angular.element('.assessment-page header #cancelSession').css('color', 'rgb(229, 229, 229)');
+            vm.assesscancelsavepopup =false;
+            // $state.go('dashboard')
 
         }
-        // vm.retdashboard = function()
-        // {
-        //     vm.withoutsave = false;
-        //        $state.go('dashboard')
-        // }
+        vm.retdashboard = function()
+        {
+            vm.withoutsave = false;
+               $state.go('dashboard')
+        }
 
-        // vm.contsection = function()
-        // {
-        //     vm.withoutsave = false;
+        vm.contsection = function()
+        {
+            vm.withoutsave = false;
 
-        // }
+        }
 
         vm.cancel_without_save = function() {
             vm.assesscancelsavepopup = false;
@@ -275,36 +276,76 @@
         vm.confirm_savesession = function(){
             vm.savefunction().then(function(){
                 console.log("asssessment ends");
-                console.log(NetworkInformation.isOnline(),"isonline")
+                // console.log(NetworkInformation.isOnline(),"isonline")
                 vm.saveuploadpouch(vm.localfilemediaarray,'saveuploadfiles').then(function() {   
                 if(NetworkInformation.isOnline()==true){
-                    // Loader.startLoading();
+                    vm.assessoksavepopup = false;
+                    
+                    vm.withsaveloader = true;
+                    // console.log("start laoder")
                     ModuleService.saveAPIOnline().then(function(res){
-                        // Loader.stopLoading();
-                        console.log("confirm save vm.localfilemediaarray",vm.localfilemediaarray);
+                        // 
+                        // $state.go('dashboard');
+                       
+                        // console.log("confirm save vm.localfilemediaarray",vm.localfilemediaarray);
                         vm.localfilemediaarray.map(function(a){
+                            console.log("file array ",a);
                            vm.filetoserver(a);
                         });
-                        console.log(res,'response data from assesmemr');
+                        // console.log(res,'response data from assesmemr');
                         ModuleService.fetchfulldata().then(function(){
-                            $state.go('dashboard');
+                            vm.withsaveloader = false;
+                            vm.withsave = true;
+                            angular.element('.assessment-page header #saveSession').css('color', 'rgb(229, 229, 229)');
+                           
+                            // Loader.stopLoading();
+                            // window.location.reload(true);
+                           
                         })
                     })
                 }
                 else{
+                    // console.log("withsaveoff");
+                    $scope.$apply(function() {
+                        // vm.withsaveoff = true;  
+                        // vm.withoutsave = true;
+                        vm.withsaveoff = true;
+                    })
+                   
                     $cookieStore.put("ChangesBoolean", true);
-                    $ionicPopup.alert({
-                        title: 'No Internet',
-                        template: 'You are Offline. Your data will sync once you are online'
-                    }).then(function(res) {
-                        $state.go('dashboard');
-                    });
+                   
+                    // $ionicPopup.alert({
+                    //     title: 'No Internet',
+                    //     template: 'You are Offline. Your data will be sync once you are online'
+                    // }).then(function(res) {
+                    //     console.log("offline response",res);
+                    //     $state.go('dashboard');
+                    // });
+
                    
                 }
             })
                 
                 
             })
+        }
+
+        $rootScope.$on("ASSESSMENT_BACK_PRESS", function () {
+            // console.log("assess**$%%");
+            $scope.$apply(function() {
+                // vm.withsaveoff = true;  
+                vm.withoutsave = true;
+            })
+            
+        })
+
+        vm.withsave_godashboard = function()
+        {
+            vm.withsaveoff = false;
+            vm.withsave = false;
+            $state.go('dashboard');
+            // console.log("stoped laoder")
+
         }
         vm.savefunction = function() {
             return new Promise(function(resolve, reject) {
@@ -385,7 +426,7 @@
                                                               
             var localdatavalue=vm.assessmentdetail_response.people;
             var localreportvalue=vm.reportdetail_response;
-            console.log(localreportvalue,"process data value");
+            // console.log(localreportvalue,"process data value");
             //console.log(localdatavalue,personIDsArr.length,"finaldata")
             for(i=0;i<=personIDsArr.length-1;i++){
                 console.log(localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id],"v1 test")
@@ -434,7 +475,7 @@
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.pdf.data_ev_ids=pdfevid[i];
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.pdf.data_auth=pdfauth[i];
                         var objmedia=[];
-                        console.log(evPDFArr,"test v1 new")
+                        // console.log(evPDFArr,"test v1 new")
                         evPDFArr[i].split(',').map((val,ind)=>{
                             // objmedia=[];
                             var valueobj={
@@ -444,7 +485,7 @@
                             }
                             objmedia.push(valueobj)
                         })
-                        console.log(evPDFArr,objmedia,"test v1 new")
+                        // console.log(evPDFArr,objmedia,"test v1 new")
                         localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].pdf=objmedia;
                         
                     }
@@ -471,7 +512,7 @@
                             }
                             objmedia.push(valueobj)
                         })
-                        console.log(evNoteArr,objmedia,"test v1 new")
+                        // console.log(evNoteArr,objmedia,"test v1 new")
                         localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].notes=objmedia;
                         
                         
@@ -490,7 +531,7 @@
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.question.data_ev_ids=quesevid[i];                    
                         // localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].type_ref.question.data_auth=quesauth[i];  
                         var objmedia=[];
-                        console.log(evNoteArr,"test v1 new")
+                        // console.log(evNoteArr,"test v1 new")
                         evQuesArr[i].split(',').map((val,ind)=>{
                             // objmedia=[];
                             var valueobj={
@@ -499,7 +540,7 @@
                             }
                             objmedia.push(valueobj)
                         })
-                        console.log(evQuesArr,objmedia,"test v1 new")
+                        // console.log(evQuesArr,objmedia,"test v1 new")
                         localreportvalue[personIDsArr[i]]['detailedReport'][vm.jobroleandmod.comp_id]['modules'][vm.jobroleandmod.m_id]['indicators'][indicatorIDsArr[i]].notes=objmedia;
                         
                         
@@ -507,7 +548,7 @@
                 // }
                 
             }
-            console.log(localreportvalue,'ck changes')
+            // console.log(localreportvalue,'ck changes')
             vm.putDataPouchDetailedDoc(localdatavalue,'detailed_document');
 
             vm.objSave = {	person_ids:personIDs,
@@ -518,7 +559,7 @@
                 notes:noteStr,
                 ques:quesStr,
                 del:deleteEvStr};
-                console.log(vm.objSave,"objsave");
+                // console.log(vm.objSave,"objsave");
                 //save as api passing data
               
                 vm.pouchSaveApiData(vm.objSave).then(function(){
@@ -533,7 +574,7 @@
         vm.pouchSaveApiData = function(objSave){
             return new Promise(function(resolve, reject) {
             function detailedDocfunc1(doc) {
-                console.log(doc,"entry");
+                // console.log(doc,"entry");
                 if(vm.isEmpty(doc)){
                     var doc={
                         "indicators":{
@@ -567,10 +608,10 @@
 
             vm.localDB.upsert('saveAPIdata', detailedDocfunc1).then(function() {
                 resolve('success')
-                console.log('success')
+                // console.log('success')
             }).catch(function(err) {
                 reject(err)
-                console.log(err)
+                // console.log(err)
             });
         });
         }
@@ -579,11 +620,59 @@
             vm.assessoksavepopup = false;
             angular.element('.assessment-page header #saveSession').css('color', 'rgb(229, 229, 229)');
         }
+        vm.multichoicefun = function($event)
+        {
+            // tem.substr(3,tem.length-1)
+            
+            // console.log("###multiple choice function $event",$event);
+            // console.log("vm.myval",vm.myval);
+        }
+        vm.choicevalsep = function(val)
+        {
+            return  val.substr(3,val.length-1)
+            // console.log("%%%%%% value",val);
+        }
 
 
         vm.assess_popupfun = function(key,assessdetails,$event) {
+            // console.log("vm.assess_popupfun key",key,"vm.assess_popupfun asses deta",assessdetails,"$event",$event)
            if(key.ind_is_q == true ){
-               vm.assquestion = key.orgcontent;
+            //    console.log("question",key.ind_is_q)
+            //    console.log("check qust string",key.orgcontent.indexOf("a)"));
+            if(key.orgcontent.indexOf("a)")>= 0)
+            {
+                vm.choiceans = true;
+                var qStrFull = key.orgcontent;
+                var qPrefArr = ["a)","b)","c)","d)","e)","f)","g)"];
+                qPrefArr.forEach(function(item, i) { 
+                    console.log("!!!!!multi",qStrFull);
+                qStrFull = qStrFull.replace(item,"_q*_"); 
+                });
+                var multiAnswerArr = qStrFull.split('_q*_');
+                // console.log("multiAnswerArr",multiAnswerArr);
+                vm.assquestion = multiAnswerArr[0];
+                vm.anschoice = multiAnswerArr.splice(1);
+                vm.anschoicelabel = [];
+                vm.anschoice.map((key,index)=>{
+                    qPrefArr.map((key1,index1)=>{
+                    if(index==index1){
+                       var val=key1+' '+key;
+                        vm.anschoicelabel.push(val)}
+                });
+                });
+            
+                
+                // console.log("answer choice",vm.anschoice);
+
+                // var currentAnswer = $(PRID).find('.ev-question').attr('data-ev');
+                
+            }
+            else {
+                vm.choiceans = false;
+                 vm.assquestion = key.orgcontent;
+
+            }
+               
              
 
            }
@@ -611,6 +700,7 @@
             //console.log(angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value)
             var datapath=angular.element($event.target).closest('.panel-row')[0].attributes['data-attribute-value'].value;
             vm.datapath=datapath;
+            // console.log("**vm.datapath",vm.datapath);
             var datacam=angular.element('[data-attribute-value="'+datapath+'"] .ev-cam')[0].attributes['data-ev'].value;
             var datapdf=angular.element('[data-attribute-value="'+datapath+'"] .ev-pdf')[0].attributes['data-ev'].value
             var datanotes=angular.element('[data-attribute-value="'+datapath+'"] .ev-notes')[0].attributes['data-ev'].value
@@ -658,7 +748,7 @@
            vm.finalarrnotesAuth=finalarrnotesAuth;
            vm.finalarrquestionAuth=finalarrquestionAuth;
 
-           console.log(" vm.gallerycamArr", vm.gallerycamArr);
+        //    console.log(" vm.gallerycamArr", vm.gallerycamArr);
            
             
         //console.log(" vm.datapath", vm.datapath);
@@ -667,6 +757,26 @@
         //console.log(" vm.finalarrcamEv_id", vm.finalarrcamEv_id);
         //console.log("vm.finalarrcamAuth",vm.finalarrcamAuth);    
 
+        }
+
+        vm.answericon = function(obj)
+        {
+
+
+            if(obj.ind_is_q == true )
+            {
+                // console.log("ind q true obj",obj)
+                // console.log("answericon#####",obj.type_ref.question.data_ev);
+                if(obj.type_ref.question.data_ev !== undefined){
+                        return false;
+                }
+                return true;
+                
+
+            }
+            // console.log("ind q false obj",obj)
+            return false;
+            // console.log("**********************object",obj.final_content,obj);
         }
         vm.iconobjcheck = function(obj)
         {
@@ -690,6 +800,7 @@
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-ev-ids'].value='new'
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-auth'].value=vm.currentUser
             angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question').removeClass("hidden");
+            angular.element('[data-attribute-value="'+vm.datapath+'"] .q-icon').addClass("anshide");
             vm.galleryquestionArr=vm.changemodel.split('_*_');
             vm.finalarrquestionAuth=vm.currentUser.split('_*_')
             vm.showupdatbtn=false;
@@ -726,7 +837,9 @@
         }
 
         vm.assesspopclose = function() {
+            // console.log("baseurl**",baseUrl);
             vm.assessmentpopup = false;
+            vm.camcapture = false;
             vm.bdycampanel = false;
             vm.bdypdfpanel = false;
             vm.bdynotespanel = false;
@@ -751,6 +864,7 @@
 
         vm.assesscam = function() {
             vm.bdycampanel = true;
+            vm.camcapture = false;
             vm.bdypdfpanel = false;
             vm.bdynotespanel = false;
             vm.bdyquestpanel = false;
@@ -760,6 +874,7 @@
         vm.assesspdf = function() {
             
             vm.bdycampanel = false;
+            vm.camcapture = false;
             vm.bdypdfpanel = true;
             vm.bdynotespanel = false;
             vm.bdyquestpanel = false;
@@ -768,6 +883,7 @@
         }
         vm.assessnotes = function() {
             vm.bdycampanel = false;
+            vm.camcapture = false;
             vm.bdypdfpanel = false;
             vm.bdynotespanel = true;
             vm.bdyquestpanel = false;
@@ -777,6 +893,7 @@
         vm.assessquest = function(value) {
             console.log("question value ",value);
             vm.bdycampanel = false;
+            vm.camcapture = false;
             vm.bdypdfpanel = false;
             vm.bdynotespanel = false;
             vm.bdyquestpanel = true;
@@ -791,21 +908,21 @@
             var sourcepath = a;
             var fname = sourcepath.substring(sourcepath.lastIndexOf('/')+1);
             var ftypedum = fname.substring(fname.lastIndexOf('.')+1);
-            var ftype = ftypedum == 'mp4' ? 'video/mp4': ftypedum == 'jpeg' || ftypedum == 'jpg' ? 'image/jpeg' : ftypedum == 'pdf' ? "application/pdf":'' ;
+            var ftype = ftypedum == 'mp4' ? 'video/mp4': ftypedum == 'jpeg' || ftypedum == 'jpg' ? 'image/jpeg' : ftypedum == 'pdf' ? "application/pdf": ftypedum == '3gp' ? 'video/3gp':ftypedum == 'avi' ? 'video/avi':ftypedum == 'flv' ? 'video/flv':ftypedum == 'wmv' ? 'video/wmv':ftypedum == 'mkv' ? 'video/mkv':ftypedum == 'mov' ? 'video/mov':'';
            
             console.log("file type",ftypedum);
             var win = function (r) {
                 console.log("*****win function r",r);
-                //console.log("Code = " + r.responseCode);
-                //console.log("Response = " + r.response);
-                //console.log("Sent = " + r.bytesSent);
+                console.log("Code = " + r.responseCode);
+                console.log("Response = " + r.response);
+                console.log("Sent = " + r.bytesSent);
             }
             
             var fail = function (error) {
                 console.log("**************** fail function error ",error)
                 alert("An error has occurred: Code = " + error.code);
-                //console.log("upload error source " + error.source);
-                //console.log("upload error target " + error.target);
+                console.log("upload error source " + error.source);
+                console.log("upload error target " + error.target);
             }
 
             var options = new FileUploadOptions();
@@ -814,14 +931,15 @@
             options.mimeType = ftype;
             
             var params = {};
-            params.value1 = "test";
-            params.value2 = "param";
+            params.dir = "foo-3094kf304fk30kafskjfk3493ja0324r";
+            // params.value2 = "param"; 
 
             options.params = params;
 
-                var encodeuri="https://swifttrack-agilexcyber.c9users.io/swiftMobile/api/uploadFiles.php";
+                var encodeuri="https://swifttrack-updated-version-agilexcyber.c9users.io/swiftMobile/api/uploadFiles.php";
                 //console.log("encodeuri",encodeuri);
                 var ft = new FileTransfer();
+                
                 ft.upload(sourcepath, encodeURI(encodeuri),win,fail,options);
       
         }
@@ -837,15 +955,26 @@
            }
             vm.camclick = function(datatype){
                 var options = {
-                    limit: 1
+                    quality: 50, 
+                    correctOrientation:true,
+                    targetWidth:3120,
+                    targetHeight:4100
                  };
-                 navigator.device.capture.captureImage(onSuccess, onError, options);
+                 console.log("!!@@",navigator.device.capture);
+                //  navigator.device.capture.captureImage(onSuccess, onError, options);
+                navigator.camera.getPicture(onSuccess, onError,options);
                 function onSuccess(mediaFiles) {
                     var name, path, size, type;
-                   path = mediaFiles[0].fullPath;
-                    name = mediaFiles[0].name;
-                    size = mediaFiles[0].size;
-                    type = mediaFiles[0].type;
+                    name = mediaFiles.substring(mediaFiles.lastIndexOf('/')+1);
+                    path = mediaFiles;
+                    type = mediaFiles.substring(mediaFiles.lastIndexOf('.')+1) == 'jpg'?'image/jpeg':'image/jpg';
+                    console.log("camera capture ",mediaFiles);
+                    console.log("name",name,"path",path,"type",type);
+             
+                    // path = mediaFiles[0].fullPath;
+                    // name = mediaFiles[0].name;
+                    // size = mediaFiles[0].size;
+                    // type = mediaFiles[0].type;
                     vm.movefile(path,name,type,datatype);
                     vm.camcapture = false;
                     }
@@ -855,9 +984,12 @@
                  }
             }
             vm.vidclick = function(datatype){
+                console.log("video click");
+            
                 var options = {
                     limit: 1,
-                    duration: 300
+                    duration: 300,
+                    // quality:0
                  };
                  navigator.device.capture.captureVideo(onSuccess, onError, options);
                 function onSuccess(mediaFiles) {
@@ -866,6 +998,7 @@
                 name = mediaFiles[0].name;
                 size = mediaFiles[0].size;
                 type = mediaFiles[0].type;
+                console.log(path,name,type,datatype,"check for type")
                 vm.movefile(path,name,type,datatype);
                 vm.camcapture = false;
                  }
@@ -875,7 +1008,43 @@
                  }
           }
             vm.galclick = function(datatype){
+
+            //     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, downloadFile, fileSystemFail);
+            //    function downloadFile(fileSystem){
+    
+            //            function onDirectorySuccess(parent){console.log(parent);}
+            //            function onDirectoryFail(error){console.log("Unable to create new directory: " + error.code);}
+            //             console.log("***fileSystem",fileSystem);
+            //            var directoryEntry = fileSystem.root;
+            //             var folderName = "Folder";
+            //     directoryEntry.getDirectory(folderName, { create: true, exclusive: false }, onDirectorySuccess, onDirectoryFail);
+
+            //         }
+            //         function fileSystemFail(fileSystem){console.log(fileSystem);}
+
+// ---------------------------------
+
+                // function success(parent) {
+                //     console.log("Parent Name: " + parent.name);
+                // }
+                
+                // function fail(error) {
+                //     alert("Unable to create new directory: " + error.code);
+                // }
+                
+                // // Retrieve an existing directory, or create it if it does not already exist
+                // entry.getDirectory("newDir", {create: true, exclusive: false}, success, fail);
+               
+                // var myPath = cordova.file.externalRootDirectory;  
+            //     window.resolveLocalFileSystemURL(myPath, function (dirEntry) {
+            //         console.log("*!@#$",myPath);
+            //         var directoryReader = dirEntry.createReader();
+            //         directoryReader.readEntries(onSuccessCallback,onFailCallback);
+            //    });
+
+
                fileChooser.open(
+               
                     function fcSuccess(file){
                     vm.filename=file.name;
                     vm.camcapture = false;
@@ -884,7 +1053,30 @@
                     console.log("file chooser data type dum",datatype);
                     },
                     function fcError(e){console.log(e);}
-               );   
+               );  
+
+
+
+            //    function onSuccessCallback(entries){
+            //     // The magic will happen here, check out entries with :
+            //     console.log(entries);
+            //     fileChooser.open('/sdcard/Download',
+               
+            //                 function fcSuccess(file){
+            //                 vm.filename=file.name;
+            //                 vm.camcapture = false;
+            //                 vm.movefile(file.uri,file.name,file.mime_type,datatype);
+            //                 console.log(" from filechooser",file.mime_type);
+            //                 console.log("file chooser data type dum",datatype);
+            //                 },
+            //                 function fcError(e){console.log(e);}
+            //            );  
+                
+            //   }
+              
+            //   function onFailCallback(){
+            //     // In case of error
+            //   }
             }
            
             vm.findfiletype=function(name){
@@ -893,7 +1085,7 @@
                 if(type=='pdf'){filename='pdf'}
                 else if(type=='jpg' || type=='jpeg' ||type=='png' ||type=='svg'||type=='gif'){
                     filename='image';
-                }else if( type=='mp4' || type=='avi' || type=='flv' || type=='wmv' || type=='mov' ||type=='mkv'){
+                }else if( type=='mp4' || type=='avi'|| type=='3gp' || type=='flv' || type=='wmv' || type=='mov' ||type=='mkv'){
                     filename='movie'
                 }
                 return filename;
@@ -902,11 +1094,22 @@
                 var filename;
                 var type=name.split('.')[name.split('.').length-1];
                 if(type=='pdf'){filename='pdf'};
-                if(type=='jpg' || type=='jpeg' || type=='mp4' || type=='avi' || type=='png' ||type=='svg'||type=='gif'||type=='flv' || type=='wmv' || type=='mov' ||type=='mkv'){
+                if(type=='jpg' || type=='jpeg' || type=='mp4'|| type=='3gp'  || type=='avi' || type=='png' ||type=='svg'||type=='gif'||type=='flv' || type=='wmv' || type=='mov' ||type=='mkv'){
                     filename='cam';
                 }
                 if(filename!=datatype){
-                alert('error file type');
+                    var datatypeuppcase = "";
+                    if(datatype == 'pdf'){datatypeuppcase = datatype.toUpperCase();}
+                    else{ datatypeuppcase = "MEDIA"}
+                    $ionicPopup.alert({
+                        title: 'Incorrect File Type',
+                        template: 'Please choose a '+datatypeuppcase+' file to attach.'
+                    })
+
+                    
+                    
+                    // navigator.notification.alert('Please choose a '+ datatypeuppcase+' file to attach.');   
+                // alert('Please choose a '+datatypeuppcase+' file to attach.');
                     return;
                 }
                var ft = new FileTransfer();
@@ -920,6 +1123,7 @@
                 console.log("file download success targetPath",targetPath);
                 ft.download(uri,targetPath,downloadsuccess,downloadfailed)
                     function downloadsuccess(entry) {
+                        console.log("download sucess",entry);
                         vm.localfilemediaarray.push(targetPath);
                        var evidence=angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value;
                         angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-'+datatype+'')[0].attributes['data-ev'].value=evidence==''?newfilename:evidence+','+newfilename;
@@ -981,6 +1185,7 @@
                 options.fileKey = "file";
                 options.fileName =name; 
                 options.mimeType = ftype;
+                options.chunkMode = true;
                 //console.log("option obj",options);
                 //console.log("targetPath",targetPath);
                 var params = {};
@@ -989,7 +1194,7 @@
     
                 options.params = params;
     
-                    var encodeuri="https://swifttrack-agilexcyber.c9users.io/swiftMobile/api/uploadFiles.php";
+                    var encodeuri="https://swifttrack-updated-version-agilexcyber.c9users.io/swiftMobile/api/uploadFiles.php";
                     //console.log("encodeuri",encodeuri);
                     var ft = new FileTransfer();
                     ft.upload(targetPath, encodeURI(encodeuri),win,fail,options);
@@ -1118,6 +1323,7 @@
                 
                 if(vm.galleryquestionArr.length == 0){
                     angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question').addClass('hidden');
+                    angular.element('[data-attribute-value="'+vm.datapath+'"] .q-icon').removeClass('anshide');
                 }
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-ev'].value = vm.galleryquestionArr.join('_*_')
                 angular.element('[data-attribute-value="'+vm.datapath+'"] .ev-question')[0].attributes['data-ev-ids'].value = vm.finalarrquestionEv_id.join('_*_')
@@ -1258,6 +1464,11 @@
         // console.log("vm.totalPages",vm.totalPages);
      vm.viewer.nextPage();
     if(vm.currentPage > 1){ vm.prevpage = true; }
+
+    // else if(vm.currentPage == vm.totalPages){
+    //     console.log("*******vm.nextpage1",vm.currentPage,vm.totalPages);
+    //     vm.nextpage1 = false;}
+    
       
 	};
 
@@ -1271,14 +1482,13 @@
 	};
 
 	vm.pageLoaded = function(curPage, totalPages) {
-        // console.log("current page",curPage,"total pages",totalPages);
-        vm.nextpage = true;
+        console.log("@@@@@@@@@@current page",curPage,"total pages",totalPages);
+        vm.nextpage1 = true;
         vm.prevpage = true;
 		vm.currentPage = curPage;
         vm.totalPages = totalPages;
-       if(vm.currentPage == 1 ){vm.prevpage = false;}
-       else if(totalPages == curPage  ){ vm.nextpage = false;}
-
+       if(vm.currentPage == 1){vm.prevpage = false;}
+         if(vm.totalPages == vm.currentPage){vm.nextpage1 = false;}
     
     };
 
@@ -1322,5 +1532,5 @@
 
     angular.module('swiftTrack.assessment')
         .controller('assessmentCtrl', assessmentCtrl);
-    assessmentCtrl.$inject = ['$ionicPopup','NetworkInformation','Constants','PDFViewerService','$sce','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'ModuleService','$filter'];
+    assessmentCtrl.$inject = ['Loader','$ionicPopup','NetworkInformation','Constants','PDFViewerService','$sce','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'ModuleService','$filter', '$rootScope'];
 }());

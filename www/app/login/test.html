@@ -1,0 +1,578 @@
+<ion-view cache-view="false" class="assessment-page pane" state="assessment" nav-view="active" style="transform: translate3d(0%, 0px, 0px); opacity: 1;">
+        <header class="fixed-hdr">
+           <div class="">
+              <div class="">
+                 <img class="logo" alt="logo" ng-src="file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/nf-logo.jpg" src="file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/nf-logo.jpg">
+                 <!-- <img class="logo" src="https://app.swifttrack.co.uk/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/settings/nf-logo.jpg" alt="logo"> -->
+           </div>
+           </div>
+           <div class="">
+              <div class="top-r tr-single-btn">
+                 <a id="saveSession" class="btn-circ btn-top-r" ng-click="vm.assess_save($event)">
+                 <i class="icon-checkmark"></i>
+                 </a>
+                 <a id="cancelSession" class="btn-circ btn-top-r" ng-click="vm.assess_cancel($event)">
+                 <i class="icon-cross"></i>
+                 </a>
+     
+                 <div ng-show="vm.assesscancelsavepopup" class="popover fade bottom in ng-hide" id="popover301935" style="opacity: 1; top: 90px; left: -88px; display: block; height: auto; margin-left: 45px;">
+                    <div class="arrow" style="left: 50%;">
+                       <i class="icon ion-arrow-up-b"></i>
+                    </div>
+                    <h3 class="popover-title">End without saving?</h3>
+                    <div class="popover-content">
+                       <a ng-click="vm.confirm_without_save($event)" class="btn btn-warning m-rgt-10 btn-logout-confirm">Confirm</a>
+                       <a ng-click="vm.cancel_without_save()" id="cancelLogout" class="btn btn-cancel">Cancel</a>
+                    </div>
+                 </div>
+                 <div ng-show="vm.assessoksavepopup" class="popover fade bottom in ng-hide" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:auto;margin-left: 0px;">
+                    <div class="arrow" style="left: 50%;">
+                       <i class="icon ion-arrow-up-b"></i>
+                    </div>
+                    <h3 class="popover-title">End and save session?</h3>
+                    <div class="popover-content">
+                       <a style="background-color:  #47b475;" ng-click="vm.confirm_savesession($event)" class="btn btn-warning m-rgt-10 btn-logout-confirm">Confirm</a>
+                       <a ng-click="vm.cancel_savesession()" id="cancelLogout" class="btn btn-cancel">Cancel</a>
+                    </div>
+                 </div>
+                 <div class="avatar"><img ng-src="https://app.swifttrack.co.uk/orgs/wor-pf834j3894mqf348l3489d384fsfoj67/media/assessors/roger.jpg" alt="User-Avatar" src="https://app.swifttrack.co.uk/orgs/wor-pf834j3894mqf348l3489d384fsfoj67/media/assessors/roger.jpg"></div>
+              </div>
+           </div>
+        </header>
+        <div class="header-bar" ng-click="vm.assesstray = !vm.assesstray;">
+           <div class="row bar-row">
+              <div col-11="" class="col-xs-11 no-pad">
+                 Assessing: <strong ng-bind-html="vm.assessmentdetail_response.jobRole" class="ng-binding">Operative</strong> | <strong ng-bind-html=" vm.assessmentdetail_response.ModuleName" class="ng-binding">Basic Safety Certificates Held</strong>
+              </div>
+           </div>
+           <i class="resource-icon icon-stack" ng-class="vm.assesstray == true ? 'icon-cancel-circle' : 'icon-stack'" style=""></i>
+           <div id="resourcesTray" ng-show="vm.assesstray" class="ng-hide" style="">
+              <h1><i class="icn icon-stack"></i> Resources for this assessment</h1>
+              <!-- ngRepeat: resour in vm.assessmentdetail_response.resources --><div ng-click="vm.resourcefunct(resour)" ng-repeat=" resour in vm.assessmentdetail_response.resources" class="res-row" style="">
+                 <i class="ion-chevron-right"></i>
+                 <h2 class="ng-binding">Ropes, Knots and Slices</h2>
+              </div><!-- end ngRepeat: resour in vm.assessmentdetail_response.resources --><div ng-click="vm.resourcefunct(resour)" ng-repeat=" resour in vm.assessmentdetail_response.resources" class="res-row">
+                 <i class="ion-chevron-right"></i>
+                 <h2 class="ng-binding">Safe lifting - Manual Handling Techniques</h2>
+              </div><!-- end ngRepeat: resour in vm.assessmentdetail_response.resources --><div ng-click="vm.resourcefunct(resour)" ng-repeat=" resour in vm.assessmentdetail_response.resources" class="res-row">
+                 <i class="ion-chevron-right"></i>
+                 <h2 class="ng-binding">Test -2</h2>
+              </div><!-- end ngRepeat: resour in vm.assessmentdetail_response.resources -->
+           </div>
+        </div>
+        <div class="header-bar-pad"></div>
+        <ion-content class="assess-top scroll-content ionic-scroll overflow-scroll" scroll="true"><div class="scroll">
+           <div class="panel-container">
+           <div class="fullvh">
+              <!-- ngRepeat: (assesskey,assessvalue) in vm.assessmentdetail_response.people track by $index --><section data-newid="1" ng-attr-id="assessment_id_{{assesskey}}_{{$index}}" ng-repeat="(assesskey,assessvalue) in vm.assessmentdetail_response.people track by $index" class="panel person-panel pnl-brdr pnl-no-pad" id="assessment_id_1_0" style="">
+                 <div class="panel-hdr">
+                    <div class="panel-title">
+                       <div class="circ-person">
+                          <img class="avatar" ng-src="https://app.swifttrack.co.uk/orgs/wor-pf834j3894mqf348l3489d384fsfoj67/media/people/p3.jpg" alt="" src="https://app.swifttrack.co.uk/orgs/wor-pf834j3894mqf348l3489d384fsfoj67/media/people/p3.jpg">
+                       </div>
+                       <h3 class="p-nam ng-binding">John Clark</h3>
+                    </div>
+                    <div class="ind-labels">
+                       <div class="level-label">Aware</div>
+                       <div class="level-label">Understands</div>
+                       <div class="level-label">Competent</div>
+                    </div>
+                    <!-- ngIf: assessvalue.training_signed_off==true -->
+                 </div>
+                 <div class="panel-rows">
+                    <!-- ngRepeat: (personid,indicatorsvalue) in assessvalue.indicators track by $index --><div ng-repeat="(personid,indicatorsvalue) in assessvalue.indicators track by $index" class="panel-row" data-id="65" data-attribute-value="person_1_65" data-q="0" data-level-set="1">
+                       <div class="ind" ng-click="assessvalue.training_signed_off? '' : vm.assess_popupfun(indicatorsvalue,assessvalue,$event)">
+                          <span class="ind-content ng-binding" ng-bind-html="indicatorsvalue.final_content">Personal Survival Techniques</span>
+                          <br>
+                         
+                          <span>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-cam icn icon-camera hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.media) == false ?'':'hidden'"></i>
+                             <i data-ev="/media/cert1 (1).pdf" data-ev-ids="24" data-auth="jennifer" class="ev-pdf icn icon-file-pdf " ng-class=" vm.iconobjcheck( indicatorsvalue.type_ref.pdf) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-notes icn icon-file-text2 hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.notes) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-question icn icon-bubble hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.question) == false?'':'hidden'"></i>
+                             <i class="icn icon-plus"></i>
+                             <em>Tap to add evidence or notes </em>
+                           </span>
+                          <!-- <span>
+                             <i ng-data-ev="val.data_ev" ng-data-ev-ids="val.data_ev_ids" ng-data-auth="val.data_auth" ng-repeat="(key,val) in indicatorsvalue.type_ref" class="icn ev-cam {{key == 'media' ? 'icon-camera media' : key == 'notes' ? 'icon-file-text2 notes' : key == 'pdf' ? 'icon-file-pdf pdf' : key == 'question' ? 'icon-bubble question' : 'hidden' }}"></i>
+                             <i class="icn icon-plus"></i>
+                       <em>Tap to add evidence or notes </em>
+                       </span> -->
+                          <!-- ngIf: indicatorsvalue.ind_is_q == true -->
+                       </div>
+                       <div class="checks">
+                             <!-- ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark " data-level="1" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(255,180,0);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark  unchecked" data-level="2" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(61,169,224);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark  unchecked" data-level="3" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(71,180,117);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels -->
+                       </div>
+                    </div><!-- end ngRepeat: (personid,indicatorsvalue) in assessvalue.indicators track by $index --><div ng-repeat="(personid,indicatorsvalue) in assessvalue.indicators track by $index" class="panel-row" data-id="66" data-attribute-value="person_1_66" data-q="0" data-level-set="1">
+                       <div class="ind" ng-click="assessvalue.training_signed_off? '' : vm.assess_popupfun(indicatorsvalue,assessvalue,$event)">
+                          <span class="ind-content ng-binding" ng-bind-html="indicatorsvalue.final_content">Basic First Aid</span>
+                          <br>
+                         
+                          <span>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-cam icn icon-camera hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.media) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-pdf icn icon-file-pdf  hidden" ng-class=" vm.iconobjcheck( indicatorsvalue.type_ref.pdf) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-notes icn icon-file-text2 hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.notes) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-question icn icon-bubble hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.question) == false?'':'hidden'"></i>
+                             <i class="icn icon-plus"></i>
+                             <em>Tap to add evidence or notes </em>
+                           </span>
+                          <!-- <span>
+                             <i ng-data-ev="val.data_ev" ng-data-ev-ids="val.data_ev_ids" ng-data-auth="val.data_auth" ng-repeat="(key,val) in indicatorsvalue.type_ref" class="icn ev-cam {{key == 'media' ? 'icon-camera media' : key == 'notes' ? 'icon-file-text2 notes' : key == 'pdf' ? 'icon-file-pdf pdf' : key == 'question' ? 'icon-bubble question' : 'hidden' }}"></i>
+                             <i class="icn icon-plus"></i>
+                       <em>Tap to add evidence or notes </em>
+                       </span> -->
+                          <!-- ngIf: indicatorsvalue.ind_is_q == true -->
+                       </div>
+                       <div class="checks">
+                             <!-- ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark " data-level="1" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(255,180,0);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark  unchecked" data-level="2" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(61,169,224);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark  unchecked" data-level="3" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(71,180,117);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels -->
+                       </div>
+                    </div><!-- end ngRepeat: (personid,indicatorsvalue) in assessvalue.indicators track by $index --><div ng-repeat="(personid,indicatorsvalue) in assessvalue.indicators track by $index" class="panel-row" data-id="67" data-attribute-value="person_1_67" data-q="0" data-level-set="3">
+                       <div class="ind" ng-click="assessvalue.training_signed_off? '' : vm.assess_popupfun(indicatorsvalue,assessvalue,$event)">
+                          <span class="ind-content ng-binding" ng-bind-html="indicatorsvalue.final_content">Fire Fighting</span>
+                          <br>
+                         
+                          <span>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-cam icn icon-camera hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.media) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-pdf icn icon-file-pdf  hidden" ng-class=" vm.iconobjcheck( indicatorsvalue.type_ref.pdf) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-notes icn icon-file-text2 hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.notes) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-question icn icon-bubble hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.question) == false?'':'hidden'"></i>
+                             <i class="icn icon-plus"></i>
+                             <em>Tap to add evidence or notes </em>
+                           </span>
+                          <!-- <span>
+                             <i ng-data-ev="val.data_ev" ng-data-ev-ids="val.data_ev_ids" ng-data-auth="val.data_auth" ng-repeat="(key,val) in indicatorsvalue.type_ref" class="icn ev-cam {{key == 'media' ? 'icon-camera media' : key == 'notes' ? 'icon-file-text2 notes' : key == 'pdf' ? 'icon-file-pdf pdf' : key == 'question' ? 'icon-bubble question' : 'hidden' }}"></i>
+                             <i class="icn icon-plus"></i>
+                       <em>Tap to add evidence or notes </em>
+                       </span> -->
+                          <!-- ngIf: indicatorsvalue.ind_is_q == true -->
+                       </div>
+                       <div class="checks">
+                             <!-- ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark " data-level="1" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(255,180,0);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark " data-level="2" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(61,169,224);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark " data-level="3" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(71,180,117);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels -->
+                       </div>
+                    </div><!-- end ngRepeat: (personid,indicatorsvalue) in assessvalue.indicators track by $index -->
+                 </div>
+              </section><!-- end ngRepeat: (assesskey,assessvalue) in vm.assessmentdetail_response.people track by $index --><section data-newid="3" ng-attr-id="assessment_id_{{assesskey}}_{{$index}}" ng-repeat="(assesskey,assessvalue) in vm.assessmentdetail_response.people track by $index" class="panel person-panel pnl-brdr pnl-no-pad" id="assessment_id_3_1">
+                 <div class="panel-hdr">
+                    <div class="panel-title">
+                       <div class="circ-person">
+                          <img class="avatar" ng-src="https://app.swifttrack.co.uk/orgs/wor-pf834j3894mqf348l3489d384fsfoj67/media/people/p5.jpg" alt="" src="https://app.swifttrack.co.uk/orgs/wor-pf834j3894mqf348l3489d384fsfoj67/media/people/p5.jpg">
+                       </div>
+                       <h3 class="p-nam ng-binding">David Michaels</h3>
+                    </div>
+                    <div class="ind-labels">
+                       <div class="level-label">Aware</div>
+                       <div class="level-label">Understands</div>
+                       <div class="level-label">Competent</div>
+                    </div>
+                    <!-- ngIf: assessvalue.training_signed_off==true -->
+                 </div>
+                 <div class="panel-rows">
+                    <!-- ngRepeat: (personid,indicatorsvalue) in assessvalue.indicators track by $index --><div ng-repeat="(personid,indicatorsvalue) in assessvalue.indicators track by $index" class="panel-row" data-id="65" data-attribute-value="person_3_65" data-q="0" data-level-set="0">
+                       <div class="ind" ng-click="assessvalue.training_signed_off? '' : vm.assess_popupfun(indicatorsvalue,assessvalue,$event)">
+                          <span class="ind-content ng-binding" ng-bind-html="indicatorsvalue.final_content">Personal Survival Techniques</span>
+                          <br>
+                         
+                          <span>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-cam icn icon-camera hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.media) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-pdf icn icon-file-pdf  hidden" ng-class=" vm.iconobjcheck( indicatorsvalue.type_ref.pdf) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-notes icn icon-file-text2 hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.notes) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-question icn icon-bubble hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.question) == false?'':'hidden'"></i>
+                             <i class="icn icon-plus"></i>
+                             <em>Tap to add evidence or notes </em>
+                           </span>
+                          <!-- <span>
+                             <i ng-data-ev="val.data_ev" ng-data-ev-ids="val.data_ev_ids" ng-data-auth="val.data_auth" ng-repeat="(key,val) in indicatorsvalue.type_ref" class="icn ev-cam {{key == 'media' ? 'icon-camera media' : key == 'notes' ? 'icon-file-text2 notes' : key == 'pdf' ? 'icon-file-pdf pdf' : key == 'question' ? 'icon-bubble question' : 'hidden' }}"></i>
+                             <i class="icn icon-plus"></i>
+                       <em>Tap to add evidence or notes </em>
+                       </span> -->
+                          <!-- ngIf: indicatorsvalue.ind_is_q == true -->
+                       </div>
+                       <div class="checks">
+                             <!-- ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark  unchecked" data-level="1" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(255,180,0);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark  unchecked" data-level="2" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(61,169,224);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark  unchecked" data-level="3" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(71,180,117);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels -->
+                       </div>
+                    </div><!-- end ngRepeat: (personid,indicatorsvalue) in assessvalue.indicators track by $index --><div ng-repeat="(personid,indicatorsvalue) in assessvalue.indicators track by $index" class="panel-row" data-id="66" data-attribute-value="person_3_66" data-q="0" data-level-set="0">
+                       <div class="ind" ng-click="assessvalue.training_signed_off? '' : vm.assess_popupfun(indicatorsvalue,assessvalue,$event)">
+                          <span class="ind-content ng-binding" ng-bind-html="indicatorsvalue.final_content">Basic First Aid</span>
+                          <br>
+                         
+                          <span>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-cam icn icon-camera hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.media) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-pdf icn icon-file-pdf  hidden" ng-class=" vm.iconobjcheck( indicatorsvalue.type_ref.pdf) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-notes icn icon-file-text2 hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.notes) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-question icn icon-bubble hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.question) == false?'':'hidden'"></i>
+                             <i class="icn icon-plus"></i>
+                             <em>Tap to add evidence or notes </em>
+                           </span>
+                          <!-- <span>
+                             <i ng-data-ev="val.data_ev" ng-data-ev-ids="val.data_ev_ids" ng-data-auth="val.data_auth" ng-repeat="(key,val) in indicatorsvalue.type_ref" class="icn ev-cam {{key == 'media' ? 'icon-camera media' : key == 'notes' ? 'icon-file-text2 notes' : key == 'pdf' ? 'icon-file-pdf pdf' : key == 'question' ? 'icon-bubble question' : 'hidden' }}"></i>
+                             <i class="icn icon-plus"></i>
+                       <em>Tap to add evidence or notes </em>
+                       </span> -->
+                          <!-- ngIf: indicatorsvalue.ind_is_q == true -->
+                       </div>
+                       <div class="checks">
+                             <!-- ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark  unchecked" data-level="1" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(255,180,0);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark  unchecked" data-level="2" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(61,169,224);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark  unchecked" data-level="3" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(71,180,117);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels -->
+                       </div>
+                    </div><!-- end ngRepeat: (personid,indicatorsvalue) in assessvalue.indicators track by $index --><div ng-repeat="(personid,indicatorsvalue) in assessvalue.indicators track by $index" class="panel-row" data-id="67" data-attribute-value="person_3_67" data-q="0" data-level-set="0">
+                       <div class="ind" ng-click="assessvalue.training_signed_off? '' : vm.assess_popupfun(indicatorsvalue,assessvalue,$event)">
+                          <span class="ind-content ng-binding" ng-bind-html="indicatorsvalue.final_content">Fire Fighting</span>
+                          <br>
+                         
+                          <span>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-cam icn icon-camera hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.media) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-pdf icn icon-file-pdf  hidden" ng-class=" vm.iconobjcheck( indicatorsvalue.type_ref.pdf) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-notes icn icon-file-text2 hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.notes) == false ?'':'hidden'"></i>
+                             <i data-ev="" data-ev-ids="" data-auth="" class="ev-question icn icon-bubble hidden" ng-class="vm.iconobjcheck( indicatorsvalue.type_ref.question) == false?'':'hidden'"></i>
+                             <i class="icn icon-plus"></i>
+                             <em>Tap to add evidence or notes </em>
+                           </span>
+                          <!-- <span>
+                             <i ng-data-ev="val.data_ev" ng-data-ev-ids="val.data_ev_ids" ng-data-auth="val.data_auth" ng-repeat="(key,val) in indicatorsvalue.type_ref" class="icn ev-cam {{key == 'media' ? 'icon-camera media' : key == 'notes' ? 'icon-file-text2 notes' : key == 'pdf' ? 'icon-file-pdf pdf' : key == 'question' ? 'icon-bubble question' : 'hidden' }}"></i>
+                             <i class="icn icon-plus"></i>
+                       <em>Tap to add evidence or notes </em>
+                       </span> -->
+                          <!-- ngIf: indicatorsvalue.ind_is_q == true -->
+                       </div>
+                       <div class="checks">
+                             <!-- ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark  unchecked" data-level="1" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(255,180,0);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark  unchecked" data-level="2" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(61,169,224);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels --><span class="chk-holder " ng-repeat="(levelkey,levels) in indicatorsvalue.levels">
+                                   <i class="check btn-check icon-checkmark  unchecked" data-level="3" ng-class="levels.level_achieved !== true ?'unchecked':'' " ng-click="levels.signedoff != true?vm.setdatalevel(levelkey,personid,assesskey,$event):''" style="color:rgb(71,180,117);"></i>
+                             </span><!-- end ngRepeat: (levelkey,levels) in indicatorsvalue.levels -->
+                       </div>
+                    </div><!-- end ngRepeat: (personid,indicatorsvalue) in assessvalue.indicators track by $index -->
+                 </div>
+              </section><!-- end ngRepeat: (assesskey,assessvalue) in vm.assessmentdetail_response.people track by $index -->
+           </div>
+     
+              <!--<div ng-show="vm.assessmentpopup" class="custom-modal" id="evidenceModal">-->
+              <!--   <div class="mdl mdl-ev">-->
+              <!--      <div class="mdl-ev-hdr">-->
+              <!--         <input class="fileuploader hidden" type="file" name="files[]" accept="image/*,video/*" capture="camera">-->
+              <!--         <div class="circ-person">-->
+              <!--            <img class="avatar" ng-src="{{vm.userImageUrl}}" alt="">-->
+              <!--         </div>-->
+              <!--         <div class="ev-hdr-info">-->
+              <!--            <h4>{{assessvalue.name}}</h4>-->
+              <!--            <h5>{{vm.assessquestion}}</h5>-->
+              <!--         </div>-->
+              <!--         <i ng-click="vm.assesspopclose()" class="icon-cancel-circle close-modal"></i>-->
+              <!--      </div>-->
+              <!--      <div class="mdl-ev-icons-tray">-->
+              <!--         <div class="ev-icon icn-cam" data-type="cam"><i class="icon-camera"></i></div>-->
+              <!--         <div class="ev-icon icn-pdf" data-type="pdf"><i class="icon-file-pdf"></i></div>-->
+              <!--         <div class="ev-icon icn-notes" data-type="notes"><i class="icon-file-text2"></i></div>-->
+              <!--         <div class="ev-icon icn-question" data-type="question"><i class="icon-bubble"></i></div>-->
+              <!--      </div>-->
+              <!--      <div class="mdl-bdy ev-bdy bdy-cam" ng-click="vm.assesscam(indicatorsvalue)">-->
+              <!--         <h1 class="ev-title">Visual Evidence</h1>-->
+              <!--         <div id="gallery"></div>-->
+              <!--      </div>-->
+              <!--      <div class="mdl-bdy ev-bdy bdy-pdf hidden " ng-click="vm.assesspdf(indicatorsvalue)">-->
+              <!--         <h1 class="ev-title">File-Based Evidence</h1>-->
+              <!--         <div id="galleryPDF"></div>-->
+              <!--      </div>-->
+              <!--      <div class="mdl-bdy ev-bdy bdy-notes hidden" ng-click="vm.assessnotes(indicatorsvalue)">-->
+              <!--         <h1 class="ev-title">Notes</h1>-->
+              <!--         <div class="update-btn hidden" data-type="notes"></div>-->
+              <!--         <input type="text" class="form-control mdl-input new-note catch-enter" data-type="notes" placeholder="Add a new note...">-->
+              <!--         <div id="galleryNotes" class="gal-wrapper" data-type="notes"></div>-->
+              <!--      </div>-->
+              <!--      <div class="mdl-bdy ev-bdy bdy-question hidden" ng-click="vm.assessquest(indicatorsvalue)">-->
+              <!--         <h1 class="ev-title">Answer the Question&hellip;</h1>-->
+              <!--         <h2 class="q-question-hdr"></h2>-->
+              <!--         <div class="update-btn hidden" data-type="question"></div>-->
+              <!--         <textarea type="text" class="form-control mdl-input q-answer" data-type="question" placeholder="Your answer..." rows="3"></textarea>-->
+              <!--         <div id="galleryQuestions" class="gal-wrapper" data-type="questions"></div>-->
+              <!--      </div>-->
+              <!--      <div class="mdl-ftr">-->
+              <!--         <div class="upload-bar">-->
+              <!--            <div class="ul-prog"></div>-->
+              <!--         </div>-->
+              <!--         <div id="addEv" data-type='cam'>-->
+              <!--            <span class="btn-pre">Add</span>-->
+              <!--            <span class="ftr-icn">-->
+              <!--               <i class="icn-cam icon-camera"></i>-->
+              <!--               <i class="icn-pdf icon-file-pdf hidden"></i>-->
+              <!--               <i class="icn-notes icon-file-text2 hidden"></i>-->
+              <!--               <i class="icn-question icon-bubble hidden"></i>-->
+              <!--           </span>-->
+              <!--            <span class="btn-suf">New</span>-->
+              <!--         </div>-->
+              <!--      </div>-->
+              <!--   </div>-->
+              <!--   <div class="modal-backdrop"></div>-->
+              <!--</div>-->
+     
+     
+              <!--<div ng-show="vm.assessreport" class="custom-modal" id="resourceModal">-->
+              <!--   <div class="mdl mdl-full-page">-->
+              <!--      <div class="mdl-hdr">{{ vm.resouobj.resource_name}}<i ng-click="vm.assessreport = !vm.assessreport;" class="resource-icon icon-cancel-circle"></i></div>-->
+              <!--      <div class="mdl-bdy" style="height: 367px;">-->
+              <!--         <div class="pad-30"></div>-->
+     
+              <!--         <div ng-repeat="resouval in vm.resouobj.resource_sections " class="row sep-box">-->
+              <!--            <div col-6 class="col-xs-6">-->
+              <!--               <p>{{resouval.item_content}}</p>-->
+              <!--               <div class="pad-15"></div>-->
+              <!--            </div>-->
+              <!--            <div col-6 class="col-xs-6"><img class="img-resource" ng-src="{{resouval.item_media}}" alt=""></div>-->
+              <!--         </div>-->
+              <!--      </div>-->
+              <!--   </div>-->
+              <!--   <div class="overlay"></div>-->
+              <!--</div>-->
+     
+     
+     
+     
+              <footer class="ng-binding">© 2018 SwiftTrack V1.1&nbsp;&nbsp;⋮&nbsp;&nbsp;Licensed to Food International</footer>
+           </div>
+           
+     
+     
+     
+     
+     
+     
+        </div></ion-content>
+     
+        <!-- <div class="mdl mdl-sml" ng-show ="vm.withoutsave">
+           <div class="mdl-hdr mh-warning">Ending Session Without Saving</div>
+           <div class="mdl-bdy">Are you sure you want to end this session <b>WITHOUT SAVING?</b><br><a ng-click="vm.retdashboard()" class="btn btn-default btn-return m-top-10 w-100"><b>Yes,</b> Return to Dashboard</a><br><a ng-click="vm.contsection()" class="btn btn-cancel btn-continue m-top-10 w-100"><b>No,</b> Continue Session</a></div>
+        </div> -->
+     
+        <div class="mdl mdl-sml ng-hide" ng-show="vm.withsave" style="">
+           <div class="mdl-hdr">Saving Assessment Session Data</div>
+           <div class="mdl-bdy">Your assessment data has been updated successfully.<br><br><a href="" class="btn btn-confirm btn-return" ng-click="vm.withsave_godashboard()">Return to Your Dashboard</a></div>
+        </div>
+        
+     
+     
+        <div ng-show="vm.assessreport" class="custom-modal resource-model-overlay ng-hide" id="resourceModal" style="">
+           <div class="mdl mdl-full-page">
+              <div class="mdl-hdr ng-binding"><i ng-click="vm.resourcevideosectionclose($event)" class="resource-icon icon-cancel-circle"></i></div>
+              <div class="mdl-bdy" style="height: 100vh;">
+                 <div class="pad-30"></div>
+     
+                 <!-- ngRepeat: resouval in vm.resouobj.resource_sections -->
+              </div>
+           </div>
+           <!--<div class="modal-backdrop"></div>-->
+        </div>
+     
+        <div ng-show="vm.assessmentpopup" class="custom-modal assess-file-overlay ng-hide" id="evidenceModal" style="">
+           <div class="mdl mdl-ev">
+              <div class="mdl-ev-hdr">
+                 <input class="fileuploader hidden" type="file" name="files[]" accept="image/*,video/*" capture="camera">
+                 <div class="circ-person">
+                    <img class="avatar" alt="" ng-src="https://app.swifttrack.co.uk/orgs/wor-pf834j3894mqf348l3489d384fsfoj67/media/people/p3.jpg" src="https://app.swifttrack.co.uk/orgs/wor-pf834j3894mqf348l3489d384fsfoj67/media/people/p3.jpg">
+                 </div>
+                 <div class="ev-hdr-info">
+                    <h4 ng-bind-html="vm.username" class="ng-binding">John Clark</h4>
+                    <h5 ng-bind-html="vm.indicatorname" class="ng-binding">Personal Survival Techniques</h5>
+                 </div>
+                 <i ng-click="vm.assesspopclose()" class="icon-cancel-circle close-modal"></i>
+              </div>
+              <div class="mdl-ev-icons-tray">
+                 <div class="ev-icon icn-cam" ng-click="vm.assesscam()"><i class="icon-camera"></i></div>
+                 <div class="ev-icon icn-pdf" ng-click="vm.assesspdf()"><i class="icon-file-pdf"></i></div>
+                 <div class="ev-icon icn-notes" ng-click="vm.assessnotes()"><i class="icon-file-text2"></i></div>
+                 <div class="ev-icon icn-question ng-hide" ng-show="vm.questpanelicon" ng-click="vm.assessquest()" style=""><i class="icon-bubble"></i></div>
+              </div>
+     
+     
+            <!-- ##### video section ######## -->
+              <div class="mdl-bdy ev-bdy bdy-cam ng-hide" ng-show="vm.bdycampanel" style="">
+                 <h1 class="ev-title">Visual Evidence</h1>
+     
+                 <div id="gallery">
+                       <!-- ngRepeat: (i,value) in vm.gallerycamArr track by $index -->
+                 </div>
+     
+                 
+                 
+                 <div class="mdl-ftr">
+                       <div ng-show="vm.camcapture" style="z-index: 99999999; opacity: 1; top: 64%; display: block; height: auto;" class="ng-hide">
+                             <!-- <h3 class="popover-title">CHOOSE</h3>
+                             <h3 ng-click="vm.camcapture = false">X</h3> -->
+                             <div class="popover-content">
+                                   <div class="row">
+                                        <div col-4=""><span class="icon-camera fontclass" ng-click="vm.camclick('cam')"></span></div>
+                                        <div col-4=""> <span class="icon-video-camera fontclass" ng-click="vm.vidclick('cam')"></span></div>
+                                     <div col-4=""><span class="icon-folder-open fontclass" ng-click="vm.galclick('cam')"></span></div>
+                                   </div>
+                             </div>
+                       </div>
+                       <div class="upload-bar">
+                          <div class="ul-prog"></div>
+                       </div>
+                       <div id="addEv" ng-click="vm.evidenceupload('cam')" data-type="cam" class="">
+                          <span class="btn-pre">Add</span>
+                          <span class="ftr-icn">
+                                   <i class="icn-cam icon-camera"></i>
+                               </span>
+                          <span class="btn-suf">New</span>
+                          <!-- <div>{{vm.filename}}</div> -->
+                       </div>
+                 </div>
+     
+              </div>
+     
+           <!-- #########   video section end ###### -->
+     
+     
+     <!-- ####### pdf section ########## -->
+     
+     <div class="mdl-bdy ev-bdy bdy-pdf ng-hide" ng-show="vm.bdypdfpanel" style="">
+           <h1 class="ev-title">File-Based Evidence</h1>
+     
+           <!-- <div id="galleryPDF" ng-if="vm.popupdata.type_ref.pdf != undefined"> -->
+           <div id="galleryPDF">
+                 <!-- ngRepeat: (i,value) in vm.gallerypdfArr --><div ng-repeat="(i,value) in vm.gallerypdfArr" class="" style="">
+                       <div class="media-wrapper ev-wrap" data-ev-id="24" data-auth="jennifer">
+                             <div class="icon-cancel-circle remove-media" ng-click="vm.removeMedia(i,value,$event)"></div>
+                             <img alt="" ng-src="./img/icon-pdf.jpg" ng-click="vm.pdfopen(value)" src="./img/icon-pdf.jpg">
+                             <div class="del-media ng-hide" ng-show="vm.delconform">
+                                   <span class="del-title">Really Delete?</span>
+                                   <br><a class="btn btn-confirm del-true m-rgt-10" ng-click="vm.deleteconf('pdf',i,value,$event)">Confirm</a>
+                                   <a class="btn btn-cancel del-false" ng-click="vm.cancelconf($event)">Cancel</a>
+                             </div>
+                       </div>
+                       
+                 </div><!-- end ngRepeat: (i,value) in vm.gallerypdfArr -->
+           </div>
+           <div class="mdl-ftr">
+                 <div class="upload-bar">
+                    <div class="ul-prog"></div>
+                 </div>
+                 <div id="addEv" ng-click="vm.evidenceupload('pdf')" data-type="pdf">
+                    <span class="btn-pre">Add</span>
+                    <span class="ftr-icn">
+                             
+                             <i class="icn-pdf icon-file-pdf"></i>
+                           
+                         </span>
+                    <span class="btn-suf">New</span>
+                    <!-- <div>{{vm.filename}}</div> -->
+                 </div>
+              </div>
+        </div>
+     <!-- ########### pdf section end #### -->
+     
+     
+              <!-- ################ notes section########## -->
+     
+     
+           <div class="mdl-bdy ev-bdy bdy-notes ng-hide" ng-show="vm.bdynotespanel" style="">
+                 <h1 class="ev-title">Notes</h1>
+     
+                 <div class="update-btn ng-hide" ng-click="vm.addnotes();" ng-show="vm.updatebtn" data-type="notes" style=""></div>
+                 <input ng-change="vm.change_notes()" ng-model="vm.change_note" type="text" class="form-control mdl-input new-note catch-enter ng-pristine ng-untouched ng-valid ng-empty" data-type="notes" placeholder=" Add a new note..." style="">
+                 <div id="galleryNotes" class="gal-wrapper" data-type="notes">
+                       <!-- ngRepeat: (i,value) in vm.gallerynotesArr track by $index -->
+                 </div>
+           </div>
+     
+     
+     <!-- ############# note section end ################# -->
+     
+     
+           <div class="mdl-bdy ev-bdy bdy-question ng-hide" ng-show="vm.bdyquestpanel" ng-click="vm.assessquest(indicatorsvalue)" style="">
+                 <h1 class="ev-title">Answer the Question…</h1>
+     
+     
+                 <h2 class="q-question-hdr ng-binding" ng-bind="vm.assquestion"></h2>
+                 <div class="update-btn ng-hide" ng-click="vm.updateques()" ng-show="vm.showupdatbtn" data-type="question" style=""></div>
+                 <textarea type="text" ng-change="vm.showupdatebtn()" ng-model="vm.changemodel" class="form-control mdl-input q-answer ng-pristine ng-untouched ng-valid ng-empty" data-type="question" placeholder="Your answer..." rows="3" style=""></textarea>
+                 <div id="galleryQuestions" class="gal-wrapper" data-type="questions">
+                       <!-- ngRepeat: (i,value) in vm.galleryquestionArr -->
+                 </div>
+           </div>
+              <!-- <div class="mdl-ftr">
+                 <div class="upload-bar">
+                    <div class="ul-prog"></div>
+                 </div>
+                 <div id="addEv" ng-click="vm.evidenceupload()" data-type='cam'>
+                    <span class="btn-pre">Add</span>
+                    <span class="ftr-icn">
+                             <i class="icn-cam icon-camera"></i>
+                             <i class="icn-pdf icon-file-pdf hidden"></i>
+                             <i class="icn-notes icon-file-text2 hidden"></i>
+                             <i class="icn-question icon-bubble hidden"></i>
+                         </span>
+                    <span class="btn-suf">New</span>
+                    <div>{{vm.filename}}</div>
+                 </div>
+              </div> -->
+     
+     
+     
+           </div>
+           <!--<div class="modal-backdrop"></div>-->
+        </div>
+     
+     
+        <div ng-show="vm.assessvideopopup" id="mediaView" class="ng-hide" style="height: 100vh;">
+           <i class="icon-cancel-circle close-modal" ng-click="vm.assessvideopopupclose(vm.videolocallocation,$event)"></i>
+           <div class="mv-content">
+                       <video controls="" ng-src="file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/VID_20180614_152626_1528970202011.mp4" src="file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/VID_20180614_152626_1528970202011.mp4"></video>     
+           </div>
+        </div>
+     
+        <div ng-show="vm.assessimagepopup" id="mediaView" class="ng-hide" style="height: auto;">
+           <i class="icon-cancel-circle close-modal" ng-click="vm.assessimagepopup = false; vm.bdycampanel = true;"></i>
+           <div class="mv-content">
+                 <img alt="logo" ng-src="file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/VID_20180614_152626_1528970202011.mp4" src="file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/VID_20180614_152626_1528970202011.mp4">    
+           </div>
+        </div>
+     
+        <div ng-show="vm.assesspdfpopup" id="mediaView" class="ng-hide" style="height: auto;">
+                 <i class="icon-cancel-circle close-modal" ng-click="vm.assesspdfpopupclose($event)"></i>
+                 <div class="mv-content">
+                  <!-- <embed style="min-height: 400px; height: 133px;" ng-src="{{vm.pdflocallocation}}" alt="pdf">   -->
+                       <!-- <object src="http://www.africau.edu/images/default/sample.pdf" width="500" height="700" type='application/pdf'>  </object> -->
+                       <span class="ng-binding">/</span>
+                       <br>
+                       <pdfviewer on-page-load="vm.pageLoaded(page,total)" id="viewer"><canvas></canvas></pdfviewer>
+                       <button ng-show="vm.prevpage" ng-click="vm.prevPage()" class="ng-hide" style="">Previous Page</button>
+                       <button ng-show="vm.nextpage" style="float: right;" ng-click="vm.nextPage()" class="ng-hide">Next page</button>
+                             <!-- <embed src="https://drive.google.com/viewerng/viewer?embedded=true&url=http://www.africau.edu/images/default/sample.pdf" width="500" height="375">      <iframe src="http://www.africau.edu/images/default/sample.pdf" style="min-height: 400px; height: 133px;"></iframe> -->
+                       <!-- <pdfviewer src="http://www.africau.edu/images/default/sample.pdf" style="min-height: 400px; height: 133px;" ></pdfviewer> -->
+                 </div>
+              </div>
+     
+     
+     </ion-view>

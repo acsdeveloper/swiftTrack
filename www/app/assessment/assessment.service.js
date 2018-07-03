@@ -60,7 +60,7 @@
                     console.log(resp2);
                     resp2.indicators=resp1.indicators;
                     resp2.sessionkey=$cookieStore.get('sessionkey')
-                    Loader.startLoading();
+                    // Loader.startLoading();
                     return Request.post(vm.url, resp2).then(function(resp) {
                         // Loader.stopLoading();
                         console.log(resp,"response from assessment service")
@@ -91,7 +91,7 @@
                 //  Loader.startLoading();
                 return Request.post(vm.url,data).then(function(resp) {
                     return LoginService.putDataPouch(resp,'detailed_document').then(function(){
-                    Loader.stopLoading();
+                    // Loader.stopLoading();
                     downloadfileService.assessmentmediadownload(resp);
                     console.log(resp)
                     vm.defered = $q.defer();

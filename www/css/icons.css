@@ -31,9 +31,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-home3:before {
-  content: "\e902";
-}
+
 .icon-office:before {
   content: "\e903";
 }
@@ -1288,3 +1286,4 @@
 .icon-IcoMoon:before {
   content: "\eaea";
 }
+

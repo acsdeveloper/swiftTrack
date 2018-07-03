@@ -7,7 +7,7 @@
         min-height: 350px;
         background: #fff;
         margin: 0 auto;
-        margin-top: 5%;
+        /* margin-top: 5%; */
         border-radius: 5px;
         text-align: center;
         /*padding-bottom: 30px*/
@@ -367,3 +367,12 @@
     ul.nav.nav-tabs.tabs {
         height: auto;
     }
+
+.button.ng-binding.button-positive{
+background-color: #337ab7 !important;
+border-radius: 5px;
+
+}
+.popup-buttons{
+padding: 15px 70px;
+}

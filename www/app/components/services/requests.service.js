@@ -24,10 +24,12 @@
                             return cb(response);
                         }
                     }).error(function(err) {
+                        console.log("error",err);
                         // Loader.stopLoading();
                         //deferred.reject("Timeout");
+
                         $ionicPopup.alert({
-                            title: 'Error',
+                            title: 'Server Down',
                             template: err.message
                         }).then(function(res) {
                             //console.log(res);
@@ -69,10 +71,12 @@
                             return cb(response);
                         }
                     }).error(function(err) {
+                        console.log("error",err);
+
                         // Loader.stopLoading();
                         deferred.reject();
                         $ionicPopup.alert({
-                            title: 'Error',
+                            title: 'Server Down',
                             template: err.message
                         }).then(function(res) {
                             //console.log(res);
@@ -85,8 +89,8 @@
                         Loader.stopLoading();
                         deferred.reject("No Internet Connection");
                         $ionicPopup.alert({
-                            title: 'No Internet',
-                            template: 'Please check your device internet connection'
+                            title: 'Unable To Login',
+                            template: 'Please check your internet connection'
                         }).then(function(res) {
                             //console.log(res);
                             // ionic.Platform.exitApp();
@@ -115,7 +119,7 @@
                         Loader.stopLoading();
                         deferred.reject();
                         $ionicPopup.alert({
-                            title: 'Error',
+                            title: 'Server Down',
                             template: err.message
                         }).then(function(res) {
                             // do nothing
@@ -154,9 +158,9 @@
                         }
                     }).error(function(err) {
                         Loader.stopLoading();
-                        //deferred.reject("Timeout");
+                        deferred.reject("Timeout");
                         $ionicPopup.alert({
-                            title: 'Error',
+                            title: 'Server Down',
                             template: err.message
                         }).then(function(res) {
                             // do nothing
