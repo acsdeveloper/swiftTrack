@@ -68,27 +68,36 @@
             });
 
         vm.logoutclick = function() {
-            vm.logoutpopup = $scope.logoutpopup ? false : true;
+            vm.exitapp = $scope.exitapp ? false : true;
+        }
+        vm.confirmExit = function()
+        {
+            ionic.Platform.exitApp();
+        }
+        vm.cancelExit = function()
+        {
+            vm.exitapp = false;
+
         }
 
-        vm.cancellogout = function() {
-            vm.logoutpopup = false;
+        // vm.cancellogout = function() {
+        //     vm.logoutpopup = false;
 
-        }
-        vm.confirmlogout = function(event) {
-            SyncService.logout().then(function(){
-                $state.go('login')
-            })
-            event.preventDefault();
-            event.stopPropagation();
-            storageFactory.login(null);
-            $cookieStore.remove('loginAupercentage');
-            localStorage.setItem("loginAupercentage", false);
-            // localStorage.removeItem("first_name");
-            // localStorage.removeItem("images");
-            vm.logoutpopup = false;
+        // }
+        // vm.confirmlogout = function(event) {
+        //     SyncService.logout().then(function(){
+        //         $state.go('login')
+        //     })
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        //     storageFactory.login(null);
+        //     $cookieStore.remove('loginAupercentage');
+        //     localStorage.setItem("loginAupercentage", false);
+        //     // localStorage.removeItem("first_name");
+        //     // localStorage.removeItem("images");
+        //     vm.logoutpopup = false;
             
-        }
+        // }
         
         vm.reportvideoimagepdf = function(datatype,url)
         {

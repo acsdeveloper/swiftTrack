@@ -4,6 +4,11 @@
     function signoffCtrl(SyncService,NetworkInformation,SignoffService,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, $filter) {
         //console.log('signoff controller')
         var vm = this;
+        SignoffService.get_org_config_signoff().then(function(resp){
+            console.log("signoff response ",resp);
+            vm.logourlsignoff =   resp.logo;
+            console.log("vm.logourlassess",vm.logourlsignoff);
+        })
 
 //page functionality
 
@@ -167,27 +172,38 @@
             });
 
         vm.logoutclick = function() {
-            vm.logoutpopup = $scope.logoutpopup ? false : true;
+            vm.exitapp = $scope.exitapp ? false : true;
+        }
+        vm.confirmExit = function()
+        {
+            ionic.Platform.exitApp();
+        }
+        vm.cancelExit = function()
+        {
+            vm.exitapp = false;
+
         }
 
-        vm.cancellogout = function() {
-            vm.logoutpopup = false;
+        // vm.cancellogout = function() {
+        //     vm.logoutpopup = false;
 
-        }
-        vm.confirmlogout = function(event) {
-            SyncService.logout().then(function(){
-                $state.go('login')
-            })
-            event.preventDefault();
-            event.stopPropagation();
-            storageFactory.login(null);
-            $cookieStore.remove('loginAupercentage');
-            localStorage.setItem("loginAupercentage", false);
-            // localStorage.removeItem("first_name");
-            // localStorage.removeItem("images");
-            vm.logoutpopup = false;
+        // }
+        // vm.confirmlogout = function(event) {
+        //     SyncService.logout().then(function(){
+        //         $state.go('login')
+        //     })
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        //     storageFactory.login(null);
+        //     $cookieStore.remove('loginAupercentage');
+        //     localStorage.setItem("loginAupercentage", false);
+        //     // localStorage.removeItem("first_name");
+        //     // localStorage.removeItem("images");
+        //     vm.logoutpopup = false;
             
-        }
+        // }
+   
+   
     }
 
     angular.module('swiftTrack.signoff')

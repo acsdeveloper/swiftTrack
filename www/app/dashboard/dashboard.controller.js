@@ -226,27 +226,40 @@
         vm.logoutclick = function() {
             vm.logoutpopup = $scope.logoutpopup ? false : true;
         }
-        vm.cancellogout = function() {
-            vm.logoutpopup = false;
+
+        vm.confirmExit = function()
+        {
+            ionic.Platform.exitApp();
+        }
+        vm.cancelExit = function()
+        {
+            vm.exitapp = false;
 
         }
+
+
+
+        // vm.cancellogout = function() {
+        //     vm.logoutpopup = false;
+
+        // }
        
-        vm.confirmlogout = function(event) {
-            SyncService.logout().then(function(){
-                $state.go('login')
-            })
-            storageFactory.clearAllStorage()
-            event.preventDefault();
-            event.stopPropagation();
-            storageFactory.login(null);
-            $cookieStore.remove('loginAuth');
-            localStorage.setItem("loginAuth", false);
+        // vm.confirmlogout = function(event) {
+        //     SyncService.logout().then(function(){
+        //         $state.go('login')
+        //     })
+        //     storageFactory.clearAllStorage()
+        //     event.preventDefault();
+        //     event.stopPropagation();
+        //     storageFactory.login(null);
+        //     $cookieStore.remove('loginAuth');
+        //     localStorage.setItem("loginAuth", false);
 
-            // localStorage.removeItem("first_name");
-            // localStorage.removeItem("images");
-            vm.logoutpopup = false;
+        //     // localStorage.removeItem("first_name");
+        //     // localStorage.removeItem("images");
+        //     vm.logoutpopup = false;
            
-        }
+        // }
 
     }
 

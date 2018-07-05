@@ -29,7 +29,7 @@
                         //deferred.reject("Timeout");
 
                         $ionicPopup.alert({
-                            title: 'Server Down',
+                            title: 'Error',
                             template: err.message
                         }).then(function(res) {
                             //console.log(res);
@@ -76,7 +76,7 @@
                         // Loader.stopLoading();
                         deferred.reject();
                         $ionicPopup.alert({
-                            title: 'Server Down',
+                            title: 'Error',
                             template: err.message
                         }).then(function(res) {
                             //console.log(res);
@@ -89,7 +89,7 @@
                         Loader.stopLoading();
                         deferred.reject("No Internet Connection");
                         $ionicPopup.alert({
-                            title: 'Unable To Login',
+                            title: 'No Internet Connection',
                             template: 'Please check your internet connection'
                         }).then(function(res) {
                             //console.log(res);
@@ -119,7 +119,7 @@
                         Loader.stopLoading();
                         deferred.reject();
                         $ionicPopup.alert({
-                            title: 'Server Down',
+                            title: 'Error',
                             template: err.message
                         }).then(function(res) {
                             // do nothing
@@ -161,7 +161,8 @@
                         deferred.reject("Timeout");
                         $ionicPopup.alert({
                             title: 'Server Down',
-                            template: err.message
+                            template: 'Please try again after sometime'
+                            // template: err.message
                         }).then(function(res) {
                             // do nothing
                         });

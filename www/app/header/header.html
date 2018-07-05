@@ -16,19 +16,25 @@
             </div>
             <div class="">
                 <div class="top-r tr-single-btn">
-                    <a ng-click="vm.logoutpopup=!vm.logoutpopup; $event.preventDefault(); $event.stopPropagation();" class="btn-circ btn-top-r btn-logout">
+                    <a ng-click="vm.exitapp=!vm.exitapp; $event.preventDefault(); $event.stopPropagation();" class="btn-circ btn-top-r btn-logout">
                  <i class="icon-switch"></i>
                  </a>
-                    <div ng-show="vm.logoutpopup" class="popover fade bottom in" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:auto;margin-left: 0px;">
-                        <div class="arrow" style="left: 50%;">
+
+
+
+                    <div ng-show="vm.exitapp" class="popover fade bottom in" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:auto;margin-left: 0px;">
+                        <div class="arrow" style="left: 50%;top: -16px;position: absolute;color: #333;font-size: 25px;">
                             <i class="icon ion-arrow-up-b"></i>
                         </div>
-                        <h3 class="popover-title">Log out of SwiftTrack?</h3>
+                        <h3 class="popover-title">Exit SwiftTrack?</h3>
                         <div class="popover-content">
-                            <a ng-click="vm.confirmlogout($event)" class="btn btn-warning m-rgt-10 btn-logout-confirm">Confirm</a>
-                            <a ng-click="vm.cancellogout()" id="cancelLogout" class="btn btn-cancel">Cancel</a>
+                            <a ng-click="vm.confirmExit($event)" class="btn btn-warning m-rgt-10 btn-logout-confirm">Confirm</a>
+                            <a ng-click="vm.cancelExit()" id="cancelLogout" class="btn btn-cancel">Cancel</a>
                         </div>
                     </div>
+
+
+
                     <div class="avatar"><img ng-src="{{vm.userImageUrl | filefilter}}" alt="User-Avatar"></div>
                 </div>
             </div>
@@ -49,10 +55,10 @@
         top: 70px;
     }
 
-    .arrow {
-        top: -18px;
+    /* .arrow {
+        top: 82px;
         position: absolute;
         color: #333;
         font-size: 25px;
-    }
+    } */
 </style>

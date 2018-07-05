@@ -15,6 +15,7 @@
             'swiftTrack.networkInformation',
             'swiftTrack.pouchservice',
             'swiftTrack.signoff',
+            'swiftTrack.footer',
             'ionic',
             'ngPDFViewer',
             'ngCookies',

@@ -299,3 +299,52 @@ ion-content.assess-top {
 
   .popup-container .popup-head {background-color: #337ab7 !important;}
 .popup-container .popup-title{color:white !important;}
+
+
+
+.footer .popover {
+    font-family: Helvetica;
+    width: 208px;
+    border: 1px solid #333 !important;
+    padding: 0;
+    border-radius: 0;
+    background: #333;
+    z-index: 5;
+}
+
+.footer .popover-title {
+    font-family: Helvetica;
+    font-size: 16px;
+    color: #fff;
+    background: #333;
+    font-weight: 300;
+    padding-right: 0;
+}
+
+.footer .popover-title {
+    padding: 8px 14px;
+    margin: 0;
+    border-bottom: 1px solid #ebebeb;
+    border-radius: 5px 5px 0 0;
+}
+.footer .popover-content {
+    background: #fff;
+    font-size: 16px;
+    padding-right: 0;
+}
+.footer .popover-content {
+    padding: 3px 13px 9px;
+}
+.footer h2, h3, h4, div {
+    font-family: helvetica;
+}
+/* .assessment-page footer #popover301935
+{
+left: 236px !important;}
+.people-reportpage footer #popover301935
+{
+left: 236px !important;}
+.signoff-page footer #popover301935
+{
+left: 236px !important;} */
+

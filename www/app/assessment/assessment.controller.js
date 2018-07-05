@@ -11,8 +11,9 @@
         {
             // console.log("init");
             ModuleService.get_org_config_assess().then(function(resp){
-                // console.log("####@@@@ dashboard123 ",resp);
+                console.log("040718 dashboard123 ",resp);
                 vm.logourlassess =   resp.logo;
+                vm.directoryname  = resp.dir;
                 // console.log("vm.logourlassess",vm.logourlassess);
             })
             ModuleService.get_org_name_access().then(function(res){
@@ -931,7 +932,8 @@
             options.mimeType = ftype;
             
             var params = {};
-            params.dir = "foo-3094kf304fk30kafskjfk3493ja0324r";
+            // params.dir = "foo-3094kf304fk30kafskjfk3493ja0324r";
+            params.dir = vm.directoryname;
             // params.value2 = "param"; 
 
             options.params = params;
@@ -985,6 +987,26 @@
             }
             vm.vidclick = function(datatype){
                 console.log("video click");
+                var permissions = cordova.plugins.permissions;
+
+                permissions.requestPermission(permissions.READ_EXTERNAL_STORAGE, success, error);
+                 
+                function error() {
+                  console.warn('Camera permission is not turned on');
+                }
+                 
+                function success( status ) {
+                  if( !status.hasPermission ) error();
+                }
+                permissions.requestPermission(permissions.READ_INTERNAL_STORAGE, success1, error1);
+                 
+                function error1() {
+                  console.warn('Camera permission is not turned on1');
+                }
+                 
+                function success1( status ) {
+                  if( !status.hasPermission ) error();
+                }
             
                 var options = {
                     limit: 1,
@@ -1043,7 +1065,7 @@
             //    });
 
 
-               fileChooser.open(
+               fileChooser.open(cordova.file.externalApplicationStorageDirectory,
                
                     function fcSuccess(file){
                     vm.filename=file.name;
@@ -1214,7 +1236,56 @@
             //console.log("assess filetype",filetype);
             //console.log("assess value",value);
             if(filetype == "movie"){
-                vm.assessvideopopup=true;
+
+                // vm.assessvideopopup=true;
+                // "file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/VID_20180704_180729607.mp4"
+                
+                
+                // var urll = "file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/"+ vm.videolocallocation;
+                // var my_media = new Media(urll, onSuccess, onError);
+                // function onSuccess() { console.log("playAudio():Audio Success"); }
+                // // error callback
+                // function onError(err) { console.log("playAudio():Audio Error: " + err);}
+
+                // my_media.play();
+               
+            //    stream code start
+               
+                var urll = "file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/"+ vm.videolocallocation;
+                var options = {
+                    successCallback: function() {
+
+                      console.log("Video was closed without error.");
+                    },
+                    errorCallback: function(errMsg) {
+                      console.log("Error! " + errMsg);
+                    },
+                    orientation: 'portrait',
+                    shouldAutoClose: false,  // true(default)/false
+                    controls: true // true(default)/false. Used to hide controls on fullscreen
+                  };
+                window.plugins.streamingMedia.playVideo(urll, options);
+
+
+ //    stream code end
+
+
+
+                // VideoPlayer.play(urll,
+                //     {
+                //         volume: 0.5,
+                //         scalingMode: VideoPlayer.SCALING_MODE.SCALE_TO_FIT_WITH_CROPPING
+                //     },
+                //     function (success) {
+
+                //         console.log(" success msg video completed");
+                //     },
+                //     function (err) {
+                //         console.log("video player error");
+                //         console.log(err);
+                //     }
+                // );
+
             }
             else if(filetype == "image"){
                 vm.assessimagepopup=true;

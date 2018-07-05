@@ -9,10 +9,10 @@
     "gulp-sass": "^3.1.0"
   },
   "dependencies": {
-    "Html5Video": "git+https://github.com/jaeger25/Html5Video.git",
     "angular-pouchdb": "^5.0.2",
     "bower": "^1.8.4",
-    "cordova-android": "7.1.0",
+    "cordova-android": "^7.1.0",
+    "cordova-plugin-android-permissions": "^1.0.0",
     "cordova-plugin-cache-clear": "^1.3.7",
     "cordova-plugin-camera": "^4.0.3",
     "cordova-plugin-device": "^2.0.2",
@@ -21,10 +21,13 @@
     "cordova-plugin-file-transfer": "^1.7.1",
     "cordova-plugin-ionic-keyboard": "^2.1.2",
     "cordova-plugin-ionic-webview": "^1.2.1",
+    "cordova-plugin-media": "^5.0.2",
     "cordova-plugin-media-capture": "^3.0.2",
     "cordova-plugin-network-information": "^2.0.1",
     "cordova-plugin-splashscreen": "^5.0.2",
+    "cordova-plugin-streaming-media-xtreme": "^2.3.1",
     "cordova-plugin-video-capture-plus": "^1.0.0",
+    "cordova-plugin-video-player": "^1.0.1",
     "cordova-plugin-whitelist": "^1.3.3",
     "file": "^0.2.2",
     "git": "^0.1.5",
@@ -49,7 +52,10 @@
       "cordova-plugin-document-viewer": {},
       "cordova-plugin-camera": {},
       "cordova-plugin-media-capture": {},
-      "jaeger.Html5Video": {}
+      "cordova-plugin-android-permissions": {},
+      "com.moust.cordova.videoplayer": {},
+      "cordova-plugin-media": {},
+      "cordova-plugin-streaming-media-xtreme": {}
     },
     "platforms": [
       "android"

@@ -6,22 +6,23 @@
 	<header class="fixed-hdr">
 		<div class="">
 			<div class="">
-				<img class="logo" src="https://app.swifttrack.co.uk/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/settings/nf-logo.jpg" alt="logo">
+          <img class="logo" ng-src="{{vm.logourlsignoff | filefilter}}" alt="logo">
+				<!-- <img class="logo" src="https://app.swifttrack.co.uk/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/settings/nf-logo.jpg" alt="logo"> -->
 			</div>
 		</div>
 		<div class="peopleprogressreport">
 			<div class="top-r tr-single-btn">
-				<a ng-click="vm.logoutpopup=!vm.logoutpopup; $event.preventDefault(); $event.stopPropagation();" class="btn-circ btn-top-r btn-logout">
+				<a ng-click="vm.exitapp=!vm.exitapp; $event.preventDefault(); $event.stopPropagation();" class="btn-circ btn-top-r btn-logout">
 			 <i class="icon-switch"></i>
 			 </a>
-				<div ng-show="vm.logoutpopup" class="popover fade bottom in" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:auto;margin-left: 0px;">
+				<div ng-show="vm.exitapp" class="popover fade bottom in" id="popover301935" style=" opacity:1;top: 90px; left: -88px; display:block; height:auto;margin-left: 0px;">
 					<div class="arrow" style="left: 50%;">
 						<i class="icon ion-arrow-up-b"></i>
 					</div>
 					<h3 class="popover-title">Log out of SwiftTrack?</h3>
 					<div class="popover-content">
-						<a ng-click="vm.confirmlogout($event)" class="btn btn-warning m-rgt-10 btn-logout-confirm">Confirm</a>
-						<a ng-click="vm.cancellogout()" id="cancelLogout" class="btn btn-cancel">Cancel</a>
+						<a ng-click="vm.confirmExit($event)" class="btn btn-warning m-rgt-10 btn-logout-confirm">Confirm</a>
+						<a ng-click="vm.cancelExit()" id="cancelLogout" class="btn btn-cancel">Cancel</a>
 					</div>
 				</div>
 				<div class="avatar"><img ng-src="{{vm.userImageUrl | filefilter}}" alt="User-Avatar"></div>
@@ -82,8 +83,11 @@
          </section>
 
         <div class="pad-15"></div>
-        <footer>&copy; 2018 SwiftTrack V1.1&nbsp;&nbsp;&vellip;&nbsp;&nbsp;Licensed to Food International</footer>
+       
+        <!-- <footer>&copy; 2018 SwiftTrack V1.1&nbsp;&nbsp;&vellip;&nbsp;&nbsp;Licensed to Food International</footer> -->
       </div>
+      <div ng-include="'./app/footer/footersw.html'" style="clear:both"></div>
+
       </div>
     </ion-content>
   </ion-view>

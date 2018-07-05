@@ -1820,6 +1820,7 @@ h4.report-title span {
 /* Page footer */
 
 footer {
+	position: relative;
 	width: 100%;
 	padding: 15px 0;
 	text-align: center;

@@ -187,9 +187,11 @@
 
 
 
-
-         <footer>&copy; 2018 SwiftTrack V1.1&nbsp;&nbsp;&vellip;&nbsp;&nbsp;Licensed to {{vm.org_name}}</footer>
+        
+         <!-- <footer>&copy; 2018 SwiftTrack V1.1&nbsp;&nbsp;&vellip;&nbsp;&nbsp;Licensed to {{vm.org_name}}</footer> -->
       </div>
+      <div ng-include="'./app/footer/footersw.html'" style="clear:both"></div>
+
       </div>
 
 
@@ -495,7 +497,7 @@
                   <div class="popover-content">
                         <div class="row">
                              <div col-4><span class="icon-camera fontclass" ng-click="vm.camclick('cam')"></span></div>
-                             <div col-4> <span class="icon-video-camera fontclass" ng-click="vm.vidclick('cam')"></span></div>
+                             <div col-4> <span class=" fas fa-video fontclass" style="font-family: 'Font Awesome 5 Free';font-weight: 800;" ng-click="vm.vidclick('cam')"></span></div>
                           <div col-4><span class="icon-folder-open fontclass"  ng-click="vm.galclick('cam')"></span></div>
                         </div>
                   </div>
@@ -544,6 +546,8 @@
    </div>
 
 
+
+
    <div ng-show="vm.assessvideopopup" id="mediaView" class="" style="height: 100vh;">
       <i class="icon-cancel-circle close-modal" ng-click="vm.assessvideopopupclose(vm.videolocallocation,$event)"></i>
       <div class="mv-content">
@@ -559,7 +563,8 @@
                           </video> -->
 
 
-                  <video controls  type="video/mp4" ng-src="{{vm.videolocallocation | filefilter}}"></video>     
+                  <!-- <video controls  type="video/mp4" ng-src="{{vm.videolocallocation | filefilter}}"></video>   -->
+                  <!-- <video controls  type="video/mp4" src="file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/VID_20180704_174506625_1530706514970.mp4"></video>    -->
       </div>
    </div>
 

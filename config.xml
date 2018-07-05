@@ -90,6 +90,9 @@
     <plugin name="maurodx-cordova-plugin-file-selector" spec="^1.0.0" />
     <plugin name="cordova-plugin-camera" spec="^4.0.3" />
     <plugin name="cordova-plugin-media-capture" spec="^3.0.2" />
-    <plugin name="jaeger.Html5Video" spec="https://github.com/jaeger25/Html5Video.git" />
-    <engine name="android" spec="7.1.0" />
+    <plugin name="cordova-plugin-android-permissions" spec="^1.0.0" />
+    <plugin name="com.moust.cordova.videoplayer" spec="~1.0.1" />
+    <plugin name="cordova-plugin-media" spec="^5.0.2" />
+    <plugin name="cordova-plugin-streaming-media-xtreme" spec="^2.3.1" />
+    <engine name="android" spec="^7.1.0" />
 </widget>
