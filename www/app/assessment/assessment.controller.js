@@ -985,10 +985,10 @@
                     // navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
                  }
             }
-            vm.vidclick = function(datatype){
-                console.log("video click");
+            vm.videoclick = function(datatype){
+                //set permission for allowing storage
                 var permissions = cordova.plugins.permissions;
-
+  
                 permissions.requestPermission(permissions.READ_EXTERNAL_STORAGE, success, error);
                  
                 function error() {
@@ -1013,23 +1013,23 @@
                     duration: 300,
                     // quality:0
                  };
-                 navigator.device.capture.captureVideo(onSuccess, onError, options);
+                navigator.device.capture.captureVideo(onSuccess, onError, options);
                 function onSuccess(mediaFiles) {
-                var name, path, size, type;
-                path = mediaFiles[0].fullPath;
-                name = mediaFiles[0].name;
-                size = mediaFiles[0].size;
-                type = mediaFiles[0].type;
-                console.log(path,name,type,datatype,"check for type")
-                vm.movefile(path,name,type,datatype);
-                vm.camcapture = false;
+                    var name, path, size, type;
+                    path = mediaFiles[0].fullPath;
+                    name = mediaFiles[0].name;
+                    size = mediaFiles[0].size;
+                    type = mediaFiles[0].type;
+                    console.log(path,name,type,datatype,"check for type")
+                    vm.movefile(path,name,type,datatype);
+                    vm.camcapture = false;
                  }
                 function onError(error) {
                     console.log(error);
                     // navigator.notification.alert('Error code: ' + error.code, null, 'Capture Error');
                  }
           }
-            vm.galclick = function(datatype){
+            vm.galleryclick = function(datatype){
 
             //     window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, downloadFile, fileSystemFail);
             //    function downloadFile(fileSystem){
@@ -1237,7 +1237,7 @@
             //console.log("assess value",value);
             if(filetype == "movie"){
 
-                // vm.assessvideopopup=true;
+                vm.assessvideopopup=true;
                 // "file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/VID_20180704_180729607.mp4"
                 
                 
@@ -1251,20 +1251,21 @@
                
             //    stream code start
                
-                var urll = "file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/"+ vm.videolocallocation;
-                var options = {
-                    successCallback: function() {
+                // var urll = "file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/"+ vm.videolocallocation;
+                // var options = {
+                //     successCallback: function() {
 
-                      console.log("Video was closed without error.");
-                    },
-                    errorCallback: function(errMsg) {
-                      console.log("Error! " + errMsg);
-                    },
-                    orientation: 'portrait',
-                    shouldAutoClose: false,  // true(default)/false
-                    controls: true // true(default)/false. Used to hide controls on fullscreen
-                  };
-                window.plugins.streamingMedia.playVideo(urll, options);
+                //       console.log("Video was closed without error.");
+                //     },
+                //     errorCallback: function(errMsg) {
+                //       console.log("Error! " + errMsg);
+                //     },
+                //     // orientation: 'portrait',
+                //     shouldAutoClose: true,  // true(default)/false
+                //     controls: true // true(default)/false. Used to hide controls on fullscreen
+                    
+                //   };
+                // window.plugins.streamingMedia.playVideo(urll, options);
 
 
  //    stream code end
