@@ -28,14 +28,14 @@
             $ionicPlatform.ready(function() {
                 cordova.exec(win, fail, "File", "getFreeDiskSpace", []);
                 function win(freeSpace){
-                    //  if(freeSpace<1000000){
-                    //     $ionicPopup.alert({
-                    //         title: 'Low space',
-                    //         template: 'Please Free up some space and come back'
-                    //     }).then(function(res) {
-                    //         ionic.Platform.exitApp();
-                    //     });
-                    // }
+                     if(freeSpace<1000000){
+                        $ionicPopup.alert({
+                            title: freeSpace,
+                            template: 'Please Free up some space and come back'
+                        }).then(function(res) {
+                            ionic.Platform.exitApp();
+                        });
+                    }
                 }
                 function fail(err){
                     console.log(err)
@@ -137,6 +137,10 @@
                 // }
                 if (window.StatusBar) {
                     StatusBar.styleDefault();
+                }
+                if(window.cordova) {
+                    console.log("files extension");
+                    console.log(window.cordova.file);
                 }
                 var isbackclick=false;
                 var handleBackButton = function() {

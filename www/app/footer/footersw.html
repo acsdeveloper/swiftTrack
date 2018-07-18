@@ -1,15 +1,21 @@
-<footer class="footer" ng-click="vm.logoutpopup=!vm.logoutpopup; $event.preventDefault(); $event.stopPropagation();"  ng-controller="footerCtrl as vm" >
+<footer class="footer"   ng-controller="footerCtrl as vm" >
     
-    <span>&copy; 2018 SwiftTrack V1.0&nbsp;&nbsp;&vellip;&nbsp;&nbsp;Licensed to {{vm.orgname}} &nbsp;&nbsp;&vellip;&nbsp;&nbsp;<span >LogOut</span></span>
-    <div ng-show="vm.logoutpopup" class="popover fade bottom in" id="popover301935" style="position: absolute;opacity: 1;top: unset;margin-top: unset;bottom: 55px;display: block;left: 254px;height: auto;">
-            <div class="arrow" style="left: 58%;top: 82px;position: absolute;color: #333;font-size: 25px;">
-                <i class="icon ion-arrow-down-b"></i>
-            </div>
-            <h3 class="popover-title">Log out of SwiftTrack?</h3>
-            <div class="popover-content">
-                <a ng-click="vm.confirmlogout($event)" class="btn btn-warning m-rgt-10 btn-logout-confirm">Confirm</a>
-                <a ng-click="vm.cancellogout()" id="cancelLogout" class="btn btn-cancel">Cancel</a>
-            </div>
-        </div>
+    <!-- <span>&copy; 2018 SwiftTrack V1.0&nbsp;&nbsp;&vellip;&nbsp;&nbsp;Licensed to {{vm.orgname}} &nbsp;&nbsp;&vellip;&nbsp;&nbsp;<span >LogOut</span></span> -->
+    <span>Licensed to {{vm.orgname}} &nbsp;&nbsp;&vellip;&nbsp;&nbsp;<span style="text-decoration:underline;position:relative" ng-click="vm.logoutpopup=!vm.logoutpopup; $event.preventDefault(); $event.stopPropagation();" >
+
+            <div ng-show="vm.logoutpopup" class="popover fade bottom in" id="popover301935" style="position: absolute;opacity: 1;top: unset;margin-top: unset;bottom: 32px; left:0px; right:0px; display: block;height: auto;">
+                    <!-- <div class="arrow" style="left: 58%;top: 82px;position: absolute;color: #333;font-size: 25px;">
+                        <i class="icon ion-arrow-down-b"></i>
+                    </div> -->
+                    <h3 class="popover-title">Log out of SwiftTrack?</h3>
+                    <div class="popover-content">
+                        <a ng-click="vm.confirmlogout($event)" class="btn btn-warning m-rgt-10 btn-logout-confirm">Confirm</a>
+                        <a ng-click="vm.cancellogout($event)" id="cancelLogout" class="btn btn-cancel">Cancel</a>
+                    </div>
+                </div>
+
+            <i  ng-show="vm.logoutpopup" class="icon ion-arrow-down-b" style="position: absolute;font-size:  25px;color: #333;left: 0;right: 0; bottom: 12px;"></i>Log Out</span><br>&copy; 2018 SwiftTrack v1.0
+</span>
+    
 </footer>
 <!-- ng-show="vm.logoutpopup" -->

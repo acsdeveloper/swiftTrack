@@ -14,7 +14,9 @@
        console.log("footer test calling@@@@");
    }
 
-   vm.cancellogout = function() {
+   vm.cancellogout = function(event) {
+    event.preventDefault();
+    event.stopPropagation();
     vm.logoutpopup = false;
 
     }
