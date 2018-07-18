@@ -146,7 +146,7 @@ p.body-text {
 }
 
 body {
-	background: #333;
+	background: #fff;
 }
 
 body.hide-main #main {
@@ -1492,7 +1492,7 @@ body.locked-page {
 	padding: 30px; */
 	height: 100% !important;
 	position: fixed;
-    z-index: 10001;
+    z-index: 9999999999;
     top: 0%;
     left: 50%;
     transform: translate(-50%, 0);
@@ -1644,6 +1644,7 @@ video {
 /* Notes  */
 
 .note-row {
+	margin-top: 15px !important;
 	padding: 10px 60px 10px 10px;
 	color: #333;
 	font-size: 14px;
@@ -1822,7 +1823,7 @@ h4.report-title span {
 footer {
 	position: relative;
 	width: 100%;
-	padding: 15px 0;
+	padding: 6px 0;
 	text-align: center;
 	color: #bbb;
 	font-size: 12px;
@@ -1910,4 +1911,12 @@ footer {
 {
 color:red !important;
 font-size: 0.8em !important;
+}
+
+.assessment-page input.radiotick:after {
+    opacity: 1!important;   
+    border: 3px solid #ccc;
+    border-top: 0 !important;
+    border-right: 0;
+   
 }

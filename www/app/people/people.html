@@ -141,13 +141,21 @@
 			</div>
 
 			<div ng-if="vm.data_type == 'pdf'" class="mv-content">
-					<button ng-click="vm.prevPage()">&lt;</button>
+					<!-- <button ng-click="vm.prevPage()">&lt;</button>
 					  <button ng-click="vm.nextPage()">&gt;</button>
 					  <br>
 					  <span>{{vm.currentPage}}/{{vm.totalPages}}</span>
 					  <br>
-					  <pdfviewer ng-src="{{vm.targetPath}}" on-page-load='vm.pageLoaded(page,total)' id="viewer"></pdfviewer>
-			</div>
+					  <pdfviewer ng-src="{{vm.targetPath}}" on-page-load='vm.pageLoaded(page,total)' id="viewer"></pdfviewer> -->
+			
+
+				<span>{{vm.currentPage}}/{{vm.totalPages}}</span>
+                  <br>
+                  <pdfviewer ng-src="{{vm.targetPath}}" on-page-load='vm.pageLoaded(page,total)' id="viewer"></pdfviewer>
+                  <button ng-show="vm.prevpage" ng-click="vm.prevPage()">Previous Page</button>
+                  <button ng-show="vm.nextpage1" style="float: right;" ng-click="vm.nextPage()">Next page</button>
+			
+					</div>
 
 			<div ng-if="vm.data_type == 'image'" class="mv-content">
 					<img controls ng-src="{{vm.targetPath}}"></img>     

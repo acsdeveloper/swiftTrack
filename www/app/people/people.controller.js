@@ -1,7 +1,7 @@
 (function() {
     // 'use strict';
 
-    function peopleCtrl(SyncService,$state, $ionicModal, $scope, $http, $location, $cookieStore, storageFactory, reportService,$filter) {
+    function peopleCtrl(SyncService,$state, $ionicModal, $scope,pdf, $http, $location, $cookieStore, storageFactory, reportService,$filter) {
         //console.log('people coi=ntroller')
         var vm = this;
 
@@ -101,13 +101,64 @@
         
         vm.reportvideoimagepdf = function(datatype,url)
         {
-            //console.log("datatype",datatype,"url",url);
-            vm.reportvideoimagepdfpopup = true;
             vm.data_type = datatype;
-            // cordova.file.externalApplicationStorageDirectory +'files/'
             vm.targetPath = cordova.file.externalApplicationStorageDirectory +"files/"+url.substring(url.lastIndexOf('/')+1)
+            if(datatype == 'movie')
+            {
+                var urll =  vm.targetPath;
+                var options = {
+                successCallback: function(){
+                    console.log("Video was closed without error.");
+                },
+                errorCallback: function(errMsg) {
+                    console.log("Error! " + errMsg);
+                },
+                // orientation: 'landscape',
+                    orientation: 'portrait',
+                    shouldAutoClose: true,  // true(default)/false
+                    controls: true // true(default)/false. Used to hide controls on fullscreen
+                  };
+                    console.log("window.plugins.streamingMedia",window.plugins.streamingMedia);
+                window.plugins.streamingMedia.playVideo(urll, options);
+            }
+            else{
+                vm.reportvideoimagepdfpopup = true;
+            }
+            
+            console.log("datatype",datatype,"url",url);
+            
+            
+            // cordova.file.externalApplicationStorageDirectory +'files/'
+            
             // //console.log(vm.targetPath,"88888tagettt");
         }
+
+    vm.viewer = pdf.Instance("viewer");
+
+	vm.nextPage = function() {
+    vm.viewer.nextPage();
+    if(vm.currentPage > 1){
+        vm.prevpage = true; 
+        }
+	};
+
+	vm.prevPage = function() {
+      vm.viewer.prevPage();
+	};
+
+	vm.pageLoaded = function(curPage, totalPages) {
+        vm.nextpage1 = true;
+        vm.prevpage = true;
+		vm.currentPage = curPage;
+        vm.totalPages = totalPages;
+        if(vm.currentPage == 1){
+           vm.prevpage = false;
+        }
+        if(vm.totalPages == vm.currentPage){
+            vm.nextpage1 = false;
+            }
+    };
+
         vm.reportmediaclose = function(path,$event)
         {
             var srcelement=$event.target.nextElementSibling.children[0];
@@ -129,7 +180,7 @@
 
     angular.module('swiftTrack.progressreport')
         .controller('peopleCtrl', peopleCtrl);
-    peopleCtrl.$inject = ['SyncService','$state', '$ionicModal', '$scope', '$http', '$location', '$cookieStore', 'storageFactory', 'reportService', '$filter'];
+    peopleCtrl.$inject = ['SyncService','$state', '$ionicModal', '$scope','PDFViewerService', '$http', '$location', '$cookieStore', 'storageFactory', 'reportService', '$filter'];
 
     
 

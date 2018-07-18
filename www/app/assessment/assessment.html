@@ -264,58 +264,73 @@
 
             <div ng-repeat="resouval in vm.resouobj.resource_sections " class="row sep-box">
 
-               <div  class="col-xs-12" ng-if="resouval.type_id == 5">
-                        <div ng-click="vm.videoclick($event)" style="height: 190px;width:  100%;position: absolute;z-index: 99999999999999999999999999999999999;"></div>
+                  <div  class="col-xs-12" ng-if="resouval.type_id == 5">
+                        <!-- <div ng-click="vm.videoclick($event)" style="height: 190px;width:  100%;position: absolute;z-index: 99999999999999999999999999999999999;"></div>
                         <video width="280" height="240" controls>
                               <source src="" dynamic-url dynamic-url-src="{{resouval.item_media | filefilter}}">
-                          </video>
-               </div>
-               <div class="col-xs-12" ng-if="resouval.type_id == 2">
+                          </video> -->
+                          <div class="media-wrapper ev-wrap">
+                                    <img class="img-resource" ng-src="./img/icon-movie.jpg" alt="" ng-click="vm.assessvideoplay('movie',resouval.item_media)" >
+                                    
+                                </div>
+                  </div>
+
+                  <div class="col-xs-12" ng-if="resouval.type_id == 2">
                   <h1>{{resouval.item_content}}</h1>
-               </div>
-               <div class="col-xs-12" ng-if="resouval.type_id == 1">
+                  </div>
+
+                  <div class="col-xs-12" ng-if="resouval.type_id == 1">
                         <h1>{{resouval.item_content}}</h1>
-                     </div>
+                  </div>
                
-               <!-- <div col-6 class="col-xs-6" ng-if="resouval.type_id == 3"> -->
-                        <div class="col-xs-12" ng-if="resouval.type_id == 3">
+              
+                  <div class="col-xs-12" ng-if="resouval.type_id == 3">
                      <p>{{resouval.item_content}}</p>
-                  <!-- <div class="pad-15"></div> -->
-               </div>
-               <!-- <div col-6 class="col-xs-6" ng-if="resouval.type_id == 3"><img ng-if="resouval.file_type == 'image'" class="img-resource" ng-src="{{resouval.item_media | filefilter}}" alt=""> -->
-                  <div  class="col-xs-12" ng-if="resouval.type_id == 3"><img ng-if="resouval.file_type == 'image'" class="img-resource" ng-src="{{resouval.item_media | filefilter}}" alt="">
-                  <div ng-if="resouval.file_type == 'movie'">
-                              <div ng-click="vm.videoclick($event)" style="height: 190px;width:  100%;position: absolute;z-index: 99999999999999999999999999999999999;"></div>
-                              <video width="280" height="240" controls>
-                                    <source src="" dynamic-url dynamic-url-src="{{resouval.item_media | filefilter}}">
-                                </video>
-
                   </div>
-            </div>
-               <!-- <div col-6 class="col-xs-6" ng-if="resouval.type_id == 4"><img ng-if="resouval.file_type == 'image'" class="img-resource" ng-src="{{resouval.item_media | filefilter}}" alt=""> -->
-                  <div  class="col-xs-12" ng-if="resouval.type_id == 4"><img ng-if="resouval.file_type == 'image'" class="img-resource" ng-src="{{resouval.item_media | filefilter}}" alt="">  
-                  <div ng-if="resouval.file_type == 'movie'">
-                              <div ng-click="vm.videoclick($event)" style="height: 190px;width:  100%;position: absolute;z-index: 99999999999999999999999999999999999;"></div>
-                              <video width="280" height="240" controls>
-                                    <source src="" dynamic-url dynamic-url-src="{{resouval.item_media | filefilter}}">
-                                </video>
-
-                  </div>
-            </div>
                
-               <!-- <div col-6 class="col-xs-6" ng-if="resouval.type_id == 4"> -->
+                  
+                  <div  class="col-xs-12" ng-if="resouval.type_id == 3">
+                  <img ng-if="resouval.file_type == 'image'" class="img-resource" ng-src="{{resouval.item_media | filefilter}}" alt="">
+                        <div ng-if="resouval.file_type == 'movie'">
+                              <!-- <div ng-click="vm.videoclick($event)" style="height: 190px;width:  100%;position: absolute;z-index: 99999999999999999999999999999999999;"></div>
+                                    <video width="280" height="240" controls>
+                                          <source src="" dynamic-url dynamic-url-src="{{resouval.item_media | filefilter}}">
+                                    </video> -->
+                                    <div class="media-wrapper ev-wrap">
+                                                <img class="img-resource" ng-src="./img/icon-movie.jpg" alt="" ng-click="vm.assessvideoplay('movie',resouval.item_media)" >
+                                                
+                                            </div>
+                        </div>
+                  </div>
+
+
+              
+                  <div  class="col-xs-12" ng-if="resouval.type_id == 4"><img ng-if="resouval.file_type == 'image'" class="img-resource" ng-src="{{resouval.item_media | filefilter}}" alt="">  
+                        <div ng-if="resouval.file_type == 'movie'">
+                                    <!-- <div ng-click="vm.videoclick($event)" style="height: 190px;width:  100%;position: absolute;z-index: 99999999999999999999999999999999999;"></div>
+                                    <video width="280" height="240" controls>
+                                          <source src="" dynamic-url dynamic-url-src="{{resouval.item_media | filefilter}}">
+                                    </video> -->
+                                    <div class="media-wrapper ev-wrap">
+                                                <img class="img-resource" ng-src="./img/icon-movie.jpg" alt="" ng-click="vm.assessvideoplay('movie',resouval.item_media)" >
+                                                
+                                            </div>
+                        </div>
+                  </div>
+               
+               
                   <div class="col-xs-12" ng-if="resouval.type_id == 4">
-                  <p>{{resouval.item_content}}</p>
-                  <!-- <div class="pad-15"></div> -->
-               </div>
-               <div class="col-xs-12" ng-if="resouval.type_id == 6">
+                        <p>{{resouval.item_content}}</p>
+                  </div>
+
+                  <div class="col-xs-12" ng-if="resouval.type_id == 6">
                         <p>seperator</p>
-                        <!-- <div class="pad-15"></div> -->
-                     </div>
+                  </div>
+
             </div>
          </div>
       </div>
-      <!--<div class="modal-backdrop"></div>-->
+      
    </div>
 
    <div ng-show="vm.assessmentpopup" class="custom-modal assess-file-overlay" id="evidenceModal">
@@ -441,11 +456,12 @@
             <h2 class="q-question-hdr" ng-bind="vm.assquestion"></h2>
             <div ng-if="vm.choiceans == true" class="form-group multiplechoice">
                <div ng-repeat=" values in vm.anschoicelabel" class="checkbox big-check">
-                              <label><input type="radio" ng-model="vm.changemodel" ng-click="vm.updateques()" name="multchoice" class="multi-choice" ng-value="vm.choicevalsep(values)">{{values}}</label>
+                              <label><input type="radio" ng-model="vm.changemodel" ng-click="vm.updateques('choice',$event)" name="multchoice" class="multi-choice" ng-value="vm.choicevalsep(values)"></label>
+                              <span style="position: absolute;top: 21px;left: 60px;" class="mult-choice-label">{{values}}</span>
                         </div>
                   </div>
                   
-            <div class="update-btn " ng-click="vm.updateques()" ng-show="vm.showupdatbtn" data-type="question"></div>
+            <div class="update-btn " ng-click="vm.updateques('nonchoice',$event)" ng-show="vm.showupdatbtn" data-type="question"></div>
             <textarea type="text" ng-if="vm.choiceans == false"ng-change="vm.showupdatebtn()" ng-model="vm.changemodel" class="form-control mdl-input q-answer" data-type="question" placeholder="Your answer..." rows="3"></textarea>
             <div id="galleryQuestions" class="gal-wrapper" data-type="questions">
                   <div ng-repeat="(i,value) in vm.galleryquestionArr" >
@@ -497,8 +513,8 @@
                   <div class="popover-content">
                         <div class="row">
                              <div col-4><span class="icon-camera fontclass" ng-click="vm.camclick('cam')"></span></div>
-                             <div col-4> <span class=" fas fa-video fontclass" style="font-family: 'Font Awesome 5 Free';font-weight: 800;" ng-click="vm.videoclick('cam')"></span></div>
-                          <div col-4><span class="icon-folder-open fontclass"  ng-click="vm.galleryclick('cam')"></span></div>
+                             <div col-4> <span class=" fas fa-video fontclass" style="font-family: 'Font Awesome 5 Free';font-weight: 800;" ng-click="vm.vidclick('cam')"></span></div>
+                          <div col-4><span class="icon-folder-open fontclass"  ng-click="vm.galclick('cam')"></span></div>
                         </div>
                   </div>
             </div>
@@ -519,6 +535,7 @@
                <div class="ul-prog"></div>
             </div>
             <div id="addEv" ng-click="vm.evidenceupload('pdf')" data-type='pdf'>
+            <div id="addEv"  data-type='pdf'>
                <span class="btn-pre">Add</span>
                <span class="ftr-icn">
                         
@@ -552,7 +569,7 @@
       <i class="icon-cancel-circle close-modal" ng-click="vm.assessvideopopupclose(vm.videolocallocation,$event)"></i>
       <div class="mv-content">
             <!-- http://www.videogular.com/tutorials/how-to-start/ -->
-            <!-- <video controls  width="560"  type="video/mp4" src="file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/testingvideo.mp4"></video>    -->
+            <!-- <video controls  width="700"  type="video/3gpp" src="http://swifttrack-updated-version-agilexcyber.c9users.io/orgs/foo-3094kf304fk30kafskjfk3493ja0324r/media/VID_20180703_184409_1530623655707.3gp"></video>    -->
             <!-- <embed src="file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/testingvideo.mp4" width="400px" height="200px"> -->
                   <!-- <object data="file:///storage/emulated/0/Android/data/io.swiftTrack.app/files/testingvideo.mp4" width="400px" height="200px"></object> -->
                   <!-- <video controls>

@@ -49,14 +49,13 @@
       "cordova-plugin-cache-clear": {},
       "cordova-plugin-file-transfer": {},
       "cordova-plugin-file": {},
-      "maurodx-cordova-plugin-file-selector": {},
       "cordova-plugin-document-viewer": {},
       "cordova-plugin-camera": {},
       "cordova-plugin-media-capture": {},
       "cordova-plugin-android-permissions": {},
-      "com.moust.cordova.videoplayer": {},
       "cordova-plugin-media": {},
-      "cordova-plugin-streaming-media-xtreme": {}
+      "cordova-plugin-streaming-media-xtreme": {},
+      "maurodx-cordova-plugin-file-selector": {}
     },
     "platforms": [
       "android"
